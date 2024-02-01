@@ -1,6 +1,8 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
+#include <iostream>
+
 class Vertex {
 private:
     int pos_[3];
@@ -35,6 +37,11 @@ public:
     void setYPos(int n);
     void setZPos(int n);
     void setPos(int xPos, int yPos, int zPos);
+
+    /**
+        * Print methods
+    */
+    void print() const;
 };
 
 #include "Vertex.cpp"

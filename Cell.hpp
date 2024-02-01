@@ -13,6 +13,7 @@
 class Cell {
 private:
     bool walls_[4];
+    bool visited_;
 
 public:
     /**
@@ -49,12 +50,22 @@ public:
     bool * getWalls();
 
     /**
+        * Returns whether cell has been visited
+    */
+    bool getVisited() const;
+
+    /**
         * MUTATOR METHODS
     */
     /**
         * Sets a cell's walls to true or false
     */
-    void setWallValues(bool up, bool right, bool down, bool left);
+    void setWallValues(bool up, bool right, bool down, bool left, bool visited);
+
+    /**
+        * Sets visited
+    */
+    void setVisited(bool visited);
 
     /**
         * CELL FUNCTIONS
@@ -62,7 +73,7 @@ public:
     /**
         * Returns whether the cell has any walls. If the cell has no walls, it means it hasn't been visited yet
     */
-    bool isVisited() const;
+    bool hasWalls() const;
 
     /**
         * PRINT FUNCTIONS

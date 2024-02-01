@@ -18,6 +18,9 @@ private:
     //An array of two ints that represents the x, y position of the maze generator
     int active_[2];
 
+    //Specifies the resolution of the maze
+    int resolution_[2];
+
 public:
     /**
         * DEFAULT CONSTRUCTOR

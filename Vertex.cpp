@@ -51,3 +51,10 @@ void Vertex::setPos(int xPos, int yPos, int zPos) {
     pos_[1] = yPos;
     pos_[2] = zPos;
 }
+
+/**
+    * Print methods
+*/
+void Vertex::print() const {
+    std::cout << pos_[0] << ", " << pos_[1] << ", " << pos_[2] << std::endl;
+}

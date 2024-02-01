@@ -3,6 +3,12 @@
 */
 Maze::Maze() {
     maze_ = {};
+
+    active_[0] = 1;
+    active_[1] = 1;
+
+    resolution_[0] = 10;
+    resolution_[1] = 10;
 }
 
 /**
@@ -32,10 +38,10 @@ bool Maze::isActiveStuck() const {
     bool surrounded[4];
 
     //The 4 directions either way are checked for a visited cell
-    surrounded[0] = maze_[active_[0] + 0][active_[1] - 1].isVisited();
-    surrounded[1] = maze_[active_[0] + 1][active_[1] + 0].isVisited();
-    surrounded[2] = maze_[active_[0] + 0][active_[1] + 1].isVisited();
-    surrounded[3] = maze_[active_[0] - 1][active_[1] + 0].isVisited();
+    surrounded[0] = maze_[active_[0] + 0][active_[1] - 1].getVisited();
+    surrounded[1] = maze_[active_[0] + 1][active_[1] + 0].getVisited();
+    surrounded[2] = maze_[active_[0] + 0][active_[1] + 1].getVisited();
+    surrounded[3] = maze_[active_[0] - 1][active_[1] + 0].getVisited();
     
     //If the active_ is surrounded on all sides (each side is true), return true
     bool output = true;
@@ -61,13 +67,13 @@ bool Maze::isActiveStuck() const {
 */
 bool Maze::IsDirectionBlocked(int direction) const {
     if (direction == 0) {
-        return maze_[active_[0] + 0][active_[1] - 1].isVisited();
+        return maze_[active_[0] + 0][active_[1] - 1].getVisited();
     } else if (direction == 1) {
-        return maze_[active_[0] + 1][active_[1] + 0].isVisited();
+        return maze_[active_[0] + 1][active_[1] + 0].getVisited();
     } else if (direction == 2) {
-        return maze_[active_[0] + 0][active_[1] + 1].isVisited();
+        return maze_[active_[0] + 0][active_[1] + 1].getVisited();
     } else if (direction == 3) {
-        return maze_[active_[0] - 1][active_[1] + 0].isVisited();
+        return maze_[active_[0] - 1][active_[1] + 0].getVisited();
     } else {
         return 0;
     }
@@ -83,26 +89,26 @@ bool Maze::IsDirectionBlocked(int direction) const {
 */
 void Maze::setupMaze() {
     //Populate the maze with empty cells
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < resolution_[0]; i++) {
         //This represents each row of cells to be added to the maze
         std::vector<Cell> mazeLayer;
         
         //Push a cell to form each row; do something special for the borders
-        for (int j = 0; j < 50; j++) {
+        for (int j = 0; j < resolution_[1]; j++) {
             Cell cell;
 
             //The border cells should be pre-visited
             //Top and bottom rows
             if (i == 0) {
-                cell.setWallValues(0, 1, 0, 0);
-            } else if (i == 49) {
-                cell.setWallValues(0, 0, 0, 1);
+                cell.setWallValues(0, 1, 0, 0, 1);
+            } else if (i == resolution_[0] - 1) {
+                cell.setWallValues(0, 0, 0, 1, 1);
             }
             //Left and right columns
             if (j == 0) {
-                cell.setWallValues(0, 0, 1, 0);
-            } else if (j == 49) {
-                cell.setWallValues(1, 0, 0, 0);
+                cell.setWallValues(0, 0, 1, 0, 1);
+            } else if (j == resolution_[1] - 1) {
+                cell.setWallValues(1, 0, 0, 0, 1);
             }
 
             //Push each cell into the row
@@ -145,7 +151,7 @@ void Maze::depthFirstSearch() {
     active_[1] = 1;
 
     //Prepare the first cell by giving it total walls
-    maze_[1][1].setWallValues(1, 1, 1, 1);
+    maze_[1][1].setWallValues(1, 1, 1, 1, 1);
 
     //Preparing the path
     std::vector<Vertex> path;
@@ -155,12 +161,13 @@ void Maze::depthFirstSearch() {
     path.push_back(firstCell);
 
     //Keeps count of the amount of cells visited in the maze
-    int visitedCells = 1;
+    // int visitedCells = 1;
+    int back = 0;
 
     //So long as the amount of cells hasn't filled in the maze, keep generating
-    while (visitedCells < 2304) {
+    while (path.size() < (resolution_[0] - 2) * (resolution_[1] - 2)) {
         //Generate a random direction to move the active_ to [0,3]
-        int direction = (int)(dis(gen) * 4);        
+        int direction = (int)(dis(gen) * 4);
 
         //Checks if the active can't move in any direction. If it can't, then go back and find an open cell along the path.
         if (!isActiveStuck()) {
@@ -181,15 +188,25 @@ void Maze::depthFirstSearch() {
                 }
 
                 //Set the next wall to recieve the active_
-                maze_[active_[0]][active_[1]].setWallValues(1, 1, 1, 1);
+                //If the cell hasn't been visited yet, set it to all walls
+                if (!maze_[active_[0]][active_[1]].getVisited()) {
+                    maze_[active_[0]][active_[1]].setWallValues(1, 1, 1, 1, 1);
+                }
+                //If it has been visited, open up the wall to recieve the active_
                 maze_[active_[0]][active_[1]].getWalls()[(direction + 2) % 4] = false;
 
                 //Add one to the amount of cells visited
-                visitedCells++;
+                // visitedCells++;
 
                 //Add the cell to the path
                 Vertex traceCell(active_[0], active_[1]);
                 path.push_back(traceCell);
+                // traceCell.print();
+
+                // if (back > 0) {
+                //     std::cout << "back: " << back << std::endl;
+                //     break;
+                // }
             }
         } else {
             //Traverse the path in search of an open cell
@@ -204,6 +221,9 @@ void Maze::depthFirstSearch() {
                     break;
                 }
             }
+            // std::cout << active_[0] << ", " << active_[1] << std::endl;
+            back++;
+            // break;
         }
     }
     
@@ -234,8 +254,8 @@ void Maze::buildMaze() {
     * Draws the maze onto the screen
 */
 void Maze::draw(sf::RenderTarget& window) const {
-    for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
+    for (int i = 0; i < resolution_[0]; i++) {
+        for (int j = 0; j < resolution_[1]; j++) {
             maze_[i][j].draw(window, i, j);
         }
     }

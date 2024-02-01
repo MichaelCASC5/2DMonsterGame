@@ -5,16 +5,25 @@ Cell::Cell() {
     for (int i = 0; i < 4; i++) {
         walls_[i] = 0;
     }
+
+    visited_ = false;
 }
 
 /**
     * ACCESSOR METHODS
 */
 /**
-    * Returns the address to the 2D vector Cell_ 
+    * @return the address to the 2D vector Cell_ 
 */
 bool * Cell::getWalls() {
     return walls_;
+}
+
+/**
+    * @return Whether the cell has been visited or not
+*/
+bool Cell::getVisited() const {
+    return visited_;
 }
 
 /**
@@ -23,17 +32,27 @@ bool * Cell::getWalls() {
 /**
     * Sets a cell's walls to true or false
 */
-void Cell::setWallValues(bool up, bool right, bool down, bool left) {
+void Cell::setWallValues(bool up, bool right, bool down, bool left, bool visited) {
     walls_[0] = up;
     walls_[1] = right;
     walls_[2] = down;
     walls_[3] = left;
+
+    visited_ = visited;
+}
+
+/**
+    * Sets visited
+    * @param visited The bool to set visited_ to
+*/
+void Cell::setVisited(bool visited) {
+    visited_ = visited;
 }
 
 /**
     * CELL FUNCTIONS
 */
-bool Cell::isVisited() const {
+bool Cell::hasWalls() const {
     bool output = false;
 
     for (int i = 0; i < 4; i++) {
@@ -66,18 +85,20 @@ void Cell::print() const {
     * Draws the cell onto the screen
 */
 void Cell::draw(sf::RenderTarget& window, int xPos, int yPos) const {
-    //Set the dimensions of the rectangle
-    sf::RectangleShape shape(sf::Vector2f(15.f, 15.f));
+    if (!hasWalls()) {
+        //Set the dimensions of the rectangle
+        sf::RectangleShape shape(sf::Vector2f(15.f, 15.f));
 
-    //Set the position of the rectangle
-    sf::Vector2f position = {(float) xPos * 20, (float) yPos * 20};
-    shape.setPosition(position);
+        //Set the position of the rectangle
+        sf::Vector2f position = {(float) xPos * 20, (float) yPos * 20};
+        shape.setPosition(position);
 
-    //Set the color of the rectangle
-    shape.setFillColor(sf::Color::Black);
+        //Set the color of the rectangle
+        shape.setFillColor(sf::Color::Red);
 
-    //Draw the rectangle to the target window
-    window.draw(shape);
+        //Draw the rectangle to the target window
+        window.draw(shape);
+    }
 
     for (int i = 0; i < 4; i++) {
         if (walls_[0]) {
