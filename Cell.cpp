@@ -1,4 +1,7 @@
 /**
+    * BIG 5
+*/
+/**
     * DEFAULT CONSTRUCTOR
 */
 Cell::Cell() {
@@ -8,6 +11,49 @@ Cell::Cell() {
 
     visited_ = false;
 }
+
+/**
+    * PARAMETERIZED CONSTRUCTOR
+*/
+Cell::Cell(bool up, bool right, bool down, bool left, bool visited) {
+    walls_[0] = up;
+    walls_[1] = right;
+    walls_[2] = down;
+    walls_[3] = left;
+
+    visited_ = visited;
+}
+
+/**
+    * COPY CONSTRUCTOR
+*/
+Cell::Cell(const Cell& other) {
+    walls_[0] = other.walls_[0];
+    walls_[1] = other.walls_[1];
+    walls_[2] = other.walls_[2];
+    walls_[3] = other.walls_[3];
+
+    visited_ = other.visited_;
+}
+
+/**
+    * COPY ASSIGNMENT OPERATOR
+*/
+Cell& Cell::operator=(const Cell& other) {
+    walls_[0] = other.walls_[0];
+    walls_[1] = other.walls_[1];
+    walls_[2] = other.walls_[2];
+    walls_[3] = other.walls_[3];
+
+    visited_ = other.visited_;
+
+    return *this;
+}
+
+/**
+    * DESTRUCTOR
+*/
+Cell::~Cell() {}
 
 /**
     * ACCESSOR METHODS
@@ -94,7 +140,7 @@ void Cell::draw(sf::RenderTarget& window, int xPos, int yPos) const {
         shape.setPosition(position);
 
         //Set the color of the rectangle
-        shape.setFillColor(sf::Color::Red);
+        shape.setFillColor(sf::Color::Black);
 
         //Draw the rectangle to the target window
         window.draw(shape);
@@ -103,10 +149,10 @@ void Cell::draw(sf::RenderTarget& window, int xPos, int yPos) const {
     for (int i = 0; i < 4; i++) {
         if (walls_[0]) {
             //Set the dimensions of the rectangle
-            sf::RectangleShape shape(sf::Vector2f(20.f, 5.f));
+            sf::RectangleShape shape(sf::Vector2f(25.f, 5.f));
 
             //Set the position of the rectangle
-            sf::Vector2f position = {(float) xPos * 20, (float) yPos * 20 - 5};
+            sf::Vector2f position = {(float) xPos * 20 - 5, (float) yPos * 20 - 5};
             shape.setPosition(position);
 
             //Set the color of the rectangle

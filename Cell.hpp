@@ -17,29 +17,32 @@ private:
 
 public:
     /**
+        * BIG 5
+    */
+    /**
         * DEFAULT CONSTRUCTOR
     */
     Cell();
 
-    // /**
-    //     * PARAMETERIZED CONSTRUCTOR
-    // */
-    // Cell(std::initializer_list<int> arr);
+    /**
+        * PARAMETERIZED CONSTRUCTOR
+    */
+    Cell(bool up, bool right, bool down, bool left, bool visited);
 
-    // /**
-    //     COPY CONSTRUCTOR
-    // */
-    // Cell(const Cell& other);
+    /**
+        COPY CONSTRUCTOR
+    */
+    Cell(const Cell& other);
 
-    // /**
-    //     COPY ASSIGNMENT OPERATOR
-    // */
-    // Cell& operator=(const Cell& other);
+    /**
+        COPY ASSIGNMENT OPERATOR
+    */
+    Cell& operator=(const Cell& other);
 
-    // /**
-    //     DESTRUCTOR
-    // */
-    // ~Cell();
+    /**
+        DESTRUCTOR
+    */
+    ~Cell();
 
     /**
         * ACCESSOR METHODS

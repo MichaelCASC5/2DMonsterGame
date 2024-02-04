@@ -1,4 +1,7 @@
 /**
+    * BIG 5
+*/
+/**
     * DEFAULT CONSTRUCTOR
 */
 Maze::Maze() {
@@ -10,6 +13,87 @@ Maze::Maze() {
     resolution_[0] = 10;
     resolution_[1] = 10;
 }
+
+/**
+    * PARAMETERIZED CONSTRUCTOR
+    * Specifies resolution
+*/
+Maze::Maze(int resx, int resy) {
+    maze_ = {};
+
+    active_[0] = 1;
+    active_[1] = 1;
+
+    resolution_[0] = resx + 2;
+    resolution_[1] = resy + 2;
+}
+
+/**
+    * COPY CONSTRUCTOR
+*/
+Maze::Maze(const Maze& other) {
+    //Clears the maze_ of this object
+    maze_.clear();
+
+    //For every cell in the other maze, push a copy to this one
+    for (int i = 0; i < other.maze_.size(); i++) {
+        std::vector<Cell> layer;
+        Cell cell;
+        for (int j = 0; j < other.maze_.size(); j++) {
+            cell = other.maze_[i][j];
+        }
+
+        //Push each row of the other maze to this one's
+        maze_.push_back(layer);
+
+        //Clear the row after
+        layer.clear();
+    }
+
+    //Set active and resolution to the other maze
+    active_[0] = other.active_[0];
+    active_[1] = other.active_[1];
+
+    resolution_[0] = other.resolution_[0];
+    resolution_[1] = other.resolution_[1];
+}
+
+/**
+    * COPY ASSIGNMENT OPERATOR
+*/
+Maze& Maze::operator=(const Maze& other) {
+    //Clears the maze_ of this object
+    maze_.clear();
+
+    //For every cell in the other maze, push a copy to this one
+    for (int i = 0; i < other.maze_.size(); i++) {
+        std::vector<Cell> layer;
+        Cell cell;
+        for (int j = 0; j < other.maze_.size(); j++) {
+            cell = other.maze_[i][j];
+        }
+
+        //Push each row of the other maze to this one's
+        maze_.push_back(layer);
+
+        //Clear the row after
+        layer.clear();
+    }
+
+    //Set active and resolution to the other maze
+    active_[0] = other.active_[0];
+    active_[1] = other.active_[1];
+
+    resolution_[0] = other.resolution_[0];
+    resolution_[1] = other.resolution_[1];
+
+    return *this;
+}
+
+/**
+    * DESTRUCTOR
+*/
+Maze::~Maze() {}
 
 /**
     * ACCESSOR METHODS
@@ -28,6 +112,16 @@ int * Maze::getActive() {
     return active_;
 }
 
+/**
+    * @returns a pointer to the resoution_ vertex
+*/
+int * Maze::getResolution() {
+    return resolution_;
+}
+
+/**
+    * MAZE FUNCTIONS
+*/
 /**
     * Checks if the active_ is surrounded on all sides by visited cells or borders
     *
@@ -98,17 +192,8 @@ void Maze::setupMaze() {
             Cell cell;
 
             //The border cells should be pre-visited
-            //Top and bottom rows
-            if (i == 0) {
-                cell.setWallValues(0, 1, 0, 0, 1);
-            } else if (i == resolution_[0] - 1) {
-                cell.setWallValues(0, 0, 0, 1, 1);
-            }
-            //Left and right columns
-            if (j == 0) {
-                cell.setWallValues(0, 0, 1, 0, 1);
-            } else if (j == resolution_[1] - 1) {
-                cell.setWallValues(1, 0, 0, 0, 1);
+            if (i == 0 || i == resolution_[0] - 1 || j == 0 || j == resolution_[1] - 1) {
+                cell.setVisited(true);
             }
 
             //Push each cell into the row
@@ -160,10 +245,6 @@ void Maze::depthFirstSearch() {
     Vertex firstCell(1, 1);
     path.push_back(firstCell);
 
-    //Keeps count of the amount of cells visited in the maze
-    // int visitedCells = 1;
-    int back = 0;
-
     //So long as the amount of cells hasn't filled in the maze, keep generating
     while (path.size() < (resolution_[0] - 2) * (resolution_[1] - 2)) {
         //Generate a random direction to move the active_ to [0,3]
@@ -195,18 +276,9 @@ void Maze::depthFirstSearch() {
                 //If it has been visited, open up the wall to recieve the active_
                 maze_[active_[0]][active_[1]].getWalls()[(direction + 2) % 4] = false;
 
-                //Add one to the amount of cells visited
-                // visitedCells++;
-
                 //Add the cell to the path
                 Vertex traceCell(active_[0], active_[1]);
                 path.push_back(traceCell);
-                // traceCell.print();
-
-                // if (back > 0) {
-                //     std::cout << "back: " << back << std::endl;
-                //     break;
-                // }
             }
         } else {
             //Traverse the path in search of an open cell
@@ -221,9 +293,6 @@ void Maze::depthFirstSearch() {
                     break;
                 }
             }
-            // std::cout << active_[0] << ", " << active_[1] << std::endl;
-            back++;
-            // break;
         }
     }
     

@@ -9,6 +9,9 @@ private:
 
 public:
     /**
+        * BIG 5
+    */
+    /**
         * DEFAULT CONSTRUCTOR
     */
     Vertex();
@@ -22,6 +25,21 @@ public:
         * PARAMETERIZED CONSTRUCTOR 2D
     */
     Vertex(int xPos, int yPos);
+
+    /**
+        COPY CONSTRUCTOR
+    */
+    Vertex(const Vertex& other);
+
+    /**
+        COPY ASSIGNMENT OPERATOR
+    */
+    Vertex& operator=(const Vertex& other);
+
+    /**
+        DESTRUCTOR
+    */
+    ~Vertex();
 
     /**
         * Accessors methods

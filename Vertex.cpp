@@ -1,20 +1,60 @@
+/**
+    * BIG 5
+*/
+/**
+    * DEFAULT CONSTRUCTOR
+*/
 Vertex::Vertex() {
     for (int i = 0; i < 3; i++) {
         pos_[i] = 0;
     }
 }
 
+/**
+    * PARAMETERIZED CONSTRUCTORS
+*/
+/**
+    * 3D PARAMETERIZED CONSTRUCTOR
+*/
 Vertex::Vertex(int xPos, int yPos, int zPos) {
     pos_[0] = xPos;
     pos_[1] = yPos;
     pos_[2] = zPos;
 }
 
+/**
+    * 2D PARAMETERIZED CONSTRUCTOR
+*/
 Vertex::Vertex(int xPos, int yPos) {
     pos_[0] = xPos;
     pos_[1] = yPos;
     pos_[2] = 0;
 }
+
+/**
+    * COPY CONSTRUCTOR
+*/
+Vertex::Vertex(const Vertex& other) {
+    pos_[0] = other.pos_[0];
+    pos_[1] = other.pos_[1];
+    pos_[2] = other.pos_[2];
+}
+
+/**
+    * COPY ASSIGNMENT OPERATOR
+*/
+Vertex& Vertex::operator=(const Vertex& other) {
+    pos_[0] = other.pos_[0];
+    pos_[1] = other.pos_[1];
+    pos_[2] = other.pos_[2];
+
+    return *this;
+}
+
+/**
+    * DESTRUCTOR
+*/
+Vertex::~Vertex() {}
 
 /**
     * Accessor methods

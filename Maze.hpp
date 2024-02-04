@@ -23,29 +23,32 @@ private:
 
 public:
     /**
+        * BIG 5
+    */
+    /**
         * DEFAULT CONSTRUCTOR
     */
     Maze();
 
-    // /**
-    //     * PARAMETERIZED CONSTRUCTOR
-    // */
-    // Maze(std::initializer_list<int> arr);
+    /**
+        * PARAMETERIZED CONSTRUCTOR
+    */
+    Maze(int resx, int resy);
 
-    // /**
-    //     COPY CONSTRUCTOR
-    // */
-    // Maze(const Maze& other);
+    /**
+        COPY CONSTRUCTOR
+    */
+    Maze(const Maze& other);
 
-    // /**
-    //     COPY ASSIGNMENT OPERATOR
-    // */
-    // Maze& operator=(const Maze& other);
+    /**
+        COPY ASSIGNMENT OPERATOR
+    */
+    Maze& operator=(const Maze& other);
 
-    // /**
-    //     DESTRUCTOR
-    // */
-    // ~Maze();
+    /**
+        DESTRUCTOR
+    */
+    ~Maze();
 
     /**
         * ACCESSOR METHODS
@@ -59,6 +62,11 @@ public:
         * Returns the active_ vertex
     */
     int * getActive();
+
+    /**
+        * Returns the resolution_ vertex
+    */
+    int * getResolution();
 
     /**
         * MUTATOR METHODS

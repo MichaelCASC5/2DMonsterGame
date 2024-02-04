@@ -18,7 +18,7 @@
 
 int main() {
     //Create a maze and build it
-    Maze maze;
+    Maze maze(16, 16);
     maze.buildMaze();
 
 
