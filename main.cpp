@@ -12,6 +12,8 @@
 //Classes include
 #include "Vertex.hpp"
 #include "Maze.hpp"
+#include "Player.hpp"
+
 
 //C include
 #include <iostream>
@@ -21,6 +23,8 @@ int main() {
     Maze maze(16, 16);
     maze.buildMaze();
 
+    //Make a Player
+    Player player;
 
 
     /**
@@ -54,13 +58,18 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
-            } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            } 
+            
+            else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 window.close();
             } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
                 maze.buildMaze();
             }
+        //Player can move
+         player.handleMovement();
+            
         }
-
+       
         //Clear the window
         window.clear();
 
