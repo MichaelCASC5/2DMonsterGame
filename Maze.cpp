@@ -282,8 +282,8 @@ void Maze::depthFirstSearch() {
             }
         } else {
             //Traverse the path in search of an open cell
-            for (int i = 0; i < path.size(); i++) {//Hard mode
-            // for (int i = path.size() - 1; i >= 0; i--) {//Easy mode
+            // for (int i = 0; i < path.size(); i++) {//Hard mode
+            for (int i = path.size() - 1; i >= 0; i--) {//Easy mode
                 //Set the active_ to the path as it's being traversed
                 active_[0] = path[i].getXPos();
                 active_[1] = path[i].getYPos();

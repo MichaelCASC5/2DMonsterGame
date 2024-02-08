@@ -16,4 +16,5 @@ class Player {
     float speed;
 };
 
+#include "Player.cpp"
 #endif

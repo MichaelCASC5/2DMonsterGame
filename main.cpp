@@ -65,8 +65,9 @@ int main() {
             } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
                 maze.buildMaze();
             }
-        //Player can move
-         player.handleMovement();
+
+            //Player can move
+            player.handleMovement();
             
         }
        
@@ -80,6 +81,7 @@ int main() {
         */
         //Draw the maze
         maze.draw(window);
+        player.drawPlayer(window);
 
         //Display the window
         window.display();

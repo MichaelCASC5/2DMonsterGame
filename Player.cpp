@@ -1,7 +1,6 @@
 //Player class 
-#include "Player.hpp"
 
-//cosntructor of Player class
+//constructor of Player class
 Player::Player(sf::Vector2f size):speed(1.0f){
     //size of player shape 
     shape.setSize(size);
