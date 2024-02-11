@@ -23,8 +23,8 @@ int main() {
     Maze maze(16, 16);
     maze.buildMaze();
 
-    //Make a Player
-    Player player;
+    //Make a Player position, size
+    Player player(sf::Vector2f(100.0f,100.0f), sf::Vector2f(50.0f,50.0f));
 
 
     /**
@@ -66,11 +66,14 @@ int main() {
                 maze.buildMaze();
             }
 
-            //Player can move
-            player.handleMovement();
+        
             
         }
-       
+
+    
+        //Player can move
+        player.handleMovement();
+        
         //Clear the window
         window.clear();
 
