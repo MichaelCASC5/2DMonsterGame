@@ -13,7 +13,7 @@
 #include "Vertex.hpp"
 #include "Maze.hpp"
 #include "Player.hpp"
-
+#include "Map.hpp"
 
 //C include
 #include <iostream>
