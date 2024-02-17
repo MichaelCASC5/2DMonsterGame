@@ -36,7 +36,9 @@ int main() {
     bot.setPath(path);
 
     //Make a Player position, size
-    Player player(sf::Vector2f(100.0f,100.0f), sf::Vector2f(50.0f,50.0f));
+    Player player(sf::Vector2f(100.0f,100.0f));
+    player.loadSprite("slime1.png");
+    
 
 
 
@@ -92,10 +94,14 @@ int main() {
     
         //Player can move
         player.handleMovement();
+        player.handleRotation();
         bot.move();
         
         //Clear the window
         window.clear();
+
+   
+
 
         /**
          * GAME DISPLAY
@@ -106,7 +112,9 @@ int main() {
         maze.draw(window);
         player.drawPlayer(window);
         bot.draw(window);
+        Timers.draw(window);
 
+       
         //Display the window
         window.display();
     }

@@ -19,5 +19,5 @@ class Timer{
         bool finish;
 };
 
-
+#include "Timer.cpp"
 #endif

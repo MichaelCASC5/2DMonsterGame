@@ -2,10 +2,14 @@
 #include <iostream>
 
 Timer::Timer(unsigned int timer):timer(timer), finish(false){
+    if(!font.loadFromFile("C:\\Users\\Raptor\\Desktop\\Roboto-Bold.ttf")){
+        std::cerr<<"Failed to load font"<<std::endl;
+    }
     text.setFont(font);
-    text.setCharacterSize(10);
+    text.setString("Timer");
+    text.setCharacterSize(30);
     text.setFillColor(sf::Color::Red);
-    text.setPosition(20,20);
+    text.setPosition(70,50);
 }
 
 void Timer::update(){
