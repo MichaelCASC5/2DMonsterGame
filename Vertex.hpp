@@ -5,60 +5,60 @@
 
 class Vertex {
 private:
-    int pos_[3];
+    double data_[3];
 
 public:
     /**
-        * BIG 5
-    */
+     * BIG 5
+     */
     /**
-        * DEFAULT CONSTRUCTOR
-    */
+     * DEFAULT CONSTRUCTOR
+     */
     Vertex();
 
     /**
-        * PARAMETERIZED CONSTRUCTOR 3D
-    */
-    Vertex(int xPos, int yPos, int zPos);
+     * PARAMETERIZED CONSTRUCTOR 3D
+     */
+    Vertex(double x, double y, double z);
 
     /**
-        * PARAMETERIZED CONSTRUCTOR 2D
-    */
-    Vertex(int xPos, int yPos);
+     * PARAMETERIZED CONSTRUCTOR 2D
+     */
+    Vertex(double x, double y);
 
     /**
-        COPY CONSTRUCTOR
-    */
+     * COPY CONSTRUCTOR
+     */
     Vertex(const Vertex& other);
 
     /**
-        COPY ASSIGNMENT OPERATOR
-    */
+     * COPY ASSIGNMENT OPERATOR
+     */
     Vertex& operator=(const Vertex& other);
 
     /**
-        DESTRUCTOR
-    */
+     * DESTRUCTOR
+     */
     ~Vertex();
 
     /**
-        * Accessors methods
-    */
-    int getXPos() const;
-    int getYPos() const;
-    int getZPos() const;
+     * Accessors methods
+     */
+    double getX() const;
+    double getY() const;
+    double getZ() const;
 
     /**
-        * Mutator methods
-    */
-    void setXPos(int n);
-    void setYPos(int n);
-    void setZPos(int n);
-    void setPos(int xPos, int yPos, int zPos);
+     * Mutator methods
+     */
+    void setX(double n);
+    void setY(double n);
+    void setZ(double n);
+    void set(double x, double y, double z);
 
     /**
-        * Print methods
-    */
+     * Print methods
+     */
     void print() const;
 };
 

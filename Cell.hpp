@@ -17,78 +17,78 @@ private:
 
 public:
     /**
-        * BIG 5
-    */
+     * BIG 5
+     */
     /**
-        * DEFAULT CONSTRUCTOR
-    */
+     * DEFAULT CONSTRUCTOR
+     */
     Cell();
 
     /**
-        * PARAMETERIZED CONSTRUCTOR
-    */
+     * PARAMETERIZED CONSTRUCTOR
+     */
     Cell(bool up, bool right, bool down, bool left, bool visited);
 
     /**
-        COPY CONSTRUCTOR
-    */
+     * COPY CONSTRUCTOR
+     */
     Cell(const Cell& other);
 
     /**
-        COPY ASSIGNMENT OPERATOR
-    */
+     * COPY ASSIGNMENT OPERATOR
+     */
     Cell& operator=(const Cell& other);
 
     /**
-        DESTRUCTOR
-    */
+     * DESTRUCTOR
+     */
     ~Cell();
 
     /**
-        * ACCESSOR METHODS
-    */
+     * ACCESSOR METHODS
+     */
     /**
-        * Returns the address to the 2D vector Cell_ 
-    */
+     * Returns the address to the 2D vector Cell_ 
+     */
     bool * getWalls();
 
     /**
-        * Returns whether cell has been visited
-    */
+     * Returns whether cell has been visited
+     */
     bool getVisited() const;
 
     /**
-        * MUTATOR METHODS
-    */
+     * MUTATOR METHODS
+     */
     /**
-        * Sets a cell's walls to true or false
-    */
+     * Sets a cell's walls to true or false
+     */
     void setWallValues(bool up, bool right, bool down, bool left, bool visited);
 
     /**
-        * Sets visited
-    */
+     * Sets visited
+     */
     void setVisited(bool visited);
 
     /**
-        * CELL FUNCTIONS
-    */
+     * CELL FUNCTIONS
+     */
     /**
-        * Returns whether the cell has any walls. If the cell has no walls, it means it hasn't been visited yet
-    */
+     * Returns whether the cell has any walls. If the cell has no walls, it means it hasn't been visited yet
+     */
     bool hasWalls() const;
 
     /**
-        * PRINT FUNCTIONS
-    */
+     * PRINT FUNCTIONS
+     */
     void print() const;
 
     /**
-        * GRAPHICS METHODS
-    */
+     * GRAPHICS METHODS
+     */
     /**
-        * Draws the cell onto the screen
-    */
+     * Draws the cell onto the screen
+     */
     void draw(sf::RenderTarget& window, int xPos, int yPos) const;
 };
 

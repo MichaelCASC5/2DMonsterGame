@@ -1,9 +1,9 @@
 /**
-    * BIG 5
-*/
+ * BIG 5
+ */
 /**
-    * DEFAULT CONSTRUCTOR
-*/
+ * DEFAULT CONSTRUCTOR
+ */
 Maze::Maze() {
     maze_ = {};
 
@@ -15,9 +15,9 @@ Maze::Maze() {
 }
 
 /**
-    * PARAMETERIZED CONSTRUCTOR
-    * Specifies resolution
-*/
+ * PARAMETERIZED CONSTRUCTOR
+ * Specifies resolution
+ */
 Maze::Maze(int resx, int resy) {
     maze_ = {};
 
@@ -29,8 +29,8 @@ Maze::Maze(int resx, int resy) {
 }
 
 /**
-    * COPY CONSTRUCTOR
-*/
+ * COPY CONSTRUCTOR
+ */
 Maze::Maze(const Maze& other) {
     //Clears the maze_ of this object
     maze_.clear();
@@ -59,8 +59,8 @@ Maze::Maze(const Maze& other) {
 }
 
 /**
-    * COPY ASSIGNMENT OPERATOR
-*/
+ * COPY ASSIGNMENT OPERATOR
+ */
 Maze& Maze::operator=(const Maze& other) {
     //Clears the maze_ of this object
     maze_.clear();
@@ -91,42 +91,42 @@ Maze& Maze::operator=(const Maze& other) {
 }
 
 /**
-    * DESTRUCTOR
-*/
+ * DESTRUCTOR
+ */
 Maze::~Maze() {}
 
 /**
-    * ACCESSOR METHODS
-*/
+ * ACCESSOR METHODS
+ */
 /**
-    * Returns the address to the 2D vector maze_ 
-*/
+ * Returns the address to the 2D vector maze_ 
+ */
 std::vector<std::vector<Cell>>& Maze::getMaze() {
     return maze_;
 }
 
 /**
-    * @returns a pointer to the active_ vertex
-*/
+ * @returns a pointer to the active_ vertex
+ */
 int * Maze::getActive() {
     return active_;
 }
 
 /**
-    * @returns a pointer to the resoution_ vertex
-*/
+ * @returns a pointer to the resoution_ vertex
+ */
 int * Maze::getResolution() {
     return resolution_;
 }
 
 /**
-    * MAZE FUNCTIONS
-*/
+ * MAZE FUNCTIONS
+ */
 /**
-    * Checks if the active_ is surrounded on all sides by visited cells or borders
-    *
-    * An array of 4 booleans attest to whether there are open spaces in either direction.
-*/
+ * Checks if the active_ is surrounded on all sides by visited cells or borders
+ *
+ * An array of 4 booleans attest to whether there are open spaces in either direction.
+ */
 bool Maze::isActiveStuck() const {
     //If the 4 adjacent spaces are obstructed. True if there is an obstruction.
     bool surrounded[4];
@@ -151,14 +151,14 @@ bool Maze::isActiveStuck() const {
 }
 
 /**
-    * Checks if the direction the active_ wishes to travel to is blocked off by a visited cell 
-    *
-    * Depending on which direction the active_ wishes to go, one is either added or subtracted to find
-    * the adjacent position. Then that cell is checked to see if it was ever visited.
-    *
-    * @param direction The direction that the active_ wishes to travel in.
-    * @return A boolean representing whether or not a visited cell lies one ahead in that direction.
-*/
+ * Checks if the direction the active_ wishes to travel to is blocked off by a visited cell 
+ *
+ * Depending on which direction the active_ wishes to go, one is either added or subtracted to find
+ * the adjacent position. Then that cell is checked to see if it was ever visited.
+ *
+ * @param direction The direction that the active_ wishes to travel in.
+ * @return A boolean representing whether or not a visited cell lies one ahead in that direction.
+ */
 bool Maze::IsDirectionBlocked(int direction) const {
     if (direction == 0) {
         return maze_[active_[0] + 0][active_[1] - 1].getVisited();
@@ -174,13 +174,13 @@ bool Maze::IsDirectionBlocked(int direction) const {
 }
 
 /**
-    * Populates the maze with cells
-    *
-    * The maze is filled with empty cells but considers the cells around the perimeter as having been
-    * visited. These cells are built to serve as a walled perimeter around the maze.
-    *
-    * @post A blank maze is built with a walled perimeter
-*/
+ * Populates the maze with cells
+ *
+ * The maze is filled with empty cells but considers the cells around the perimeter as having been
+ * visited. These cells are built to serve as a walled perimeter around the maze.
+ *
+ * @post A blank maze is built with a walled perimeter
+ */
 void Maze::setupMaze() {
     //Populate the maze with empty cells
     for (int i = 0; i < resolution_[0]; i++) {
@@ -207,18 +207,18 @@ void Maze::setupMaze() {
 }
 
 /**
-    * Uses the Depth-First Search Algorithm to generate the maze
-    *
-    * The cell generation doesn't begin at (0, 0), where the border is. Instead the generation begins
-    * at (1, 1). The first cell counts as having been visited and it is given walls.
-    * A random direction is chosen for the active_, and the maze extends into that direction.
-    * As the maze navigates around the map, the coordinates of the nodes visited are recorded and remembered
-    * in the vector "path." The active_ only stops once it gets stuck somewhere.
-    * When the active_ gets stuck, the algorithm traverses that recorded "path" to find the first cell that
-    * can be expanded on.
-    *
-    * @post The maze has been generated
-*/
+ * Uses the Depth-First Search Algorithm to generate the maze
+ *
+ * The cell generation doesn't begin at (0, 0), where the border is. Instead the generation begins
+ * at (1, 1). The first cell counts as having been visited and it is given walls.
+ * A random direction is chosen for the active_, and the maze extends into that direction.
+ * As the maze navigates around the map, the coordinates of the nodes visited are recorded and remembered
+ * in the vector "path." The active_ only stops once it gets stuck somewhere.
+ * When the active_ gets stuck, the algorithm traverses that recorded "path" to find the first cell that
+ * can be expanded on.
+ *
+ * @post The maze has been generated
+ */
 void Maze::depthFirstSearch() {
     //Clear maze_
     maze_.clear();
@@ -285,8 +285,8 @@ void Maze::depthFirstSearch() {
             // for (int i = 0; i < path.size(); i++) {//Hard mode
             for (int i = path.size() - 1; i >= 0; i--) {//Easy mode
                 //Set the active_ to the path as it's being traversed
-                active_[0] = path[i].getXPos();
-                active_[1] = path[i].getYPos();
+                active_[0] = path[i].getX();
+                active_[1] = path[i].getY();
 
                 //If that new active isn't surrounded, then this section is finished
                 if (!isActiveStuck()) {
@@ -301,13 +301,13 @@ void Maze::depthFirstSearch() {
 }
 
 /**
-    * Builds the maze
-    *
-    * First, the setup is called to populate the maze with empty cells and a perimeter. Then, the depth-first search
-    * algorithm is called to generate the maze structure.
-    *
-    * @post A completely generated maze.
-*/
+ * Builds the maze
+ *
+ * First, the setup is called to populate the maze with empty cells and a perimeter. Then, the depth-first search
+ * algorithm is called to generate the maze structure.
+ *
+ * @post A completely generated maze.
+ */
 void Maze::buildMaze() {
     //Sets the maze up
     setupMaze();
@@ -317,11 +317,11 @@ void Maze::buildMaze() {
 }
 
 /**
-    * GRAPHICS METHODS
-*/
+ * GRAPHICS METHODS
+ */
 /**
-    * Draws the maze onto the screen
-*/
+ * Draws the maze onto the screen
+ */
 void Maze::draw(sf::RenderTarget& window) const {
     for (int i = 0; i < resolution_[0]; i++) {
         for (int j = 0; j < resolution_[1]; j++) {

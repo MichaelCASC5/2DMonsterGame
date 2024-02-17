@@ -1,9 +1,9 @@
 /**
-    * BIG 5
-*/
+ * BIG 5
+ */
 /**
-    * DEFAULT CONSTRUCTOR
-*/
+ * DEFAULT CONSTRUCTOR
+ */
 Cell::Cell() {
     for (int i = 0; i < 4; i++) {
         walls_[i] = 0;
@@ -13,8 +13,8 @@ Cell::Cell() {
 }
 
 /**
-    * PARAMETERIZED CONSTRUCTOR
-*/
+ * PARAMETERIZED CONSTRUCTOR
+ */
 Cell::Cell(bool up, bool right, bool down, bool left, bool visited) {
     walls_[0] = up;
     walls_[1] = right;
@@ -25,8 +25,8 @@ Cell::Cell(bool up, bool right, bool down, bool left, bool visited) {
 }
 
 /**
-    * COPY CONSTRUCTOR
-*/
+ * COPY CONSTRUCTOR
+ */
 Cell::Cell(const Cell& other) {
     walls_[0] = other.walls_[0];
     walls_[1] = other.walls_[1];
@@ -37,8 +37,8 @@ Cell::Cell(const Cell& other) {
 }
 
 /**
-    * COPY ASSIGNMENT OPERATOR
-*/
+ * COPY ASSIGNMENT OPERATOR
+ */
 Cell& Cell::operator=(const Cell& other) {
     walls_[0] = other.walls_[0];
     walls_[1] = other.walls_[1];
@@ -51,33 +51,33 @@ Cell& Cell::operator=(const Cell& other) {
 }
 
 /**
-    * DESTRUCTOR
-*/
+ * DESTRUCTOR
+ */
 Cell::~Cell() {}
 
 /**
-    * ACCESSOR METHODS
-*/
+ * ACCESSOR METHODS
+ */
 /**
-    * @return the address to the 2D vector Cell_ 
-*/
+ * @return the address to the 2D vector Cell_ 
+ */
 bool * Cell::getWalls() {
     return walls_;
 }
 
 /**
-    * @return Whether the cell has been visited or not
-*/
+ * @return Whether the cell has been visited or not
+ */
 bool Cell::getVisited() const {
     return visited_;
 }
 
 /**
-    * MUTATOR METHODS
-*/
+ * MUTATOR METHODS
+ */
 /**
-    * Sets a cell's walls to true or false
-*/
+ * Sets a cell's walls to true or false
+ */
 void Cell::setWallValues(bool up, bool right, bool down, bool left, bool visited) {
     walls_[0] = up;
     walls_[1] = right;
@@ -88,16 +88,16 @@ void Cell::setWallValues(bool up, bool right, bool down, bool left, bool visited
 }
 
 /**
-    * Sets visited
-    * @param visited The bool to set visited_ to
-*/
+ * Sets visited
+ * @param visited The bool to set visited_ to
+ */
 void Cell::setVisited(bool visited) {
     visited_ = visited;
 }
 
 /**
-    * CELL FUNCTIONS
-*/
+ * CELL FUNCTIONS
+ */
 bool Cell::hasWalls() const {
     bool output = false;
 
@@ -112,11 +112,11 @@ bool Cell::hasWalls() const {
 }
 
 /**
-    * PRINT FUNCTIONS
-*/
+ * PRINT FUNCTIONS
+ */
 /**
-    * Prints the cell data to console
-*/
+ * Prints the cell data to console
+ */
 void Cell::print() const {
     for (int i = 0; i < 4; i++) {
         std::cout << walls_[i] << " ";
@@ -125,11 +125,11 @@ void Cell::print() const {
 }
 
 /**
-    * GRAPHICS METHODS
-*/
+ * GRAPHICS METHODS
+ */
 /**
-    * Draws the cell onto the screen
-*/
+ * Draws the cell onto the screen
+ */
 void Cell::draw(sf::RenderTarget& window, int xPos, int yPos) const {
     if (!hasWalls()) {
         //Set the dimensions of the rectangle

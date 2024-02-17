@@ -9,8 +9,8 @@
 class Map {
 public:
     /**
-        * BIG 5
-    */
+     * BIG 5
+     */
     //Default Constructor
     Map();
 

@@ -1,10 +1,10 @@
 /**
-    * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
-    *
-    * 2D MONSTER GAME
-    * CREATED BY ___LIST ALL YOUR NAMES HERE___
-    * 01/30/24 Spring Semester
-*/
+ * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
+ *
+ * 2D MONSTER GAME
+ * CREATED BY ANTON, ANGELA, MICHAEL
+ * 01/30/24 Spring Semester
+ */
 
 //External library include
 #include <SFML/Graphics.hpp>
@@ -14,6 +14,7 @@
 #include "Maze.hpp"
 #include "Player.hpp"
 #include "Map.hpp"
+#include "Bot.hpp"
 
 //C include
 #include <iostream>
@@ -23,15 +24,25 @@ int main() {
     Maze maze(16, 16);
     maze.buildMaze();
 
+    //Create a bot, build its path, and set it
+    Bot bot;
+    std::vector<Vertex> path = {
+        Vertex(10, 10),
+        Vertex(20, 2),
+        Vertex(5, 5),
+        Vertex(2, 20)
+    };
+    bot.setPath(path);
+
     //Make a Player position, size
     Player player(sf::Vector2f(100.0f,100.0f), sf::Vector2f(50.0f,50.0f));
 
 
     /**
-        * SFML 2D GRAPHICS LIBRARY SETUP
-        *
-        *
-    */
+     * SFML 2D LIBRARY GRAPHICS SETUP
+     * 
+     * 
+     */
     //Set up window
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML works!", sf::Style::Fullscreen);
 
@@ -73,18 +84,20 @@ int main() {
     
         //Player can move
         player.handleMovement();
+        bot.move();
         
         //Clear the window
         window.clear();
 
         /**
-            * GAME DISPLAY 
-            *
-            *
-        */
+         * GAME DISPLAY
+         * 
+         * 
+         */
         //Draw the maze
         maze.draw(window);
         player.drawPlayer(window);
+        bot.draw(window);
 
         //Display the window
         window.display();

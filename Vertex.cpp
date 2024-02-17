@@ -1,100 +1,100 @@
 /**
-    * BIG 5
-*/
+ * BIG 5
+ */
 /**
-    * DEFAULT CONSTRUCTOR
-*/
+ * DEFAULT CONSTRUCTOR
+ */
 Vertex::Vertex() {
     for (int i = 0; i < 3; i++) {
-        pos_[i] = 0;
+        data_[i] = 0;
     }
 }
 
 /**
-    * PARAMETERIZED CONSTRUCTORS
-*/
+ * PARAMETERIZED CONSTRUCTORS
+ */
 /**
-    * 3D PARAMETERIZED CONSTRUCTOR
-*/
-Vertex::Vertex(int xPos, int yPos, int zPos) {
-    pos_[0] = xPos;
-    pos_[1] = yPos;
-    pos_[2] = zPos;
+ * 3D PARAMETERIZED CONSTRUCTOR
+ */
+Vertex::Vertex(double x, double y, double z) {
+    data_[0] = x;
+    data_[1] = y;
+    data_[2] = z;
 }
 
 /**
-    * 2D PARAMETERIZED CONSTRUCTOR
-*/
-Vertex::Vertex(int xPos, int yPos) {
-    pos_[0] = xPos;
-    pos_[1] = yPos;
-    pos_[2] = 0;
+ * 2D PARAMETERIZED CONSTRUCTOR
+ */
+Vertex::Vertex(double x, double y) {
+    data_[0] = x;
+    data_[1] = y;
+    data_[2] = 0;
 }
 
 /**
-    * COPY CONSTRUCTOR
-*/
+ * COPY CONSTRUCTOR
+ */
 Vertex::Vertex(const Vertex& other) {
-    pos_[0] = other.pos_[0];
-    pos_[1] = other.pos_[1];
-    pos_[2] = other.pos_[2];
+    data_[0] = other.data_[0];
+    data_[1] = other.data_[1];
+    data_[2] = other.data_[2];
 }
 
 /**
-    * COPY ASSIGNMENT OPERATOR
-*/
+ * COPY ASSIGNMENT OPERATOR
+ */
 Vertex& Vertex::operator=(const Vertex& other) {
-    pos_[0] = other.pos_[0];
-    pos_[1] = other.pos_[1];
-    pos_[2] = other.pos_[2];
+    data_[0] = other.data_[0];
+    data_[1] = other.data_[1];
+    data_[2] = other.data_[2];
 
     return *this;
 }
 
 /**
-    * DESTRUCTOR
-*/
+ * DESTRUCTOR
+ */
 Vertex::~Vertex() {}
 
 /**
-    * Accessor methods
-*/
-int Vertex::getXPos() const {
-    return pos_[0];
+ * Accessor methods
+ */
+double Vertex::getX() const {
+    return data_[0];
 }
 
-int Vertex::getYPos() const{
-    return pos_[1];
+double Vertex::getY() const{
+    return data_[1];
 }
 
-int Vertex::getZPos() const{
-    return pos_[2];
-}
-
-/**
-    * Mutator methods
-*/
-void Vertex::setXPos(int n) {
-    pos_[0] = n;
-}
-
-void Vertex::setYPos(int n) {
-    pos_[1] = n;
-}
-
-void Vertex::setZPos(int n) {
-    pos_[2] = n;
-}
-
-void Vertex::setPos(int xPos, int yPos, int zPos) {
-    pos_[0] = xPos;
-    pos_[1] = yPos;
-    pos_[2] = zPos;
+double Vertex::getZ() const{
+    return data_[2];
 }
 
 /**
-    * Print methods
-*/
+ * Mutator methods
+ */
+void Vertex::setX(double n) {
+    data_[0] = n;
+}
+
+void Vertex::setY(double n) {
+    data_[1] = n;
+}
+
+void Vertex::setZ(double n) {
+    data_[2] = n;
+}
+
+void Vertex::set(double x, double y, double z) {
+    data_[0] = x;
+    data_[1] = y;
+    data_[2] = z;
+}
+
+/**
+ * Print methods
+ */
 void Vertex::print() const {
-    std::cout << pos_[0] << ", " << pos_[1] << ", " << pos_[2] << std::endl;
+    std::cout << data_[0] << ", " << data_[1] << ", " << data_[2] << std::endl;
 }
