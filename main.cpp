@@ -15,6 +15,7 @@
 #include "Player.hpp"
 #include "Map.hpp"
 #include "Bot.hpp"
+#include "Timer.hpp"
 
 //C include
 #include <iostream>
@@ -36,6 +37,7 @@ int main() {
 
     //Make a Player position, size
     Player player(sf::Vector2f(100.0f,100.0f), sf::Vector2f(50.0f,50.0f));
+
 
 
     /**
@@ -62,6 +64,9 @@ int main() {
     sf::Vector2i position(desktop.width/2 - window.getSize().x/2, desktop.height/2 - window.getSize().y/2);
     window.setPosition(position);
 
+    //Initiaziaze timer
+    Timer Timers(30);
+
     //Keep the window open
     while (window.isOpen()) {
         sf::Event event;
@@ -77,10 +82,13 @@ int main() {
                 maze.buildMaze();
             }
 
+
+
         
             
         }
 
+        Timers.update();
     
         //Player can move
         player.handleMovement();
