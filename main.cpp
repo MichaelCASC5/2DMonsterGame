@@ -35,6 +35,9 @@ int main() {
     };
     bot.setPath(path);
 
+    //Create a map
+    Map map;
+
     //Make a Player position, size
     Player player(sf::Vector2f(100.0f,100.0f));
     player.loadSprite("slime1.png");
@@ -113,8 +116,8 @@ int main() {
         player.drawPlayer(window);
         bot.draw(window);
         Timers.draw(window);
+        map.draw(window);
 
-       
         //Display the window
         window.display();
     }

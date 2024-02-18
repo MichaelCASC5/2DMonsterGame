@@ -13,70 +13,106 @@ public:
     /**
      * BIG 5
      */
-    //Default Constructor
+    /**
+     * Default Constructor
+     */
     Bot();
 
-    //Parameterized Constructor
+    /**
+     * Parameterized Constructor
+     */
     Bot(int xPos, int yPos, int velocity, int angle, std::vector<Vertex> path);
 
-    //Copy Constructor
+    /**
+     * Copy Constructor
+     */
     Bot(const Bot& other);
 
-    //Copy Assignment Operator
+    /**
+     * Copy Assignment Operator
+     */
     Bot& operator=(const Bot& other);
 
-    //Destructor
+    /**
+     * Destructor
+     */
     ~Bot();
 
     /**
      * ACCESSOR FUNCTIONS
      */
-    //Get x position
+    /**
+     * Get x position
+     */
     double getXPos();
 
-    //Get y position
+    /**
+     * Get y position
+     */
     double getYPos();
 
-    //Get velocity
+    /**
+     * Get velocity
+     */
     double getVelocity();
 
-    //Get angle
+    /**
+     * Get angle
+     */
     double getAngle();
 
-    //Get bot path
+    /**
+     * Get bot path
+     */
     std::vector<Vertex> & getPath();
 
     /**
      * MUTATOR FUNCTIONS
      */
-    //Set x position
+    /**
+     * Set x position
+     */
     void setXPos(double n);
 
-    //Set y position
+    /**
+     * Set y position
+     */
     void setYPos(double n);
 
-    //Set velocity
+    /**
+     * Set velocity
+     */
     void setVelocity(double n);
 
-    //Set angle
+    /**
+     * Set angle
+     */
     void setAngle(double n);
 
-    //Set bot path
+    /**
+     * Set bot path
+     */
     void setPath(std::vector<Vertex> vec);
 
     /**
      * BOT FUNCTIONS
      */
-    //Calculate euclidean distance to target
+    /**
+     * Calculate euclidean distance to target
+     */
     double dist(Vertex v);
 
-    //Move bot
+    /**
+     * Move bot
+     */
     void move();
 
     /**
      * GRAPHICS FUNCTIONS
      */
-    //Draw the bot
+    /**
+     * Draw the bot
+     */
     void draw(sf::RenderTarget& window) const;
 private:
     //Coordinate position of the bot

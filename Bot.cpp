@@ -169,14 +169,17 @@ void Bot::move() {
     //Only go towards the next point if the vector isn't empty
     if (path_.size() > 0) {
 
-        //Calculating angle from this position to point
-        double numerator = path_[0].getY() - yPos_;
-        double denominator = path_[0].getX() - xPos_;
+        //Calculating the angle from this position to point
+        double yDiff = path_[0].getY() - yPos_;
+        double xDiff = path_[0].getX() - xPos_;
+        double targetAngle = atan2(yDiff, xDiff);
 
-        //Calculating radians
-        angle_ = atan2(numerator, denominator);
+        // std::cout << targetAngle * (180 / PI) << ", " << angle_ * (180 / PI) << std::endl;
         
-        //If the bot reachs a point, remove it from the path
+        //Setting the angle_ to the angle to the point
+        angle_ = targetAngle;
+
+        //If the bot reaches a point, remove it from the path
         if (dist(path_[0]) < 0.1) {
             path_.erase(path_.begin());
         }

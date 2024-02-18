@@ -11,16 +11,35 @@ public:
     /**
      * BIG 5
      */
-    //Default Constructor
+    /**
+     * Default constructor
+     */
     Map();
 
-    //Accessor methods
+    /**
+     * ACCESSOR FUNCTIONS
+     */
+    /**
+     * Gets the value at a certain 2D index
+     */
     bool getCoordinate(int x, int y);
-    bool * getMap();
+    
+    /**
+     * Returns a pointer to the 2D vector
+     */
+    std::vector<std::vector<bool>> & getMap();
+
+    /**
+     * GRAPHICS FUNCTIONS
+     */
+    /**
+     * Draws the map onto the screen
+     */
+    void draw(sf::RenderTarget& window) const;
 
 private:
     //2D map
-    bool map_[400][400];
+    std::vector<std::vector<bool>> map_;
 };
 
 #include "Map.cpp"
