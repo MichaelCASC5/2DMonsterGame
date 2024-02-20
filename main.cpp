@@ -16,6 +16,7 @@
 #include "Map.hpp"
 #include "Bot.hpp"
 #include "Timer.hpp"
+#include "Lives.hpp"
 
 //C include
 #include <iostream>
@@ -40,7 +41,11 @@ int main() {
 
     //Make a Player position, size
     Player player(sf::Vector2f(100.0f,100.0f));
+    player.setHealth(3);
     player.loadSprite("slime1.png");
+    player.setSize(30.0f, 30.0f);
+    Lives lives(3,"heart.png");
+
     
 
 
@@ -71,6 +76,12 @@ int main() {
 
     //Initiaziaze timer
     Timer Timers(30);
+
+    //position size of lives top right
+    float heartWidth=lives.getHeartWidth();
+    float livesX=790;
+    float livesY=30;
+    lives.setPosition(livesX,livesY);
 
     //Keep the window open
     while (window.isOpen()) {
@@ -116,6 +127,7 @@ int main() {
         player.drawPlayer(window);
         bot.draw(window);
         Timers.draw(window);
+        lives.draw(window);
         map.draw(window);
 
         //Display the window

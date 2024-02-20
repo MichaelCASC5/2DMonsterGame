@@ -23,7 +23,7 @@ void Player::loadSprite(const std::string& textures){
 void Player::handleMovement(){
 
     //movement key pressed
-    float movementAmount=10.0f;
+    float movementAmount=5.0f;
 
     //check if W is pressed move shape up, decrease y coordinate
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -59,7 +59,23 @@ void Player::handleRotation(){
     }
 }
 
+void Player::setSize(float w, float h){
+    sf::FloatRect spriteSize=sprite.getGlobalBounds();
+    float scaleX=w/spriteSize.width;
+    float scaleY=h/spriteSize.height;
+    sprite.setScale(scaleX, scaleY);
+}
+
 //drawPlayer class 
 void Player::drawPlayer(sf::RenderWindow& window){
     window.draw(sprite);
 }
+
+void Player::setHealth(int h){
+    health=h;
+}
+
+int Player::getHealth() const{
+    return health;
+}
+
