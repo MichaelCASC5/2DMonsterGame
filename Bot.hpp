@@ -103,6 +103,11 @@ public:
     double dist(Vertex v);
 
     /**
+     * Keeps the angle between [-180, 180) degrees
+     */
+    double refit(double angle);
+
+    /**
      * Move bot
      */
     void move();

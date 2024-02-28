@@ -30,6 +30,24 @@ public:
     std::vector<std::vector<bool>> & getMap();
 
     /**
+     * MAP FUNCTIONS
+     */
+    /**
+     * Sets the borders of the map to true
+     */
+    void buildPerimeter();
+
+    /**
+     * Builds a box in the map
+     */
+    void buildCell(int x, int y, int horz, int vert, Cell cell);
+
+    /**
+     * Builds the map according to a maze
+     */
+    void buildMap(Maze &maze);
+
+    /**
      * GRAPHICS FUNCTIONS
      */
     /**

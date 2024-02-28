@@ -158,6 +158,43 @@ double Bot::dist(Vertex v) {
 }
 
 /**
+ * A mod function for the bot's path finding
+ * 
+ * The C++ fmod() function is really weird and doesn't behave like the one on my
+ * calculator so I just made my own. This implementation correctly handles negative
+ * numbers and can be used for modding angles.
+ * 
+ * @param x The divident to calculate the mod from
+ * @param y the divisor to calculate the mod from
+ * @return The modded value
+ */
+double mod(double x, double y) {
+    double output = fmod(fabs(x), y);
+
+    if (x < 0) {
+        output = y - output;
+    }
+
+    return output;
+}
+
+/**
+ * Keeps the angle between [-180, 180) degrees
+ * 
+ * @param angle The angle to refit into the specified range
+ * @return The refitted angle
+ */
+double Bot::refit(double angle) {
+    if (angle < -PI) {
+        angle += 2 * PI;
+    } else if (angle >= PI) {
+        angle -= 2 * PI;
+    }
+
+    return angle;
+}
+
+/**
  * Moves the bot according to the path that was set.
  * 
  * Each game tick this function should be called. It moves the bot
@@ -174,10 +211,19 @@ void Bot::move() {
         double xDiff = path_[0].getX() - xPos_;
         double targetAngle = atan2(yDiff, xDiff);
 
-        // std::cout << targetAngle * (180 / PI) << ", " << angle_ * (180 / PI) << std::endl;
+        //Calculating where the target angle is relative to bot angle
+        targetAngle = targetAngle - angle_;
         
-        //Setting the angle_ to the angle to the point
-        angle_ = targetAngle;
+        //Handling out of bounds
+        angle_ = refit(angle_);
+        targetAngle = refit(targetAngle);
+        
+        //Changing course slowly depending on where the target angle is
+        if (targetAngle < 0) {
+            angle_ -= 0.05;
+        } else {
+            angle_ += 0.05;
+        }
 
         //If the bot reaches a point, remove it from the path
         if (dist(path_[0]) < 0.1) {
@@ -198,7 +244,7 @@ void Bot::move() {
  */
 void Bot::draw(sf::RenderTarget& window) const {
     //Set the dimensions of the rectangle
-    sf::RectangleShape shape(sf::Vector2f(15.f, 20.f));
+    sf::RectangleShape shape(sf::Vector2f(20.f, 30.f));
 
     //Set the position of the rectangle
     sf::Vector2f position = {(float) xPos_ * 20, (float) yPos_ * 20};
