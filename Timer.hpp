@@ -7,10 +7,10 @@
 class Timer{
     public:
         Timer(unsigned int timer);
-
+        
         void update();
         void draw(sf::RenderWindow& window);
-    
+        
     private:
         sf::Clock clock;
         sf::Text text;

@@ -39,8 +39,8 @@ int main() {
     //Create a map
     Map map;
 
-    //Make a Player position, size
-    Player player(sf::Vector2f(100.0f,100.0f));
+  //Make Player position, size
+    Player player(sf::Vector2f(100.0f, 100.0f));
     player.setHealth(3);
     player.loadSprite("slime1.png");
     player.setSize(30.0f, 30.0f);
