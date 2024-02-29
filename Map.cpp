@@ -3,8 +3,9 @@
  */
 /**
  * DEFAULT CONSTRUCTOR
+ * NOTE: The map_ resolution must always be a multiple of 3
  */
-Map::Map() : map_(32, std::vector<bool>(32)) {}
+Map::Map() : map_(33, std::vector<bool>(33)) {}
 
 /**
  * ACCESSOR FUNCTIONS
@@ -68,6 +69,14 @@ void Map::buildCell(int x, int y, int horz, int vert, Cell cell) {
             }
         }
     }
+
+    //This is supposed to make the map_ maze structure perfect, but doesn't work
+    if (x > 0 && y > 0 && x < map_.size() && y < map_[0].size() && false) {
+        map_[x][y] = 1;
+        map_[x + 2][y + 2] = 1;
+        map_[x + 2][y] = 1;
+        map_[x][y + 2] = 1;
+    }
 }
 
 /**
@@ -93,7 +102,7 @@ void Map::buildMap(Maze &maze) {
     buildPerimeter();
 
     //Set scale of maze translation onto the map
-    int sc = 4;
+    int sc = 3;
     
     //For every cell in the maze, build a real blocky cell in the gridded map
     for (int i = 0; i < maze.getMaze().size(); i++) {
