@@ -93,23 +93,23 @@ int Player::getHealth () const
 
 //shoot lazer
 void Player::shoot(){
-  lasers.push_back(Laser(position, sprite.getRotation(), 10.0f));
+  lasers.push_back(Laser(position, sprite.getRotation(), 10.0f)); //loads laser starting with the player position with current rotation, moves in direction of player
 }
 
-//updat laser path trhoughout the screen
+//update laser path throughout the screen
 void Player::updateLasers(sf::RenderWindow& window){
-  for(size_t i=0; i<lasers.size();){
-    lasers[i].Update();
+  for(size_t i=0; i<lasers.size();){ //go through all lasers
+    lasers[i].Update(); //update position of laser
 
     //remove laser off screen
     if(lasers[i].offScreen(window)){
       lasers.erase(lasers.begin()+i);
     }
     else{
-      i++;
+      i++; //move to next laser
     }
   }
-  for(auto& laser:lasers){
+  for(auto& laser:lasers){ //draw each laser on window
     laser.draw(window);
   }
 }
