@@ -1,6 +1,8 @@
 #ifndef LASER_HPP
 #define LASER_HPP
 
+//utuilized resources from SFML docs https://www.sfml-dev.org/learn.php
+
 #include <SFML/Graphics.hpp>
 
 class Laser{
