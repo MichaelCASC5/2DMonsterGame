@@ -41,7 +41,7 @@ public:
      * At the bottom the initial game logic that isn't meant to be looped
      * continuously is placed.
      */
-    Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), maze(11, 11), player(sf::Vector2f(100.0f,100.0f)), lives(3,"heart.png"), Timers(30) {
+    Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), maze(10, 10), player(sf::Vector2f(100.0f,100.0f)), lives(3,"heart.png"), Timers(30) {
         //Enable VSync (doesn't work?)
         window.setVerticalSyncEnabled(true);
 

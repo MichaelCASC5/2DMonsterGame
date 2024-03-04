@@ -3,9 +3,9 @@
  */
 /**
  * DEFAULT CONSTRUCTOR
- * NOTE: The map_ resolution must always be a multiple of 3
+ * NOTE: The map_ resolution must always be a multiple of 5
  */
-Map::Map() : map_(33, std::vector<bool>(33)) {}
+Map::Map() : map_(50, std::vector<bool>(50)) {}
 
 /**
  * ACCESSOR FUNCTIONS
@@ -70,12 +70,12 @@ void Map::buildCell(int x, int y, int horz, int vert, Cell cell) {
         }
     }
 
-    //This is supposed to make the map_ maze structure perfect, but doesn't work
-    if (x > 0 && y > 0 && x < map_.size() && y < map_[0].size() && false) {
-        map_[x][y] = 1;
-        map_[x + 2][y + 2] = 1;
-        map_[x + 2][y] = 1;
-        map_[x][y + 2] = 1;
+    //Fill in the corners of a cell to clean up the map
+    if (x >= 0 && y >=0 && x < map_.size() && y < map_[0].size()) {
+        map_[x][y] = true;
+        map_[x + 4][y + 4] = true;
+        map_[x][y + 4] = true;
+        map_[x + 4][y] = true;
     }
 }
 
@@ -102,7 +102,7 @@ void Map::buildMap(Maze &maze) {
     buildPerimeter();
 
     //Set scale of maze translation onto the map
-    int sc = 3;
+    int sc = 5;
     
     //For every cell in the maze, build a real blocky cell in the gridded map
     for (int i = 0; i < maze.getMaze().size(); i++) {
@@ -123,10 +123,10 @@ void Map::draw(sf::RenderTarget& window) const {
         for (int j = 0; j < map_[i].size(); j++) {
             if (map_[i][j]) {
                 //Set the dimensions of the rectangle
-                sf::RectangleShape shape(sf::Vector2f(27.f, 27.f));
+                sf::RectangleShape shape(sf::Vector2f(18.f, 18.f));
 
                 //Set the position of the rectangle
-                sf::Vector2f position = {(float) i * 30 + 250, (float) j * 30};
+                sf::Vector2f position = {(float) i * 20 + 250, (float) j * 20};
                 shape.setPosition(position);
 
                 //Set the color of the rectangle
