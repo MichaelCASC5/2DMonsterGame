@@ -6,10 +6,10 @@ Player::Player (sf::Vector2f position):position (position), rotation (2.0f)
   //size of player shape
   //set position of player
   sprite.setPosition (position);
-  sprite.setOrigin (sprite.getLocalBounds ().width / 2,
-					sprite.getLocalBounds ().height / 2);
+  sprite.setOrigin (sprite.getLocalBounds ().width / 2, sprite.getLocalBounds ().height / 2);
 }
 
+//load sprite of charector
 void Player::loadSprite (const std::string & textures)
 {
   if (!texture.loadFromFile (textures))
@@ -66,6 +66,7 @@ void Player::handleRotation ()
 	}
 }
 
+//set size of sprite charector
 void Player::setSize (float w, float h)
 {
   sf::FloatRect spriteSize = sprite.getGlobalBounds ();
@@ -90,10 +91,12 @@ int Player::getHealth () const
   return health;
 }
 
+//shoot lazer
 void Player::shoot(){
   lasers.push_back(Laser(position, sprite.getRotation(), 10.0f));
 }
 
+//updat laser path trhoughout the screen
 void Player::updateLasers(sf::RenderWindow& window){
   for(size_t i=0; i<lasers.size();){
     lasers[i].Update();
