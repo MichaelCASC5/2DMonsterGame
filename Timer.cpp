@@ -1,6 +1,7 @@
 #include "Timer.hpp"
 #include <iostream>
 
+//constrcutor for timer, Rovboto font, timer is text for now
 Timer::Timer(unsigned int timer):timer(timer), finish(false){
    if(!font.loadFromFile("Roboto-Bold.ttf")){
         std::cerr<<"Failed to load font"<<std::endl;
@@ -12,6 +13,7 @@ Timer::Timer(unsigned int timer):timer(timer), finish(false){
     text.setPosition(450,30);
 }
 
+//update timer, starts from example 30seconds until 0 then "Ran out of Time":
 void Timer::update(){
     sf::Time durationtook = clock.getElapsedTime();
     
@@ -26,6 +28,7 @@ void Timer::update(){
     }
 }
 
+//draw timer in game
 void Timer::draw(sf::RenderWindow& window){
     window.draw(text);
 }
