@@ -6,8 +6,10 @@
 
 class Lives{
     public:
+        //Lives constructor count, heart image
         Lives(int count, const std::string& heart);
-        
+
+        //set pisition, draw, resize fucntions
         void setPosition(float x, float y);
         void draw(sf::RenderWindow& window);
         float getHeartWidth() const;
