@@ -6,8 +6,9 @@
 
 class Timer{
     public:
+        //constructor of timer
         Timer(unsigned int timer);
-        
+        //update and draw timer
         void update();
         void draw(sf::RenderWindow& window);
         
