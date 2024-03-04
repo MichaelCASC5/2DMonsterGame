@@ -89,3 +89,24 @@ int Player::getHealth () const
 {
   return health;
 }
+
+void Player::shoot(){
+  lasers.push_back(Laser(position, sprite.getRotation(), 10.0f));
+}
+
+void Player::updateLasers(sf::RenderWindow& window){
+  for(size_t i=0; i<lasers.size();){
+    lasers[i].Update();
+
+    //remove laser off screen
+    if(lasers[i].offScreen(window)){
+      lasers.erase(lasers.begin()+i);
+    }
+    else{
+      i++;
+    }
+  }
+  for(auto& laser:lasers){
+    laser.draw(window);
+  }
+}

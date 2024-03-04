@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include <SFML/Graphics.hpp>
+#include "Laser.hpp"
 
 class Player{
     public:
@@ -16,6 +17,10 @@ class Player{
         //stats 
         void setHealth(int health);
         int getHealth() const;
+
+        //laser
+        void shoot();
+        void updateLasers(sf::RenderWindow& window);
         
     private:
         sf::RectangleShape shape;
@@ -25,6 +30,7 @@ class Player{
         float rotation;
         
         int health;
+        std::vector<Laser> lasers;
 };
 
 #include "Player.cpp"

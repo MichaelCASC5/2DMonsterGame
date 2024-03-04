@@ -21,6 +21,7 @@
 #include "Bot.hpp"
 #include "Timer.hpp"
 #include "Lives.hpp"
+#include "Laser.hpp"
 
 //C include
 #include <iostream>
@@ -172,6 +173,9 @@ private:
                     maze.buildMaze();
                     map.buildMap(maze);
                 }
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+                    player.shoot();
+                }
             }
 
             //Sleep the thread to allow for 60 updates per second logic
@@ -195,6 +199,8 @@ private:
 
             //Clear the screen to black
             window.clear(sf::Color::Black);
+
+            player.updateLasers(window);
 
             /**
              * DRAW OBJECTS HERE
