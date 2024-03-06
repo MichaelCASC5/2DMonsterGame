@@ -227,6 +227,7 @@ void Bot::move() {
 
         //If the bot reaches a point, remove it from the path
         if (dist(path_[0]) < 0.1) {
+            path_.push_back(path_[0]);//Loop the path
             path_.erase(path_.begin());
         }
 
