@@ -1,3 +1,6 @@
+#include <SFML/Graphics.hpp>
+#include "Driver.hpp"
+//#include <SFML/Audio.hpp>
 /**
  * Constructor
  * 
@@ -5,7 +8,45 @@
  * At the bottom the initial game logic that isn't meant to be looped
  * continuously is placed.
  */
-Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), maze(10, 10), player(sf::Vector2f(100.0f,100.0f)), lives(3,"heart.png"), Timers(30) {
+Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(100.0f,100.0f)), lives(3,"heart.png"), Timers(30) {
+
+    //loading font
+   if(!font.loadFromFile("Roboto-Bold.ttf")){
+        std::cerr<<"Failed to load font"<<std::endl;
+    }
+
+    //loading menu background
+    if(!backgroundMenu.loadFromFile("maze.jpg")){
+        std::cerr<<"Failed to load menu image"<<std::endl;
+    }
+
+    //NEED HELP MUSIC KEEP GETTING ERROR
+
+    //if(!music.openFromFile("risk.wav")){
+     //   std::cerr<<"Failed to load menu music"<<std::endl;
+   // }
+
+      //  music.play();
+    
+    //setting up Menu background and size
+    backgroundSprite.setTexture(backgroundMenu);
+    backgroundSprite.setScale(3.3f,2.0f);
+
+
+    //start game text
+    startGame.setFont(font);
+    startGame.setString("Start Adventure");
+    startGame.setCharacterSize(20);
+    startGame.setFillColor(sf::Color::White);
+    startGame.setPosition(200,200);
+
+    //exit text
+    Exit.setFont(font);
+    Exit.setString("Exit");
+    Exit.setCharacterSize(24);
+    Exit.setFillColor(sf::Color::White);
+    Exit.setPosition(200,250);
+  
     /**
      * INITIAL GAME LOGIC
      */
@@ -61,7 +102,12 @@ void Driver::start() {
  * At the bottom a thread sleep causes the loop to run at 60 updates per second
  */
 void Driver::loop() {
+    //running game, menu screen first comes up
     while (runProgram) {
+        if(GameState==MENU){
+            handleMenu();
+        }
+        else if (GameState==PLAY){
         /**
          * LOOPED GAME LOGIC GOES HERE
          */
@@ -92,11 +138,12 @@ void Driver::loop() {
                 maze.buildMaze();
                 map.buildMap(maze);
             }
+            //if F is pressed player shoots lazer in direction he us facing
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
                 player.shoot();
             }
         }
-
+        }
         //Sleep the thread to allow for 60 updates per second logic
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));//60 ups
     }
@@ -119,6 +166,15 @@ void Driver::paintComponent() {
         //Clear the screen to black
         window.clear(sf::Color::Black);
 
+        //if in Menu Screen draw backgorund imagae, startGame and Exit buttons
+        if(GameState==MENU){
+           window.draw(backgroundSprite);
+            window.draw(startGame);
+            window.draw(Exit);
+        }
+        else if(GameState==PLAY){
+
+        //updates Laser positions
         player.updateLasers(window);
 
         /**
@@ -140,7 +196,7 @@ void Driver::paintComponent() {
         lives.draw(window);
 
         //...END DRAW OBJECTS
-
+        }
         //Display the window
         window.display();
 
@@ -150,4 +206,44 @@ void Driver::paintComponent() {
         //Sleep the loop to allow for X frames per second rendering
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));//60 fps
     }
+}
+
+//handling menu screen
+void Driver::handleMenu(){
+    sf::Event event;
+
+    //DOSENT WORK FOR NOW, but gets bounding box of startGame, detecting mouse clicks
+    //sf::FloatRect playButtonBounds = startGame.getGlobalBounds();
+
+    //window event queue
+    while(window.pollEvent(event)){
+        //check if winodw close event is triggered, closes game
+        if(event.type==sf::Event::Closed){
+            window.close(); //window close
+            runProgram=false; //stop running game
+        }
+        else if(event.type==sf::Event::KeyPressed){
+            //check if Enter is pressed start game
+            if(event.key.code==sf::Keyboard::Enter){
+                GameState=PLAY;
+            }
+            //check if escape pressed to close game
+         else if(event.key.code==sf::Keyboard::Escape){
+            window.close(); //close window
+            runProgram=false; //stop runnign program
+         }
+         //else if(event.type==sf::Event::MouseButtonPressed){
+           // if(event.mouseButton.button==sf::Mouse::Left){
+                //vectorwi stores 2D positions, current position of mosue cursor
+              //  sf::Vector2i positionmouse=sf::Mouse::getPosition(window);
+           // if(playButtonBounds.contains(static_cast<float>(positionmouse.x), static_cast<float>(positionmouse.y)))
+               // GameState=PLAY;
+           // }
+        // }
+        //}
+       // sf::Vector2i positionmouse=sf::Mouse::getPosition(window);
+       // std::cout<<"Mouse position:"<<positionmouse.x<<","<<positionmouse.y<<std::endl;
+        //std::cout<<"Play Button Bounds:"<<playButtonBounds.left<<", "<<playButtonBounds.top<<", "<<playButtonBounds.width<<", "<<playButtonBounds.height<<std::endl;
+    }
+}
 }

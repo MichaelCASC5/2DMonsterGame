@@ -2,7 +2,12 @@
 #define PLAYER_HPP
 
 #include <SFML/Graphics.hpp>
+//#include <SFML/Audio.hpp>
 #include "Laser.hpp"
+#include "Map.hpp"
+
+
+class Map;
 
 class Player{
     public:
@@ -21,6 +26,9 @@ class Player{
         //laser
         void shoot();
         void updateLasers(sf::RenderWindow& window);
+
+        //collision detection BROKEN
+        bool isCollision(sf::Vector2f position, Map& map_);
         
     private:
         sf::RectangleShape shape;
@@ -28,6 +36,8 @@ class Player{
         sf::Texture texture;
         sf::Vector2f position;
         float rotation;
+        // sf::SoundBuffer laser;
+        //sf::Sound laserSound;
         
         int health;
         std::vector<Laser> lasers;

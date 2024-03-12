@@ -15,6 +15,7 @@
 
 //External library include
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 //Classes include
 #include "Vertex.hpp"
@@ -34,6 +35,12 @@
 
 class Driver {
 public:
+
+    enum GameState{
+        MENU,
+        PLAY
+    };
+
     /**
      * Constructor
      */
@@ -70,6 +77,17 @@ private:
     //Program running boolean
     bool runProgram;
 
+    //Game management
+    GameState GameState;
+    sf::Font font;
+    sf::Text startGame;
+    sf::Text Exit;
+
+    //Game Menu variables
+    sf::Texture backgroundMenu;
+    sf::Sprite backgroundSprite;
+    
+
     /**
      * GAME PRIVATE MEMBERS
      */
@@ -92,6 +110,9 @@ private:
     float heartWidth;
     float livesX;
     float livesY;
+
+    //handle meny events
+    void handleMenu();
 };
 
 #include "Driver.cpp"

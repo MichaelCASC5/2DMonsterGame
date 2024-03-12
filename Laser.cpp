@@ -3,14 +3,26 @@
 //utuilized resources from SFML docs https://www.sfml-dev.org/learn.php
 
 #include <cmath>
+#include <random>
 
 //laser with position, rotation, speed
 Laser::Laser(const sf::Vector2f& position, float rotation, float speed): speed(speed){
+    
+    //used this reosource for random color generator
+    // https://stackoverflow.com/questions/19665818/generate-random-numbers-using-c11-random-library
+
+    std::random_device rd; //random number form hardware
+    std::mt19937 eng(rd()); //seed generator
+    std::uniform_int_distribution<> distr(0,255); //range
+
+    //generates randopm color
+    sf::Color randomColor(distr(eng), distr(eng), distr(eng));
+   
     shape.setSize(sf::Vector2f(10.f,2.f)); //size of laser
     shape.setOrigin(shape.getSize().x/2, shape.getSize().y/2); //origin of laser
     shape.setPosition(position);
     shape.setRotation(rotation);
-    shape.setFillColor(sf::Color::Blue);
+    shape.setFillColor(randomColor);
 }
 
 //update laser with speed, direction
