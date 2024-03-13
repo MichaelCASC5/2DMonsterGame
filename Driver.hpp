@@ -26,6 +26,7 @@
 #include "Timer.hpp"
 #include "Lives.hpp"
 #include "Laser.hpp"
+#include "Slider.hpp"
 
 //C include
 #include <iostream>
@@ -86,6 +87,9 @@ private:
     //Game Menu variables
     sf::Texture backgroundMenu;
     sf::Sprite backgroundSprite;
+
+    //brightness
+    Slider brightnessAdjust;
     
 
     /**

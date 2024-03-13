@@ -8,7 +8,7 @@
  * At the bottom the initial game logic that isn't meant to be looped
  * continuously is placed.
  */
-Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(100.0f,100.0f)), lives(3,"heart.png"), Timers(30) {
+Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(100.0f,100.0f)), lives(3,"heart.png"), Timers(30),brightnessAdjust(100,100,200,10) {
 
     //loading font
    if(!font.loadFromFile("Roboto-Bold.ttf")){
@@ -19,6 +19,8 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     if(!backgroundMenu.loadFromFile("maze.jpg")){
         std::cerr<<"Failed to load menu image"<<std::endl;
     }
+
+
 
     //NEED HELP MUSIC KEEP GETTING ERROR
 
@@ -128,6 +130,7 @@ void Driver::loop() {
          */
         sf::Event event;
         while (window.pollEvent(event)) {
+            
             if (event.type == sf::Event::Closed){
                 window.close();
             //If ESCAPE is pressed set runProgram to false
@@ -142,6 +145,7 @@ void Driver::loop() {
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
                 player.shoot();
             }
+            
         }
         }
         //Sleep the thread to allow for 60 updates per second logic
@@ -168,9 +172,11 @@ void Driver::paintComponent() {
 
         //if in Menu Screen draw backgorund imagae, startGame and Exit buttons
         if(GameState==MENU){
-           window.draw(backgroundSprite);
+           
+            window.draw(backgroundSprite);
             window.draw(startGame);
             window.draw(Exit);
+            brightnessAdjust.draw(window);
         }
         else if(GameState==PLAY){
 
@@ -228,7 +234,7 @@ void Driver::handleMenu(){
                 GameState=PLAY;
             }
             //check if escape pressed to close game
-         else if(event.key.code==sf::Keyboard::Escape){
+        else if(event.key.code==sf::Keyboard::Escape){
             window.close(); //close window
             runProgram=false; //stop runnign program
          }
