@@ -135,3 +135,9 @@ void Player::updateLasers(sf::RenderWindow& window){
     laser.draw(window);
   }
 }
+
+bool Player::isCollision(Map& map) {
+  if (position.x < map.getMap().size() && position.y < map.getMap().size())
+    std::cout << map.getMap()[position.x][position.y] << std::endl;
+  return false;
+}

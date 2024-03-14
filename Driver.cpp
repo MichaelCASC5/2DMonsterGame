@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Driver.hpp"
-//#include <SFML/Audio.hpp>
+#include <SFML/Audio.hpp>
 /**
  * Constructor
  * 
@@ -24,11 +24,11 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
 
     //NEED HELP MUSIC KEEP GETTING ERROR
 
-    //if(!music.openFromFile("risk.wav")){
-     //   std::cerr<<"Failed to load menu music"<<std::endl;
-   // }
+    // if(!music.openFromFile("risk.wav")){
+    //     std::cerr<<"Failed to load menu music"<<std::endl;
+    // }
 
-      //  music.play();
+    //     music.play();
     
     //setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
@@ -122,6 +122,8 @@ void Driver::loop() {
         //Player can move
         player.handleMovement();
         player.handleRotation();
+
+        player.isCollision(map);
 
         //...END LOOPED GAME LOGIC
 

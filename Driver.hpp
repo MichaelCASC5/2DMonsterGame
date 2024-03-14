@@ -115,6 +115,8 @@ private:
     float livesX;
     float livesY;
 
+    // sf::Music music;
+
     //handle meny events
     void handleMenu();
 };

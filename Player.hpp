@@ -28,7 +28,7 @@ class Player{
         void updateLasers(sf::RenderWindow& window);
 
         //collision detection BROKEN
-        bool isCollision(sf::Vector2f position, Map& map_);
+        bool isCollision(Map& map_);
         
     private:
         sf::RectangleShape shape;
