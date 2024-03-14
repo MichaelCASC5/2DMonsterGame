@@ -231,8 +231,8 @@ void Maze::depthFirstSearch() {
     std::mt19937 gen(rd());//Mersenne Twister
     std::uniform_real_distribution<double> dis(0, 1.0);//range [0,1)
 
-    //Reset the active_ to the spawn coordinates to begin generation
-    Vertex spawn(resolution_[0] / 2, resolution_[1] / 2);
+    //Reset the active_ to randomized spawn coordinates to begin generation
+    Vertex spawn((int)(1 + (resolution_[0] - 2) * dis(gen)), (int)(1 + (resolution_[1] - 2) * dis(gen)));
     active_[0] = spawn.getX();
     active_[1] = spawn.getY();
 

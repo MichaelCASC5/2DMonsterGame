@@ -73,10 +73,10 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
 }
 
 /**
- * Destructor lets loop() logicThread to catch up and close with everything else
+ * Destructor lets loop() loopThread to catch up and close with everything else
  */
 Driver::~Driver() {
-    logicThread.join();
+    loopThread.join();
 }
 
 /**
@@ -91,7 +91,7 @@ void Driver::start() {
      * https://www.reddit.com/r/cpp_questions/comments/p4z5nv/invalid_use_of_nonstatic_member_function/
      * https://stackoverflow.com/questions/266168/simple-example-of-threading-in-c
      */
-    logicThread = std::thread(&Driver::loop, this);
+    loopThread = std::thread(&Driver::loop, this);
     paintComponent();
 }
 

@@ -72,7 +72,7 @@ private:
      * Threading and window variables
      */
     sf::RenderWindow window;
-    std::thread logicThread;
+    std::thread loopThread;
     std::mutex mutex;
 
     //Program running boolean
