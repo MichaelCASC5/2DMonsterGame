@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include "Driver.hpp"
 #include <SFML/Audio.hpp>
 /**
@@ -104,8 +105,10 @@ void Driver::start() {
  * At the bottom a thread sleep causes the loop to run at 60 updates per second
  */
 void Driver::loop() {
+     sf::Clock clock;
     //running game, menu screen first comes up
     while (runProgram) {
+       sf::Time deltaTime=clock.restart();
         if(GameState==MENU){
             handleMenu();
         }
@@ -116,11 +119,13 @@ void Driver::loop() {
 
         //Move bot
         bot.move();
+
+       
         
         //ANTON CODE LOGIC
         Timers.update();
         //Player can move
-        player.handleMovement();
+        player.handleMovement(deltaTime);
         player.handleRotation();
 
         player.isCollision(map);

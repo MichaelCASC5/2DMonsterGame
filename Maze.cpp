@@ -321,7 +321,7 @@ void Maze::buildMaze() {
  * GRAPHICS METHODS
  */
 /**
- * Draws the maze onto the screen
+ * Draws the maze onto the screena
  */
 void Maze::draw(sf::RenderTarget& window) const {
     for (int i = 0; i < resolution_[0]; i++) {

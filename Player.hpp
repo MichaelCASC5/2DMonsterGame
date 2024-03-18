@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 //#include <SFML/Audio.hpp>
 #include "Laser.hpp"
 #include "Map.hpp"
@@ -14,7 +15,7 @@ class Player{
         //X and Y coordinate of the Player
         Player(sf::Vector2f position=sf::Vector2f(0.0f,0.0f));
         void loadSprite(const std::string& sprite);
-        void handleMovement();
+        void handleMovement(const sf::Time& deltaTime);
         void handleRotation();
         void setSize(float w, float h);
         void drawPlayer(sf::RenderWindow& window);

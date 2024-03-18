@@ -31,41 +31,56 @@ void Player::loadSprite (const std::string & textures)
 }
 
 
-void Player::handleMovement(){
+void Player::handleMovement(const sf::Time& deltaTime){
     //Pi used for rotation
     float PI=3.14;
 
-    //movement key pressed
-    float movementAmount=5.0f;
+    //movement speed
+    float movementAmount=200.0f;
+
+    //2D Vector for movement direction
+    sf::Vector2f movement(0.0f,0.0f);
 
     //check if W is pressed move shape up, decrease y coordinate
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 {
-    position.y -= movementAmount * cos(rotation * (PI/180));
-    position.x += movementAmount * sin(rotation * (PI/180));
-    sprite.setRotation(270);
+    movement.y-=1.0f;
+   // position.y -= movementAmount * cos(rotation * (PI/180));
+    //position.x += movementAmount * sin(rotation * (PI/180));
+    //sprite.setRotation(270);
 }
     //check if A is pressed move shape left, decrease x coordinate
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 {
-    position.y -= movementAmount * sin(rotation * (PI/180));
-    position.x -= movementAmount * cos(rotation * (PI/180));
-    sprite.setRotation(180);
+  movement.x-=1.0f;
+    //position.y -= movementAmount * sin(rotation * (PI/180));
+   // position.x -= movementAmount * cos(rotation * (PI/180));
+    //sprite.setRotation(180);
 }
     //check if S is pressed move shape down, increase y coordinate
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 {
-    position.y += movementAmount * cos(rotation * (PI/180));
-    position.x -= movementAmount * sin(rotation * (PI/180));
-    sprite.setRotation(90);
+    movement.y+=1.0f;
+    //position.y += movementAmount * cos(rotation * (PI/180));
+    //position.x -= movementAmount * sin(rotation * (PI/180));
+    //sprite.setRotation(90);
 }
     //check if D is pressed move shape right, increasing x coordinate
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 {
-    position.y += movementAmount * sin(rotation * (PI/180));
-    position.x += movementAmount * cos(rotation * (PI/180));
-    sprite.setRotation(0);
+  movement.x+=1.0f;
+    //position.y += movementAmount * sin(rotation * (PI/180));
+   // position.x += movementAmount * cos(rotation * (PI/180));
+   // sprite.setRotation(0);
 }
+    //normalize movement vector. consistent movement speed all directions
+    if(movement.x!=0.0f || movement.y!=0.0f){
+      movement/=std::sqrt(movement.x*movement.x + movement.y*movement.y);
+    }
+
+    //update player position on movement vectoe, movement amount,time delta
+    position+=movement*movementAmount *deltaTime.asSeconds();
+
     //set position of player position
     sprite.setPosition(position);
 }
@@ -139,5 +154,5 @@ void Player::updateLasers(sf::RenderWindow& window){
 bool Player::isCollision(Map& map) {
   if (position.x < map.getMap().size() && position.y < map.getMap().size())
     std::cout << map.getMap()[position.x][position.y] << std::endl;
-  return false;
+    return false;
 }
