@@ -23,6 +23,8 @@ Laser::Laser(const sf::Vector2f& position, float rotation, float speed): speed(s
     shape.setPosition(position);
     shape.setRotation(rotation);
     shape.setFillColor(randomColor);
+
+    std::cout<<"Laser Rotation"<<shape.getRotation()<<std::endl;
 }
 
 //update laser with speed, direction

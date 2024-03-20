@@ -27,7 +27,7 @@ public:
     /**
      * Returns a pointer to the 2D vector
      */
-    std::vector<std::vector<bool>> & getMap();
+    const std::vector<std::vector<bool>> & getMap() const;
 
     /**
      * MAP FUNCTIONS

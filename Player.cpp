@@ -1,158 +1,225 @@
+#include "Enemy.hpp"
+// Player class
 
-//Player class
-
-//constructor of Player class
-Player::Player (sf::Vector2f position):position (position), rotation (2.0f)
+// constructor of Player class
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3)
 {
+  sprite.setPosition(position);
+  sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 
-  //NEED HELP WITH SOUND ERROR
-
- // if(!laser.loadFromFile("blaster.wav")){
-   // std::cerr<<"Failed to load laser sound"<<std::endl;
-  //}
- // laserSound.setBuffer(laser);
-
-  //size of player shape
-  //set position of player
-  sprite.setPosition (position);
-  sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+  std::cout << "Initial Player Health" << health << std::endl;
 }
 
-
-//load sprite of charector
-void Player::loadSprite (const std::string & textures)
+// load sprite of charector
+void Player::loadSprite(const std::string &textures)
 {
-  if (!texture.loadFromFile (textures))
-	{
-	  std::cerr << "Failed to load sprite" << std::endl;
-	  return;
-	}
+  if (!texture.loadFromFile(textures))
+  {
+    std::cerr << "Failed to load sprite" << std::endl;
+    return;
+  }
   sprite.setTexture(texture);
 }
 
-
-void Player::handleMovement(const sf::Time& deltaTime){
-    //Pi used for rotation
-    float PI=3.14;
-
-    //movement speed
-    float movementAmount=200.0f;
-
-    //2D Vector for movement direction
-    sf::Vector2f movement(0.0f,0.0f);
-
-    //check if W is pressed move shape up, decrease y coordinate
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
 {
-    movement.y-=1.0f;
-   // position.y -= movementAmount * cos(rotation * (PI/180));
-    //position.x += movementAmount * sin(rotation * (PI/180));
-    //sprite.setRotation(270);
-}
-    //check if A is pressed move shape left, decrease x coordinate
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-{
-  movement.x-=1.0f;
-    //position.y -= movementAmount * sin(rotation * (PI/180));
-   // position.x -= movementAmount * cos(rotation * (PI/180));
-    //sprite.setRotation(180);
-}
-    //check if S is pressed move shape down, increase y coordinate
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-{
-    movement.y+=1.0f;
-    //position.y += movementAmount * cos(rotation * (PI/180));
-    //position.x -= movementAmount * sin(rotation * (PI/180));
-    //sprite.setRotation(90);
-}
-    //check if D is pressed move shape right, increasing x coordinate
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-{
-  movement.x+=1.0f;
-    //position.y += movementAmount * sin(rotation * (PI/180));
-   // position.x += movementAmount * cos(rotation * (PI/180));
-   // sprite.setRotation(0);
-}
-    //normalize movement vector. consistent movement speed all directions
-    if(movement.x!=0.0f || movement.y!=0.0f){
-      movement/=std::sqrt(movement.x*movement.x + movement.y*movement.y);
-    }
+  // Pi used for rotation
+  float PI = 3.14;
 
-    //update player position on movement vectoe, movement amount,time delta
-    position+=movement*movementAmount *deltaTime.asSeconds();
+  // movement speed
+  float movementAmount = 200.0f;
 
-    //set position of player position
-    sprite.setPosition(position);
-}
+  // 2D Vector for movement direction
+  sf::Vector2f movement(0.0f, 0.0f);
 
-void Player::handleRotation ()
-{
-  //rotate left
-  if (sf::Keyboard::isKeyPressed (sf::Keyboard::C))
-	{
-	  sprite.rotate (-rotation);
-	}
-  //rotate right
-  if (sf::Keyboard::isKeyPressed (sf::Keyboard::V))
-	{
-	  sprite.rotate (rotation);
-	}
+  // check if W is pressed move shape up, decrease y coordinate
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+  {
+    movement.y -= movementAmount;
+    // position.y -= movementAmount * cos(rotation * (PI/180));
+    // position.x += movementAmount * sin(rotation * (PI/180));
+  }
+  // check if A is pressed move shape left, decrease x coordinate
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+  {
+    movement.x -= 1.0f;
+    // position.y -= movementAmount * sin(rotation * (PI/180));
+    // position.x -= movementAmount * cos(rotation * (PI/180));
+  }
+  // check if S is pressed move shape down, increase y coordinate
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+  {
+    movement.y += 1.0f;
+    // position.y += movementAmount * cos(rotation * (PI/180));
+    // position.x -= movementAmount * sin(rotation * (PI/180));
+  }
+  // check if D is pressed move shape right, increasing x coordinate
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+  {
+    movement.x += 1.0f;
+    // position.y += movementAmount * sin(rotation * (PI/180));
+    // position.x += movementAmount * cos(rotation * (PI/180));
+  }
+  // normalize movement vector. consistent movement speed all directions
+  if (movement.x != 0.0f || movement.y != 0.0f)
+  {
+    movement /= std::sqrt(movement.x * movement.x + movement.y * movement.y);
+  }
+
+  // update player position on movement vector, movement amount,time delta
+  sf::Vector2f newPosition = position + movement * movementAmount * deltaTime.asSeconds();
+
+  if (isCollision(map, newPosition))
+  {
+    position = newPosition;
+  }
+
+  // set position of player position
+  sprite.setPosition(position);
 }
 
-//set size of sprite charector
-void Player::setSize (float w, float h)
+void Player::handleRotation()
 {
-  sf::FloatRect spriteSize = sprite.getGlobalBounds ();
+  // rotate left
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+  {
+    sprite.rotate(-rotation);
+  }
+  // rotate right
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
+  {
+    sprite.rotate(rotation);
+  }
+}
+
+// set size of sprite charector
+void Player::setSize(float w, float h)
+{
+  sf::FloatRect spriteSize = sprite.getGlobalBounds();
   float scaleX = w / spriteSize.width;
   float scaleY = h / spriteSize.height;
-  sprite.setScale (scaleX, scaleY);
+  sprite.setScale(scaleX, scaleY);
 }
 
-//drawPlayer class
-void Player::drawPlayer (sf::RenderWindow & window)
+// drawPlayer class
+void Player::drawPlayer(sf::RenderWindow &window) { window.draw(sprite); }
+
+// Set Health of Player
+void Player::setHealth(int h) { health = h; }
+
+// get Health of Player
+int Player::getHealth() const { return health; }
+
+// shoot lazer
+void Player::shoot()
 {
-  window.draw (sprite);
+  float playerRotation = sprite.getRotation();
+  sf::Vector2f playerPos = sprite.getPosition();
+
+  std::cout << "Player rotation: " << playerRotation << std::endl;
+  // loads laser starting with the player position with current rotation, moves
+  // in direction of player
+  lasers.push_back(Laser(playerPos, playerRotation, 10.0f));
 }
 
-//Set Health of Player
-void Player::setHealth (int h)
+// update laser path throughout the screen
+void Player::updateLasers(sf::RenderWindow &window)
 {
-  health = h;
-}
+  for (size_t i = 0; i < lasers.size();)  // go through all lasers
+  {                    
+    lasers[i].Update(); // update position of laser
 
-//get Health of Player
-int Player::getHealth () const
-{
-  return health;
-}
-
-//shoot lazer
-void Player::shoot(){
-  //loads laser starting with the player position with current rotation, moves in direction of player
-  lasers.push_back(Laser(position, sprite.getRotation(), 10.0f)); 
- // laserSound.play();
-}
-
-//update laser path throughout the screen
-void Player::updateLasers(sf::RenderWindow& window){
-  for(size_t i=0; i<lasers.size();){ //go through all lasers
-    lasers[i].Update(); //update position of laser
-
-    //remove laser off screen
-    if(lasers[i].offScreen(window)){
-      lasers.erase(lasers.begin()+i);
+    // remove laser off screen
+    if (lasers[i].offScreen(window))
+    {
+      lasers.erase(lasers.begin() + i);
     }
-    else{
-      i++; //move to next laser
+    else
+    {
+      i++; // move to next laser
     }
   }
-  for(auto& laser:lasers){ //draw each laser on window
+  for (auto &laser : lasers)
+  { // draw each laser on window
     laser.draw(window);
   }
 }
 
-bool Player::isCollision(Map& map) {
-  if (position.x < map.getMap().size() && position.y < map.getMap().size())
-    std::cout << map.getMap()[position.x][position.y] << std::endl;
-    return false;
+bool Player::isCollision(const Map &map, const sf::Vector2f &newPos) const
+{
+  // scale to render map
+  const float scalex = 20.0f;
+  const float offsetx = 250.0f;
+  const float scaley = 20.0f;
+
+  // bounding box of player
+  sf::FloatRect playerBounds = sprite.getGlobalBounds();
+
+  // calculate position of four corners of player to detect collision all sides.
+  std::vector<sf::Vector2f> check = {
+      {newPos.x - playerBounds.width / 2, newPos.y - playerBounds.height / 2},
+      {newPos.x + playerBounds.width / 2, newPos.y - playerBounds.height / 2},
+      {newPos.x - playerBounds.width / 2, newPos.y + playerBounds.height / 2},
+      {newPos.x + playerBounds.width / 2, newPos.y + playerBounds.height / 2}};
+
+  // cehck each corner for collision
+  for (const auto &point : check)
+  {
+    // player position to map coordinate scale
+    int x = static_cast<int>((point.x - offsetx) / scalex);
+    int y = static_cast<int>(point.y / scaley);
+
+    // check for collision, if its outszie map boundry or if it a wall(true)
+    if (x < 0 || y < 0 || x >= map.getMap().size() ||
+        y >= map.getMap()[0].size() || map.getMap()[x][y])
+    {
+      return true; // collision detected
+    }
+  }
+  return false; // no collisions detected
+}
+
+//player current position
+sf::Vector2f Player::getPosition() const
+{
+  return sprite.getPosition();
+}
+
+//check if collides with enemy bounding box
+bool Player::collidesWith(const Enemy &enemy) const
+{
+  return sprite.getGlobalBounds().intersects(enemy.getGlobalBounds());
+}
+
+//Player looses life if touches enemy
+void Player::loseLife()
+{
+  if (health > 0)
+  {
+    health--;
+    makeInvinsible();
+    std::cout << "Player lost life. Remaining lives: " << health << std::endl;
+  }
+}
+
+//if player looses life wait time then can loose again
+void Player::makeInvinsible()
+{
+  invinsible = true;
+  invisibleTimer.restart();
+}
+
+//time for player to be invincible
+bool Player::isInvinsible() const
+{
+  return invinsible;
+}
+
+//check if invinsibility is done
+void Player::updateInvinsiblity(const sf::Time &deltaTime)
+{
+  if (invinsible && invisibleTimer.getElapsedTime().asSeconds() > invinsibleDuration)
+  {
+    invinsible = false;
+  }
 }

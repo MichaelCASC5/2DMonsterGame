@@ -27,6 +27,7 @@
 #include "Lives.hpp"
 #include "Laser.hpp"
 #include "Slider.hpp"
+#include "Enemy.hpp"
 
 //C include
 #include <iostream>
@@ -84,12 +85,19 @@ private:
     sf::Text startGame;
     sf::Text Exit;
 
+    //enemy
+    std::vector<Enemy> enemies;
+
     //Game Menu variables
     sf::Texture backgroundMenu;
     sf::Sprite backgroundSprite;
 
     //brightness
     Slider brightnessAdjust;
+
+    //invulnebility timer
+    sf::Clock waitTimer;
+    bool wait;
     
 
     /**

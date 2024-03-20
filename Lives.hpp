@@ -13,6 +13,7 @@ class Lives{
         void setPosition(float x, float y);
         void draw(sf::RenderWindow& window);
         float getHeartWidth() const;
+        void setLives(int count);
         
     private:
         std::vector<sf::Sprite> hearts;

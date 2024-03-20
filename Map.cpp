@@ -19,7 +19,7 @@ bool Map::getCoordinate(int x, int y) {
 /**
  * @return A pointer to the entire 2D vector of bools.
  */
-std::vector<std::vector<bool>> & Map::getMap() {
+const std::vector<std::vector<bool>> & Map::getMap() const {
     //Return a pointer to the first element
     return map_;
 }
