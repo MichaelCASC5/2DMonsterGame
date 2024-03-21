@@ -21,7 +21,15 @@ public:
     /**
      * CAMERA FUNCTIONS
      */
-    void Raycast();
+    /**
+     * Cast a ray from the camera perspective
+     */
+    void raycast();
+
+    /**
+     * Set all relevant data
+     */
+    void setAll(double posX, double posY, double angle);
 
 private:
     double posX_;

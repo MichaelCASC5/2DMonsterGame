@@ -15,7 +15,7 @@ Camera::Camera() {
 /**
  * Parameterized Constructor
  */
-Camera::Camera(int posX, int posY, int tileX, int tileY, int angle) {
+Camera::Camera(int posX, int posY, int tileX, int tileY, double angle) {
     posX_ = posX;
     posY_ = posY;
     tileX_ = tileX;
@@ -26,6 +26,20 @@ Camera::Camera(int posX, int posY, int tileX, int tileY, int angle) {
 /**
  * CAMERA FUNCTIONS
  */
-void Camera::Raycast() {
-    
+/**
+ * Cast a ray from the camera pov
+ */
+void Camera::raycast() {
+    std::cout << posX_ << ", " << posY_ << " | " << tileX_ << ", " << tileY_ << " | " << angle_ << std::endl;
+}
+
+/**
+ * Set relevant data
+ */
+void Camera::setAll(double posX, double posY, double angle) {
+    posX_ = posX;
+    posY_ = posY;
+    tileX_ = (int)posX;
+    tileY_ = (int)posY;
+    angle_ = angle;
 }
