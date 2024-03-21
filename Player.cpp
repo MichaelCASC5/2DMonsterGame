@@ -28,6 +28,8 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
 
   // movement speed
   float movementAmount = 200.0f;
+    //movement speed
+    // float movementAmount=30.0f;
 
   // 2D Vector for movement direction
   sf::Vector2f movement(0.0f, 0.0f);
