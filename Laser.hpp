@@ -15,6 +15,7 @@ class Laser{
         void draw(sf::RenderWindow& window);
         //chekc if laser is off screen then return a boolean
         bool offScreen(const sf::RenderWindow & window) const;
+        sf::FloatRect getBounds() const;
     
     private:
         sf::RectangleShape shape; //laser

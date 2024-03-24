@@ -28,7 +28,7 @@ class Player{
 
         //laser
         void shoot();
-        void updateLasers(sf::RenderWindow& window);
+        void updateLasers(sf::RenderWindow& window, std::vector<Enemy>&enemies);
 
 
         bool isCollision(const Map& map, const sf::Vector2f& newPos) const;

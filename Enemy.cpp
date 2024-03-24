@@ -14,6 +14,7 @@ Enemy::Enemy(const sf::Vector2f &position, const sf::Vector2f &size)
   shape.setFillColor(sf::Color::Red);
   shape.setPosition(position);
   laserCooldown = 1.0f;
+  life=1;
 }
 
 void Enemy::update(const sf::Time &deltaTime, const sf::Vector2f &playerPosition)
@@ -36,6 +37,16 @@ void Enemy::draw(sf::RenderWindow &window) const
 //global bounding box of enemy for collision of player
 sf::FloatRect Enemy::getGlobalBounds() const { 
   return shape.getGlobalBounds(); 
+}
+
+void Enemy::hit(){
+  if(life>0){
+    life--;
+  }
+}
+
+bool Enemy::isAlive() const {
+  return life>0;
 }
 
 // void Enemy::shoot(const sf::Vector2f& targetPos) {

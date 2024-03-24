@@ -45,3 +45,7 @@ bool Laser::offScreen(const sf::RenderWindow & window) const{
     return position.x <0 || position.x>window.getSize().x ||
            position.y<0  || position.y >window.getSize().y;
 }
+
+sf::FloatRect Laser::getBounds() const{
+    return shape.getGlobalBounds();
+}

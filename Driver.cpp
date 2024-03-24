@@ -135,6 +135,11 @@ void Driver::loop()
             //    enemy.updateLasers(deltaTime, window);
             }
 
+            enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
+            [](const Enemy &enemy){
+                return !enemy.isAlive();}),
+                enemies.end());
+
             //invinsibility of player
             player.updateInvinsiblity(deltaTime);
 
@@ -232,7 +237,7 @@ void Driver::paintComponent()
         {
 
             // updates Laser positions
-            player.updateLasers(window);
+            player.updateLasers(window, enemies);
 
             lives.setLives(player.getHealth());
             lives.draw(window);

@@ -123,26 +123,55 @@ void Player::shoot()
 }
 
 // update laser path throughout the screen
-void Player::updateLasers(sf::RenderWindow &window)
+void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemies)
 {
-  for (size_t i = 0; i < lasers.size();)  // go through all lasers
-  {                    
+  for (size_t i = 0; i < lasers.size();) // go through all lasers
+  {
     lasers[i].Update(); // update position of laser
 
-    // remove laser off screen
+    bool laserRemoved = false;
+
     if (lasers[i].offScreen(window))
     {
       lasers.erase(lasers.begin() + i);
+      laserRemoved = true;
     }
+
     else
     {
-      i++; // move to next laser
+      for (auto &enemy : enemies)
+      {
+        if (lasers[i].getBounds().intersects(enemy.getGlobalBounds()) && enemy.isAlive())
+        {
+          enemy.hit();
+          lasers.erase(lasers.begin() + i);
+          laserRemoved = true;
+          break;
+        }
+      }
+    }
+
+    if (!laserRemoved)
+    {
+      ++i;
     }
   }
+  
   for (auto &laser : lasers)
   { // draw each laser on window
     laser.draw(window);
   }
+
+  //   // remove laser off screen
+  //   if (lasers[i].offScreen(window))
+  //   {
+  //     lasers.erase(lasers.begin() + i);
+  //   }
+  //   else
+  //   {
+  //     i++; // move to next laser
+  //   }
+  // }
 }
 
 bool Player::isCollision(const Map &map, const sf::Vector2f &newPos) const
@@ -179,19 +208,19 @@ bool Player::isCollision(const Map &map, const sf::Vector2f &newPos) const
   return false; // no collisions detected
 }
 
-//player current position
+// player current position
 sf::Vector2f Player::getPosition() const
 {
   return sprite.getPosition();
 }
 
-//check if collides with enemy bounding box
+// check if collides with enemy bounding box
 bool Player::collidesWith(const Enemy &enemy) const
 {
   return sprite.getGlobalBounds().intersects(enemy.getGlobalBounds());
 }
 
-//Player looses life if touches enemy
+// Player looses life if touches enemy
 void Player::loseLife()
 {
   if (health > 0)
@@ -202,20 +231,20 @@ void Player::loseLife()
   }
 }
 
-//if player looses life wait time then can loose again
+// if player looses life wait time then can loose again
 void Player::makeInvinsible()
 {
   invinsible = true;
   invisibleTimer.restart();
 }
 
-//time for player to be invincible
+// time for player to be invincible
 bool Player::isInvinsible() const
 {
   return invinsible;
 }
 
-//check if invinsibility is done
+// check if invinsibility is done
 void Player::updateInvinsiblity(const sf::Time &deltaTime)
 {
   if (invinsible && invisibleTimer.getElapsedTime().asSeconds() > invinsibleDuration)

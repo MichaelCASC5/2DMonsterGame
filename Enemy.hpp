@@ -12,6 +12,8 @@ public:
     sf::FloatRect getGlobalBounds() const;
     void shoot(const sf::Vector2f &targetPos);
     void updateLasers(sf::Time deltaTime, sf::RenderWindow &window);
+    void hit();
+    bool isAlive() const;
 
 private:
     sf::RectangleShape shape;
@@ -22,6 +24,7 @@ private:
     // std::vector<Laser> lasers;
     float laserCooldown;
     sf::Clock laserTimer;
+    int life;
 };
 
 #include "Enemy.cpp"
