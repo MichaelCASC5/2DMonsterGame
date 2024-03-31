@@ -21,13 +21,17 @@ class Player{
         void drawPlayer(sf::RenderWindow& window);
         bool collidesWith(const Enemy& enemy) const;
         void loseLife();
+        sf::FloatRect getGlobalBounds() const;
+        void increaseHealth(int amount);
         
         //stats 
         void setHealth(int health);
         int getHealth() const;
+        static int getMaxLives();
 
         //laser
         void shoot();
+        void updateCooldown();
         void updateLasers(sf::RenderWindow& window, std::vector<Enemy>&enemies);
 
 
@@ -39,6 +43,17 @@ class Player{
         bool isInvinsible() const;
         void updateInvinsiblity(const sf::Time& deltaTime);
 
+        void increaseScore(int points);
+        int getScore() const;
+
+        //powerups
+        void activateSpeedBoost();
+        void activateRapidFire();
+        void activateDoubleScore();
+
+        void updatePowerUps(sf::Time deltaTime);
+
+
         
     private:
         sf::RectangleShape shape;
@@ -49,7 +64,9 @@ class Player{
         float rotation;
         // sf::SoundBuffer laser;
         //sf::Sound laserSound;
+        float speed=200.0f;
         
+        static const int maxLives=3;
         int health;
         std::vector<Laser> lasers;
         int lives;
@@ -57,6 +74,26 @@ class Player{
         sf::Clock invisibleTimer;
         bool invinsible;
         const float invinsibleDuration=2.0f;
+
+        bool isCooldown;
+        float cooldownDuration;
+        sf::Clock cooldownTimer;
+
+        int score;
+
+        //flag timers power-ups
+        bool isSpeedBoost;
+        bool isFireActive;
+        bool isDoubleScore;
+        sf::Clock powerUpTimer;
+
+        float originalSpeed;
+        float speedBoost;
+        float OriginalFireRate;
+        float rapidFireRate;
+        bool doubleScoureActive;
+        
+
 };
 
 #include "Player.cpp"

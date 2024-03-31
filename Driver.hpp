@@ -28,6 +28,8 @@
 #include "Laser.hpp"
 #include "Slider.hpp"
 #include "Enemy.hpp"
+#include "HealthPickup.hpp"
+#include "Powerup.hpp"
 
 //C include
 #include <iostream>
@@ -98,6 +100,8 @@ private:
     //invulnebility timer
     sf::Clock waitTimer;
     bool wait;
+
+    sf::Text playerScore;
     
 
     /**
@@ -114,6 +118,8 @@ private:
     //Make a Player position, size
     Player player;
     Lives lives;
+    std::vector<HealthPickup> HealthPickups;    
+    std::vector<PowerUp> powerUps;
 
     //Initiaziaze timer
     Timer Timers;

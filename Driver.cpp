@@ -24,13 +24,17 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
         std::cerr << "Failed to load menu image" << std::endl;
     }
 
-
-    //creating enemy
+    // creating enemy
     enemies.push_back(Enemy(sf::Vector2f(200, 150), sf::Vector2f(60, 60)));
     // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
     // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
-    enemies.push_back(Enemy(sf::Vector2f(150,450), sf::Vector2f(20,20)));
+    enemies.push_back(Enemy(sf::Vector2f(150, 450), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
+
+    //powerups
+    powerUps.push_back(PowerUp(PowerUpType::SpeedBoost, sf::Vector2f(200,200), "heart.png"));
+    powerUps.push_back(PowerUp(PowerUpType::RapidFire, sf::Vector2f(300,300), "heart.png"));
+    powerUps.push_back(PowerUp(PowerUpType::DoubleScore, sf::Vector2f(100,400), "heart.png"));
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
@@ -72,6 +76,15 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     livesY = 30;
     lives.setPosition(livesX, livesY);
     lives.setLives(player.getHealth());
+
+    // score
+    playerScore.setFont(font);
+    playerScore.setCharacterSize(20);
+    playerScore.setFillColor(sf::Color::White);
+    playerScore.setPosition(1000, 20);
+
+    // heart pickups
+    HealthPickups.push_back(HealthPickup(sf::Vector2f(50.0f, 600.0f),"heart.png"));
 }
 
 /**
@@ -124,26 +137,34 @@ void Driver::loop()
              * LOOPED GAME LOGIC GOES HERE
              */
 
-            //get player position
+            // get player position
             sf::Vector2f playerPosition = player.getPosition();
 
-            //BROKEN LASER of ENEMY, but tracking works
+            // BROKEN LASER of ENEMY, but tracking works
             for (Enemy &enemy : enemies)
             {
                 enemy.update(deltaTime, playerPosition);
-           //     enemy.shoot(playerPosition);
-            //    enemy.updateLasers(deltaTime, window);
+                //     enemy.shoot(playerPosition);
+                //    enemy.updateLasers(deltaTime, window);
+            }
+
+            for (auto &enemy : enemies)
+            {
+                if (!enemy.isAlive())
+                {
+                    player.increaseScore(100);
+                }
             }
 
             enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
-            [](const Enemy &enemy){
-                return !enemy.isAlive();}),
-                enemies.end());
+                                         [](const Enemy &enemy)
+                                         { return !enemy.isAlive(); }),
+                          enemies.end());
 
-            //invinsibility of player
+            // invinsibility of player
             player.updateInvinsiblity(deltaTime);
 
-            //if not invinsible and collides with enemy looses life
+            // if not invinsible and collides with enemy looses life
             if (!player.isInvinsible())
             {
                 for (auto &enemy : enemies)
@@ -156,6 +177,42 @@ void Driver::loop()
                         break;
                     }
                 }
+            }
+
+            // collision with health pickups
+            for(size_t i=0; i<HealthPickups.size();){
+                if(player.getGlobalBounds().intersects(HealthPickups[i].getGlobalBounds())){
+                    if(player.getHealth()<Player::getMaxLives()){
+                        player.increaseHealth(1);
+                    }
+                    HealthPickups.erase(HealthPickups.begin()+i);
+                }
+                else{
+                    ++i;
+                }
+            }
+
+            //powerups
+            for(size_t i=0; i<powerUps.size();){
+                if(player.getGlobalBounds().intersects(powerUps[i].getGlobalBounds())){
+                    switch (powerUps[i].getType())
+                    {
+                    case PowerUpType::SpeedBoost:
+                        player.activateSpeedBoost();
+                        break;
+                    case PowerUpType::RapidFire:
+                        player.activateRapidFire();
+                        break;
+                    case PowerUpType::DoubleScore:
+                        player.activateDoubleScore();
+                        break;
+                    }
+                    powerUps.erase(powerUps.begin()+i);
+                }
+                else{
+                    ++i;
+                }
+                player.updatePowerUps(deltaTime);
             }
 
             // Move bot
@@ -197,6 +254,7 @@ void Driver::loop()
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
                 {
                     player.shoot();
+                    player.updateCooldown();
                 }
             }
         }
@@ -236,6 +294,9 @@ void Driver::paintComponent()
         else if (GameState == PLAY)
         {
 
+            playerScore.setString("Score: " + std::to_string(player.getScore()));
+            window.draw(playerScore);
+
             // updates Laser positions
             player.updateLasers(window, enemies);
 
@@ -245,6 +306,16 @@ void Driver::paintComponent()
             for (Enemy &enemy : enemies)
             {
                 enemy.draw(window);
+            }
+
+            //healthpickups
+            for(const auto& pickup:HealthPickups){
+                pickup.draw(window);
+            }
+
+            //powerups
+            for(const auto& powerUp:powerUps){
+                powerUp.draw(window);
             }
 
             /**

@@ -2,7 +2,7 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(10.0f), speedBoost(20.0f), OriginalFireRate(1.0f), rapidFireRate(2.0), doubleScoureActive(false)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -35,28 +35,28 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   // check if W is pressed move shape up, decrease y coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
   {
-    movement.y -= movementAmount;
+    movement.y -= speed;
     // position.y -= movementAmount * cos(rotation * (PI/180));
     // position.x += movementAmount * sin(rotation * (PI/180));
   }
   // check if A is pressed move shape left, decrease x coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
   {
-    movement.x -= 1.0f;
+    movement.x -= speed;
     // position.y -= movementAmount * sin(rotation * (PI/180));
     // position.x -= movementAmount * cos(rotation * (PI/180));
   }
   // check if S is pressed move shape down, increase y coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
   {
-    movement.y += 1.0f;
+    movement.y += speed;
     // position.y += movementAmount * cos(rotation * (PI/180));
     // position.x -= movementAmount * sin(rotation * (PI/180));
   }
   // check if D is pressed move shape right, increasing x coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
   {
-    movement.x += 1.0f;
+    movement.x += speed;
     // position.y += movementAmount * sin(rotation * (PI/180));
     // position.x += movementAmount * cos(rotation * (PI/180));
   }
@@ -67,7 +67,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   }
 
   // update player position on movement vector, movement amount,time delta
-  sf::Vector2f newPosition = position + movement * movementAmount * deltaTime.asSeconds();
+  sf::Vector2f newPosition = position + movement * movementAmount* deltaTime.asSeconds();
 
   if (isCollision(map, newPosition))
   {
@@ -110,9 +110,12 @@ void Player::setHealth(int h) { health = h; }
 // get Health of Player
 int Player::getHealth() const { return health; }
 
+int Player::getMaxLives(){return maxLives;}
+
 // shoot lazer
 void Player::shoot()
 {
+  if(!isCooldown){
   float playerRotation = sprite.getRotation();
   sf::Vector2f playerPos = sprite.getPosition();
 
@@ -120,6 +123,26 @@ void Player::shoot()
   // loads laser starting with the player position with current rotation, moves
   // in direction of player
   lasers.push_back(Laser(playerPos, playerRotation, 10.0f));
+
+  isCooldown=true;
+  cooldownTimer.restart();
+  }
+}
+
+void Player::updateCooldown(){
+  if(isCooldown){
+    if(cooldownTimer.getElapsedTime().asSeconds()>cooldownDuration){
+      isCooldown=false;
+    }
+  }
+}
+
+// void Player::increaseScore(int points){
+//   score+=points;
+// }
+
+int Player::getScore() const{
+  return score;
 }
 
 // update laser path throughout the screen
@@ -231,6 +254,17 @@ void Player::loseLife()
   }
 }
 
+sf::FloatRect Player::getGlobalBounds() const{
+  return sprite.getGlobalBounds();
+}
+
+void Player::increaseHealth(int amount){
+  health+=amount;
+  if(health>maxLives){
+    health=maxLives;
+  }
+}
+
 // if player looses life wait time then can loose again
 void Player::makeInvinsible()
 {
@@ -250,5 +284,37 @@ void Player::updateInvinsiblity(const sf::Time &deltaTime)
   if (invinsible && invisibleTimer.getElapsedTime().asSeconds() > invinsibleDuration)
   {
     invinsible = false;
+  }
+}
+
+void Player::activateSpeedBoost(){
+  speed=speedBoost;
+  powerUpTimer.restart();
+}
+
+void Player::activateRapidFire(){
+  cooldownDuration=rapidFireRate;
+  powerUpTimer.restart();
+}
+
+void Player::activateDoubleScore(){
+  doubleScoureActive=true;
+  powerUpTimer.restart();
+}
+
+void Player::updatePowerUps(sf::Time deltaTime){
+  if(powerUpTimer.getElapsedTime().asSeconds()>5.0f){
+    speed=originalSpeed;
+    cooldownDuration=OriginalFireRate;
+    doubleScoureActive=false;
+  }
+}
+
+void Player::increaseScore(int points){
+  if(doubleScoureActive){
+    score+=2*points;
+  }
+  else{
+    score+=points;
   }
 }
