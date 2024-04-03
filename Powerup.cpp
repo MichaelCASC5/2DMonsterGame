@@ -1,36 +1,35 @@
 #include "Powerup.hpp"
 
-PowerUp::PowerUp(PowerUpType type, const sf::Vector2f& position, const std::string &texturePath):type(type){
-    if(!texture.loadFromFile(texturePath)){
-        throw std::runtime_error("Failed to load heart Image");
-    }
-    sprite.setTexture(texture);
-    sprite.setPosition(position);
-    sprite.setScale(0.02f,0.02f);
+PowerUp::PowerUp(PowerUpType type, const sf::Vector2f& position):type(type){
+    circle.setRadius(5.0f);
+    circle.setPosition(position);
 
     switch (type)
     {
     case PowerUpType::SpeedBoost:
-        sprite.setColor(sf::Color::Red);
+        circle.setFillColor(sf::Color::Red);
         break;
     case PowerUpType::RapidFire:
-        sprite.setColor(sf::Color::Green);
+        circle.setFillColor(sf::Color::Green);
         break;
     case PowerUpType::DoubleScore:
-        sprite.setColor(sf::Color::Blue);
+        circle.setFillColor(sf::Color::Blue);
         break;
     
     default:
         break;
     }
+
+    circle.setOutlineColor(sf::Color::White);
+    circle.setOutlineThickness(2.0f);
 }
 
 void PowerUp::draw(sf::RenderWindow& window) const{
-    window.draw(sprite);
+    window.draw(circle);
 }
 
 sf::FloatRect PowerUp::getGlobalBounds() const{
-    return sprite.getGlobalBounds();
+    return circle.getGlobalBounds();
 }
 
 PowerUpType PowerUp::getType() const {

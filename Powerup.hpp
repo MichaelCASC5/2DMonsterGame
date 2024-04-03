@@ -11,15 +11,14 @@ enum class PowerUpType{
 
 class PowerUp{
     public:
-        PowerUp(PowerUpType, const sf::Vector2f& position, const std::string &texturePath);
+        PowerUp(PowerUpType, const sf::Vector2f& position);
         void draw(sf::RenderWindow& window) const;
         sf::FloatRect getGlobalBounds() const;
         PowerUpType getType() const;
     
     private:
         PowerUpType type;
-        sf::Sprite sprite;
-        sf::Texture texture;
+        sf::CircleShape circle;
 };
 
 #include "Powerup.cpp"

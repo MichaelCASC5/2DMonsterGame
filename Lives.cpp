@@ -44,6 +44,6 @@ float Lives::getHeartWidth() const
 // set number of lives
 void Lives::setLives(int count)
 {
-    std::cout << "Updating Lives to: " << count << std::endl;
+   
     lives = count;
 }

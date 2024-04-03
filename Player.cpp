@@ -2,7 +2,7 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(10.0f), speedBoost(20.0f), OriginalFireRate(1.0f), rapidFireRate(2.0), doubleScoureActive(false)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(100.0f), speedBoost(200.0f), OriginalFireRate(1.0f), rapidFireRate(0.02f), doubleScoureActive(false), speed(originalSpeed)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -67,7 +67,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   }
 
   // update player position on movement vector, movement amount,time delta
-  sf::Vector2f newPosition = position + movement * movementAmount* deltaTime.asSeconds();
+  sf::Vector2f newPosition = position + movement * speed * deltaTime.asSeconds();
 
   if (isCollision(map, newPosition))
   {
@@ -126,6 +126,9 @@ void Player::shoot()
 
   isCooldown=true;
   cooldownTimer.restart();
+  }
+  else if(cooldownTimer.getElapsedTime().asSeconds()>cooldownDuration){
+    isCooldown=false;
   }
 }
 
@@ -289,32 +292,41 @@ void Player::updateInvinsiblity(const sf::Time &deltaTime)
 
 void Player::activateSpeedBoost(){
   speed=speedBoost;
+  isSpeedBoost=true;
   powerUpTimer.restart();
 }
 
 void Player::activateRapidFire(){
   cooldownDuration=rapidFireRate;
+  isFireActive=true;
   powerUpTimer.restart();
 }
 
 void Player::activateDoubleScore(){
   doubleScoureActive=true;
+  std::cout<<"Double Score"<<std::endl;
   powerUpTimer.restart();
 }
 
 void Player::updatePowerUps(sf::Time deltaTime){
-  if(powerUpTimer.getElapsedTime().asSeconds()>5.0f){
+  if(isSpeedBoost || isFireActive || doubleScoureActive){
+  if(powerUpTimer.getElapsedTime().asSeconds()>0.05f){
     speed=originalSpeed;
-    cooldownDuration=OriginalFireRate;
+    OriginalFireRate=0.02f;
     doubleScoureActive=false;
-  }
+    isSpeedBoost=false;
+    isFireActive=false;
+      }
+    }
 }
 
 void Player::increaseScore(int points){
   if(doubleScoureActive){
+    std::cout<<"double Score! Adding"<<2*points<<"points"<<std::endl;
     score+=2*points;
   }
   else{
-    score+=points;
+    std::cout<<"Regular score"<<points<<"points"<<std::endl;
+    score+=points; 
   }
 }

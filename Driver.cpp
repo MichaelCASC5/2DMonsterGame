@@ -32,9 +32,9 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
     //powerups
-    powerUps.push_back(PowerUp(PowerUpType::SpeedBoost, sf::Vector2f(200,200), "heart.png"));
-    powerUps.push_back(PowerUp(PowerUpType::RapidFire, sf::Vector2f(300,300), "heart.png"));
-    powerUps.push_back(PowerUp(PowerUpType::DoubleScore, sf::Vector2f(100,400), "heart.png"));
+    powerUps.push_back(PowerUp(PowerUpType::SpeedBoost, sf::Vector2f(200,200)));
+    powerUps.push_back(PowerUp(PowerUpType::RapidFire, sf::Vector2f(300,300)));
+    powerUps.push_back(PowerUp(PowerUpType::DoubleScore, sf::Vector2f(100,400)));
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
