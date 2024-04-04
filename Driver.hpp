@@ -42,7 +42,8 @@ public:
 
     enum GameState{
         MENU,
-        PLAY
+        PLAY,
+        PAUSED
     };
 
     /**

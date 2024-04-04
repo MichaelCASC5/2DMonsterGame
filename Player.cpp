@@ -2,7 +2,7 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(100.0f), speedBoost(200.0f), OriginalFireRate(1.0f), rapidFireRate(0.02f), doubleScoureActive(false), speed(originalSpeed)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(100.0f), speedBoost(300.0f), OriginalFireRate(1.0f), rapidFireRate(0.02f), doubleScoureActive(false), speed(originalSpeed)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -310,7 +310,7 @@ void Player::activateDoubleScore(){
 
 void Player::updatePowerUps(sf::Time deltaTime){
   if(isSpeedBoost || isFireActive || doubleScoureActive){
-  if(powerUpTimer.getElapsedTime().asSeconds()>0.05f){
+  if(powerUpTimer.getElapsedTime().asSeconds()>1.05f){
     speed=originalSpeed;
     OriginalFireRate=0.02f;
     doubleScoureActive=false;

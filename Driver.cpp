@@ -31,10 +31,10 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     enemies.push_back(Enemy(sf::Vector2f(150, 450), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
-    //powerups
-    powerUps.push_back(PowerUp(PowerUpType::SpeedBoost, sf::Vector2f(200,200)));
-    powerUps.push_back(PowerUp(PowerUpType::RapidFire, sf::Vector2f(300,300)));
-    powerUps.push_back(PowerUp(PowerUpType::DoubleScore, sf::Vector2f(100,400)));
+    // powerups
+    powerUps.push_back(PowerUp(PowerUpType::SpeedBoost, sf::Vector2f(200, 200)));
+    powerUps.push_back(PowerUp(PowerUpType::RapidFire, sf::Vector2f(300, 300)));
+    powerUps.push_back(PowerUp(PowerUpType::DoubleScore, sf::Vector2f(100, 400)));
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
@@ -84,7 +84,7 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     playerScore.setPosition(1000, 20);
 
     // heart pickups
-    HealthPickups.push_back(HealthPickup(sf::Vector2f(50.0f, 600.0f),"heart.png"));
+    HealthPickups.push_back(HealthPickup(sf::Vector2f(50.0f, 600.0f), "heart.png"));
 }
 
 /**
@@ -123,14 +123,42 @@ void Driver::start()
 void Driver::loop()
 {
     sf::Clock clock;
+    sf::Event event;
     // running game, menu screen first comes up
     while (runProgram)
     {
         sf::Time deltaTime = clock.restart();
+
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (GameState == MENU)
+                {
+                    if (event.key.code == sf::Keyboard::Enter)
+                    {
+                        GameState = PLAY;
+                    }
+                    else if (event.key.code == sf::Keyboard::Escape)
+                    {
+                        runProgram = false;
+                    }
+                    else if (GameState == PLAY || GameState == PAUSED)
+                    {
+                        if (event.key.code == sf::Keyboard::P)
+                        {
+                            GameState = (GameState == PLAY) ? PAUSED : PLAY;
+                        }
+                    }
+                }
+            }
+        }
+
         if (GameState == MENU)
         {
             handleMenu();
         }
+
         else if (GameState == PLAY)
         {
             /**
@@ -180,21 +208,27 @@ void Driver::loop()
             }
 
             // collision with health pickups
-            for(size_t i=0; i<HealthPickups.size();){
-                if(player.getGlobalBounds().intersects(HealthPickups[i].getGlobalBounds())){
-                    if(player.getHealth()<Player::getMaxLives()){
+            for (size_t i = 0; i < HealthPickups.size();)
+            {
+                if (player.getGlobalBounds().intersects(HealthPickups[i].getGlobalBounds()))
+                {
+                    if (player.getHealth() < Player::getMaxLives())
+                    {
                         player.increaseHealth(1);
                     }
-                    HealthPickups.erase(HealthPickups.begin()+i);
+                    HealthPickups.erase(HealthPickups.begin() + i);
                 }
-                else{
+                else
+                {
                     ++i;
                 }
             }
 
-            //powerups
-            for(size_t i=0; i<powerUps.size();){
-                if(player.getGlobalBounds().intersects(powerUps[i].getGlobalBounds())){
+            // powerups
+            for (size_t i = 0; i < powerUps.size();)
+            {
+                if (player.getGlobalBounds().intersects(powerUps[i].getGlobalBounds()))
+                {
                     switch (powerUps[i].getType())
                     {
                     case PowerUpType::SpeedBoost:
@@ -207,9 +241,10 @@ void Driver::loop()
                         player.activateDoubleScore();
                         break;
                     }
-                    powerUps.erase(powerUps.begin()+i);
+                    powerUps.erase(powerUps.begin() + i);
                 }
-                else{
+                else
+                {
                     ++i;
                 }
                 player.updatePowerUps(deltaTime);
@@ -225,6 +260,13 @@ void Driver::loop()
             player.handleRotation();
 
             // player.isCollision(map);
+
+            // player looses all lives, end game
+            if (player.getHealth() <= 0)
+            {
+                runProgram = false;
+                break;
+            }
 
             //...END LOOPED GAME LOGIC
 
@@ -258,6 +300,7 @@ void Driver::loop()
                 }
             }
         }
+     
         // Sleep the thread to allow for 60 updates per second logic
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60)); // 60 ups
     }
@@ -308,13 +351,15 @@ void Driver::paintComponent()
                 enemy.draw(window);
             }
 
-            //healthpickups
-            for(const auto& pickup:HealthPickups){
+            // healthpickups
+            for (const auto &pickup : HealthPickups)
+            {
                 pickup.draw(window);
             }
 
-            //powerups
-            for(const auto& powerUp:powerUps){
+            // powerups
+            for (const auto &powerUp : powerUps)
+            {
                 powerUp.draw(window);
             }
 
@@ -360,13 +405,14 @@ void Driver::handleMenu()
     // window event queue
     while (window.pollEvent(event))
     {
+
         // check if winodw close event is triggered, closes game
         if (event.type == sf::Event::Closed)
         {
             window.close();     // window close
             runProgram = false; // stop running game
         }
-        else if (event.type == sf::Event::KeyPressed)
+        else if (event.type == sf::Event::KeyPressed && GameState == MENU)
         {
             // check if Enter is pressed start game
             if (event.key.code == sf::Keyboard::Enter)
@@ -379,18 +425,6 @@ void Driver::handleMenu()
                 window.close();     // close window
                 runProgram = false; // stop runnign program
             }
-            // else if(event.type==sf::Event::MouseButtonPressed){
-            //  if(event.mouseButton.button==sf::Mouse::Left){
-            // vectorwi stores 2D positions, current position of mosue cursor
-            //  sf::Vector2i positionmouse=sf::Mouse::getPosition(window);
-            // if(playButtonBounds.contains(static_cast<float>(positionmouse.x), static_cast<float>(positionmouse.y)))
-            // GameState=PLAY;
-            // }
-            // }
-            //}
-            // sf::Vector2i positionmouse=sf::Mouse::getPosition(window);
-            // std::cout<<"Mouse position:"<<positionmouse.x<<","<<positionmouse.y<<std::endl;
-            // std::cout<<"Play Button Bounds:"<<playButtonBounds.left<<", "<<playButtonBounds.top<<", "<<playButtonBounds.width<<", "<<playButtonBounds.height<<std::endl;
         }
     }
 }
