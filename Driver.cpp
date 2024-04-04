@@ -9,7 +9,7 @@
  * At the bottom the initial game logic that isn't meant to be looped
  * continuously is placed.
  */
-Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(100.0f, 100.0f)), lives(3, "heart.png"), Timers(30), brightnessAdjust(100, 100, 200, 10)
+Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(2.0f, 2.0f)), lives(3, "heart.png"), Timers(30), brightnessAdjust(100, 100, 200, 10)
 {
 
     // loading font
@@ -171,7 +171,7 @@ void Driver::loop()
             // BROKEN LASER of ENEMY, but tracking works
             for (Enemy &enemy : enemies)
             {
-                enemy.update(deltaTime, playerPosition);
+                // enemy.update(deltaTime, playerPosition);
            //     enemy.shoot(playerPosition);
             //    enemy.updateLasers(deltaTime, window);
             }

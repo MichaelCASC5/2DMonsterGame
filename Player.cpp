@@ -2,7 +2,7 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(100.0f), speedBoost(300.0f), OriginalFireRate(1.0f), rapidFireRate(0.02f), doubleScoureActive(false), speed(originalSpeed)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(1.0f), score(0), originalSpeed(4.0f), speedBoost(300.0f), OriginalFireRate(1.0f), rapidFireRate(0.02f), doubleScoureActive(false), speed(originalSpeed)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -71,9 +71,23 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   // update player position on movement vector, movement amount,time delta
   sf::Vector2f newPosition = position + movement * speed * deltaTime.asSeconds();
 
-  if (isCollision(map, newPosition))
-  {
-    position = newPosition;
+  // if (isCollision(map, newPosition))
+  // {
+    // position = newPosition;
+  // }
+
+  /**
+   * HARD CODED TEMPORARILY PLS FIX
+   */
+  // sf::Vector2f savePosition = position;
+  double tempPosX = position.x;
+  double tempPosY = position.y;
+  position = newPosition;
+
+  if(isCollision(map)) {
+    position.x = tempPosX;
+    position.y = tempPosY;
+    std::cout << "if col ran" << std::endl;
   }
 
   // set position of player position
@@ -104,7 +118,28 @@ void Player::setSize(float w, float h)
 }
 
 // drawPlayer class
-void Player::drawPlayer(sf::RenderWindow &window) { window.draw(sprite); }
+void Player::drawPlayer(sf::RenderWindow &window) {
+
+  //Set the dimensions of the rectangle
+  sf::RectangleShape shape(sf::Vector2f(20.f, 20.f));
+
+  std::cout << "over here" << std::endl;
+  std::cout << position.x << ", " << position.y << std::endl;
+
+  //Set the position of the rectangle
+  sf::Vector2f screenPos = {(float) position.x * 20.f + 250, (float) position.y * 20.f};
+  shape.setPosition(screenPos);
+
+  //Set the color of the rectangle
+  shape.setFillColor(sf::Color::Blue);
+
+  //Rotate
+  // shape.rotate((float) angle_ * (180 / PI));
+
+  //Draw the rectangle to the target window
+  window.draw(shape);
+  window.draw(sprite);
+}
 
 // Set Health of Player
 void Player::setHealth(int h) { health = h; }
@@ -202,8 +237,17 @@ void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemies)
   // }
 }
 
-bool Player::isCollision(const Map &map, const sf::Vector2f &newPos) const
+bool Player::isCollision(const Map &map) 
 {
+  bool output = true;
+  std::cout << position.x << ", " << position.y << std::endl;
+  if (position.x > 0 && position.x < map.getMap().size() && position.y > 0 && position.y < map.getMap()[0].size()) {
+    std::cout << "if " << std::endl;
+    std::cout << map.getMap()[(int)position.x][(int)position.y] << std::endl;
+    output = map.getMap()[(int)position.x][(int)position.y];
+  }
+  return output;
+  /*
   // scale to render map
   const float scalex = 20.0f;
   const float offsetx = 250.0f;
@@ -233,7 +277,7 @@ bool Player::isCollision(const Map &map, const sf::Vector2f &newPos) const
       return true; // collision detected
     }
   }
-  return false; // no collisions detected
+  return false; // no collisions detected*/
 }
 
 // player current position
@@ -312,7 +356,7 @@ void Player::activateDoubleScore(){
 
 void Player::updatePowerUps(sf::Time deltaTime){
   if(isSpeedBoost || isFireActive || doubleScoureActive){
-  if(powerUpTimer.getElapsedTime().asSeconds()>2.0f){
+  if(powerUpTimer.getElapsedTime().asSeconds()>1.05f){
     speed=originalSpeed;
     OriginalFireRate=0.02f;
     doubleScoureActive=false;
