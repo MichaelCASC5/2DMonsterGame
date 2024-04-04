@@ -312,7 +312,7 @@ void Player::activateDoubleScore(){
 
 void Player::updatePowerUps(sf::Time deltaTime){
   if(isSpeedBoost || isFireActive || doubleScoureActive){
-  if(powerUpTimer.getElapsedTime().asSeconds()>1.05f){
+  if(powerUpTimer.getElapsedTime().asSeconds()>2.0f){
     speed=originalSpeed;
     OriginalFireRate=0.02f;
     doubleScoureActive=false;

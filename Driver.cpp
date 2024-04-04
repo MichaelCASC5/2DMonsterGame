@@ -172,8 +172,8 @@ void Driver::loop()
             for (Enemy &enemy : enemies)
             {
                 enemy.update(deltaTime, playerPosition);
-                //     enemy.shoot(playerPosition);
-                //    enemy.updateLasers(deltaTime, window);
+           //     enemy.shoot(playerPosition);
+            //    enemy.updateLasers(deltaTime, window);
             }
 
             for (auto &enemy : enemies)

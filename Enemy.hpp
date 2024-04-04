@@ -21,7 +21,7 @@ private:
     float speed;
     sf::Clock movementTimer;
     sf::Vector2f movementDirection;
-    // std::vector<Laser> lasers;
+    std::vector<Laser> lasers;
     float laserCooldown;
     sf::Clock laserTimer;
     int life;
