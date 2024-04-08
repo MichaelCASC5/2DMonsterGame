@@ -32,9 +32,19 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
     // powerups
-    powerUps.push_back(PowerUp(PowerUpType::SpeedBoost, sf::Vector2f(200, 200)));
-    powerUps.push_back(PowerUp(PowerUpType::RapidFire, sf::Vector2f(300, 300)));
-    powerUps.push_back(PowerUp(PowerUpType::DoubleScore, sf::Vector2f(100, 400)));
+    const float scales = 20.0f;
+    const sf::Vector2f offsets = {250.0f, 0.0f};
+    std::vector<std::pair<sf::Vector2f,PowerUpType>> powerUpInfo={
+       {{7.0f,8.0f}, PowerUpType::SpeedBoost},
+       {{10.0f,8.0f}, PowerUpType::RapidFire},
+       {{15.0f,8.0f}, PowerUpType::DoubleScore}
+    };
+
+    for (const auto& [pos,type] : powerUpInfo)
+    {
+        sf::Vector2f adjustedPowerUpPos = {(pos.x * scales) + offsets.x, pos.y * scales};
+        powerUps.push_back(PowerUp(type, adjustedPowerUpPos));
+    };
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
@@ -84,7 +94,11 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     playerScore.setPosition(1000, 20);
 
     // heart pickups
-    HealthPickups.push_back(HealthPickup(sf::Vector2f(50.0f, 600.0f), "heart.png"));
+    const float scale = 20.0f;
+    const sf::Vector2f offset = {250.0f, 0.0f};
+    sf::Vector2f heartPos = sf::Vector2f(700.0f, 800.0f);
+    sf::Vector2f adjustedHeartPos = {(heartPos.x - offset.x) / scale, heartPos.y / scale};
+    HealthPickups.push_back(HealthPickup(adjustedHeartPos, "heart.png"));
 }
 
 /**
@@ -171,9 +185,9 @@ void Driver::loop()
             // BROKEN LASER of ENEMY, but tracking works
             for (Enemy &enemy : enemies)
             {
-                // enemy.update(deltaTime, playerPosition);
-           //     enemy.shoot(playerPosition);
-            //    enemy.updateLasers(deltaTime, window);
+                enemy.update(deltaTime, playerPosition);
+                //     enemy.shoot(playerPosition);
+                //    enemy.updateLasers(deltaTime, window);
             }
 
             for (auto &enemy : enemies)
@@ -199,7 +213,7 @@ void Driver::loop()
                 {
                     if (player.collidesWith(enemy))
                     {
-                        std::cout << "Collision detectedm reducing life" << std::endl;
+                        // std::cout << "Collision detectedm reducing life" << std::endl;
                         player.loseLife();
                         lives.setLives(player.getHealth());
                         break;
@@ -300,7 +314,7 @@ void Driver::loop()
                 }
             }
         }
-     
+
         // Sleep the thread to allow for 60 updates per second logic
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60)); // 60 ups
     }
@@ -357,7 +371,7 @@ void Driver::paintComponent()
                 pickup.draw(window);
             }
 
-            // powerups
+            //  powerups
             for (const auto &powerUp : powerUps)
             {
                 powerUp.draw(window);
