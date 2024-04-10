@@ -25,10 +25,10 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     }
 
     // creating enemy
-    enemies.push_back(Enemy(sf::Vector2f(200, 150), sf::Vector2f(60, 60)));
+    enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
     // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
     // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
-    enemies.push_back(Enemy(sf::Vector2f(150, 450), sf::Vector2f(20, 20)));
+    enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
     // powerups
