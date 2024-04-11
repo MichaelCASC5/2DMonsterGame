@@ -16,7 +16,7 @@ public:
     /**
      * Parameterized Constructor
      */
-    Camera(int posX, int posY, int tileX, int tileY, double angle);
+    Camera(double posX, double posY, int tileX, int tileY, double angle);
 
     /**
      * CAMERA FUNCTIONS

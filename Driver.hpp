@@ -30,6 +30,7 @@
 #include "Enemy.hpp"
 #include "HealthPickup.hpp"
 #include "Powerup.hpp"
+#include "Camera.hpp"
 
 //C include
 #include <iostream>
@@ -114,6 +115,9 @@ private:
 
     //Create a bot
     Bot bot;
+
+    //Create camera
+    Camera camera;
 
     //ANTON CODE INITIALIZATION
     //Make a Player position, size

@@ -8,7 +8,7 @@
 // Constructor of Enemy
 Enemy::Enemy(const sf::Vector2f &position, const sf::Vector2f &size)
 {
-  speed = 50.0f;
+  speed = 10.0f;
   movementDirection = sf::Vector2f(rand() % 3 - 1, rand() % 3 - 1);
   shape.setSize(size);
   shape.setFillColor(sf::Color::Red);

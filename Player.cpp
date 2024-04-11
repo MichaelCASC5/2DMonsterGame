@@ -2,7 +2,7 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(4.0f), speedBoost(300.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(1.0f), speedBoost(50.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -77,7 +77,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   // }
 
   /**
-   * HARD CODED TEMPORARILY PLS FIX
+   * HARD CODED TEMPORARILY
    */
   // sf::Vector2f savePosition = position;
   double tempPosX = position.x;
@@ -88,7 +88,6 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   {
     position.x = tempPosX;
     position.y = tempPosY;
-    // std::cout << "if col ran" << std::endl;
   }
 
   // set position of player position
