@@ -57,6 +57,16 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     startGame.setFillColor(sf::Color::White);
     startGame.setPosition(200, 200);
 
+    pauseText.setFont(font);
+    pauseText.setString("Game Paused");
+    pauseText.setCharacterSize(40);
+    pauseText.setFillColor(sf::Color::White);
+    pauseText.setStyle(sf::Text::Bold);
+
+    sf::FloatRect textRect = pauseText.getLocalBounds();
+    pauseText.setOrigin(textRect.left+textRect.width/2.0f, textRect.top+textRect.height/2.0f);
+    pauseText.setPosition(sf::Vector2f(window.getSize().x/2.0f, window.getSize().y/2.0f));
+
     // exit text
     Exit.setFont(font);
     Exit.setString("Exit");
@@ -396,6 +406,11 @@ void Driver::paintComponent()
             lives.draw(window);
 
             //...END DRAW OBJECTS
+        }
+
+        else if(GameState==PAUSED){
+            std::cout<<"drawining pause screen"<<std::endl;
+            window.draw(pauseText);
         }
 
         // Display the window
