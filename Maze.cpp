@@ -330,3 +330,4 @@ void Maze::draw(sf::RenderTarget& window) const {
         }
     }
 }
+

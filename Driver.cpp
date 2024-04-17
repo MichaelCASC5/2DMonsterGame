@@ -9,7 +9,7 @@
  * At the bottom the initial game logic that isn't meant to be looped
  * continuously is placed.
  */
-Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(2.0f, 2.0f)), lives(3, "heart.png"), Timers(30), brightnessAdjust(100, 100, 200, 10), camera()
+Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(2.0f, 2.0f)), lives(3, "heart.png"), Timers(30), brightnessAdjust(100, 100, 200, 10)
 {
 
     // loading font
@@ -25,10 +25,10 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     }
 
     // creating enemy
-    enemies.push_back(Enemy(sf::Vector2f(200, 150), sf::Vector2f(60, 60)));
+    enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
     // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
     // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
-    enemies.push_back(Enemy(sf::Vector2f(150, 450), sf::Vector2f(20, 20)));
+    enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
     // powerups
@@ -145,6 +145,23 @@ void Driver::loop()
 
         while (window.pollEvent(event))
         {
+            if(event.type==sf::Event::Closed || (event.type==sf::Event::KeyPressed && event.key.code==sf::Keyboard::Escape)){
+                window.close();
+                runProgram=false;
+                continue;
+            }
+            if(GameState==MENU){
+                if(event.type==sf::Event::KeyPressed && event.key.code ==sf::Keyboard::Enter){
+                    GameState=PLAY;
+                }
+            }
+            else if ((GameState==PLAY || GameState==PAUSED) && event.type==sf::Event::KeyPressed){
+                if(event.key.code==sf::Keyboard::P){
+                    GameState=(GameState==PLAY) ? PAUSED : PLAY;
+                }
+            }
+
+
             if (event.type == sf::Event::KeyPressed)
             {
                 if (GameState == MENU)
@@ -281,10 +298,6 @@ void Driver::loop()
                 runProgram = false;
                 break;
             }
-
-            //Do camera logic
-            camera.setAll(player.getPosition().x, player.getPosition().y, 45);
-            camera.raycast();
 
             //...END LOOPED GAME LOGIC
 

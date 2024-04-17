@@ -92,6 +92,12 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
 
   // set position of player position
   sprite.setPosition(position);
+
+}
+
+
+bool Player::isAtGoal(const std::pair<int,int>& goalPos) const{
+return true;
 }
 
 void Player::handleRotation()
