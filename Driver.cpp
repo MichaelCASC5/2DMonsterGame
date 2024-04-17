@@ -57,6 +57,17 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     startGame.setFillColor(sf::Color::White);
     startGame.setPosition(200, 200);
 
+    //pause game text
+    pauseText.setFont(font);
+    pauseText.setString("Game Paused");
+    pauseText.setCharacterSize(48);
+    pauseText.setFillColor(sf::Color::White);
+    pauseText.setStyle(sf::Text::Bold);
+    //position text middle of screen
+    sf::FloatRect textRect=pauseText.getLocalBounds();
+    pauseText.setOrigin(textRect.left+textRect.width/2.0f, textRect.top+textRect.height/2.0f);
+    pauseText.setPosition(sf::Vector2f(window.getSize().x/2.0f, window.getSize().y/2.0f));
+
     // exit text
     Exit.setFont(font);
     Exit.setString("Exit");
@@ -145,23 +156,6 @@ void Driver::loop()
 
         while (window.pollEvent(event))
         {
-            if(event.type==sf::Event::Closed || (event.type==sf::Event::KeyPressed && event.key.code==sf::Keyboard::Escape)){
-                window.close();
-                runProgram=false;
-                continue;
-            }
-            if(GameState==MENU){
-                if(event.type==sf::Event::KeyPressed && event.key.code ==sf::Keyboard::Enter){
-                    GameState=PLAY;
-                }
-            }
-            else if ((GameState==PLAY || GameState==PAUSED) && event.type==sf::Event::KeyPressed){
-                if(event.key.code==sf::Keyboard::P){
-                    GameState=(GameState==PLAY) ? PAUSED : PLAY;
-                }
-            }
-
-
             if (event.type == sf::Event::KeyPressed)
             {
                 if (GameState == MENU)
@@ -414,6 +408,11 @@ void Driver::paintComponent()
 
             //...END DRAW OBJECTS
         }
+
+        else if(GameState==PAUSED){
+            window.draw(pauseText);
+        }
+
         // Display the window
         window.display();
 
