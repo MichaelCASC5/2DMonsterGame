@@ -88,6 +88,7 @@ private:
     sf::Font font;
     sf::Text startGame;
     sf::Text Exit;
+    sf::Text pauseText;
 
     //enemy
     std::vector<Enemy> enemies;
