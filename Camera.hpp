@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include <iostream>
+#include "Vertex.hpp"
 
 class Camera {
 public:
@@ -31,6 +32,11 @@ public:
      */
     void setAll(double posX, double posY, double angle);
 
+    /**
+     * Draws camera information
+     */
+    void draw(sf::RenderTarget& window) const;
+
 private:
     double posX_;
     double posY_;
@@ -39,6 +45,8 @@ private:
     int tileY_;
 
     int angle_;
+
+    std::vector<Vertex> intersections;
 };
 
 #include "Camera.cpp"

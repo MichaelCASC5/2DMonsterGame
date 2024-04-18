@@ -38,10 +38,20 @@ void Camera::raycast() {
     double dy = posX_ - (int)posX_;
     double dx = posY_ - (int)posY_;
 
-    double interX = posX_ + ((-1 * dy) / tan(angle_ * PI / 180));
-    double interY = posY_ - dy;
+    double interX = posX_;
+    double interY = posY_;
+    intersections.clear();
+    for (int i = 0; i < 5; i++) {
+        interX = interX + ((-1.0 * dy) / tan(angle_));
+        interY = interY - dy;
 
-    std::cout << "first intersection:\n" << interX << ", " << interY << std::endl;
+        Vertex pointofinter(interX, interY);
+        intersections.push_back(pointofinter);
+
+        std::cout << ((-1.0 * dy) / tan(angle_)) << std::endl;
+        std::cout << interX << ", " << interY << std::endl;
+    }
+    // std::cout << "first intersection:\n" << interX << ", " << interY << std::endl;
 }
 
 /**
@@ -53,4 +63,21 @@ void Camera::setAll(double posX, double posY, double angle) {
     tileX_ = (int)posX;
     tileY_ = (int)posY;
     angle_ = angle;
+}
+
+void Camera::draw(sf::RenderTarget& window) const {
+    for (int i = 0; i < intersections.size(); i++) {
+        //Set the dimensions of the rectangle
+        sf::RectangleShape shape(sf::Vector2f(5.f, 5.f));
+
+        //Set the position of the rectangle
+        sf::Vector2f position = {(float) intersections[i].getX() * 20 + 250, (float) intersections[i].getY() * 20};
+        shape.setPosition(position);
+
+        //Set the color of the rectangle
+        shape.setFillColor(sf::Color::White);
+
+        //Draw the rectangle to the target window
+        window.draw(shape);
+    }
 }

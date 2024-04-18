@@ -292,6 +292,10 @@ void Driver::loop()
                 break;
             }
 
+            //Do camera logic
+            camera.setAll(player.getPosition().x, player.getPosition().y, 1);
+            camera.raycast();
+
             //...END LOOPED GAME LOGIC
 
             /**
@@ -404,6 +408,9 @@ void Driver::paintComponent()
             player.drawPlayer(window);
             Timers.draw(window);
             lives.draw(window);
+
+            // Camera draw
+            camera.draw(window);
 
             //...END DRAW OBJECTS
         }
