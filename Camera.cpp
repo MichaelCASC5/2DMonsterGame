@@ -32,26 +32,53 @@ Camera::Camera(double posX, double posY, int tileX, int tileY, double angle) {
  * Cast a ray from the camera pov
  */
 void Camera::raycast() {
-    std::cout << posX_ << ", " << posY_ << " | " << tileX_ << ", " << tileY_ << " | " << angle_ << std::endl;
-
+    std::cout << "raycast " << angle_ << std::endl;
     //The first point of intersection
-    double dy = posX_ - (int)posX_;
-    double dx = posY_ - (int)posY_;
+    double dx = posX_ - (int)posX_;
+    double dy = posY_ - (int)posY_;
 
-    double interX = posX_;
-    double interY = posY_;
+    double interX_horz = 0;
+    double interY_horz = 0;
+
+    double interX_vert = 0;
+    double interY_vert = 0;
+
     intersections.clear();
-    for (int i = 0; i < 5; i++) {
-        interX = interX + ((-1.0 * dy) / tan(angle_));
-        interY = interY - dy;
 
-        Vertex pointofinter(interX, interY);
-        intersections.push_back(pointofinter);
+    //Calculate the tan of the angle in radians
+    double tanAngle = tan(angle_ * PI / 180);
 
-        std::cout << ((-1.0 * dy) / tan(angle_)) << std::endl;
-        std::cout << interX << ", " << interY << std::endl;
+    /**
+     * Get first intersection points
+     */
+    //Calculate first intersection with horizontal grid line
+    interX_horz = posX_ - ((-1.0 * dy) / tanAngle);
+    interY_horz = posY_ - dy;
+
+    //Calculate first intersection with vertical grid line
+    interX_vert = posX_ + (1 - dx);
+    interY_vert = posY_ + ((-1.0 * (1 - dx)) * tanAngle);
+
+    for (int i = 0; i < 10; i++) {
+        Vertex pointofinterhorz(interX_horz, interY_horz);
+        intersections.push_back(pointofinterhorz);
+
+        Vertex pointofintervert(interX_vert, interY_vert);
+        intersections.push_back(pointofintervert);
+
+        // std::cout << interX_horz << " < " << interX_vert << std::endl;
+        // while (interX_horz < interX_vert) {
+        // if (interX_horz < interX_vert - 1 / tanAngle) {
+            interY_horz -= 1;
+            interX_horz += 1 / tanAngle;
+        // }
+
+        // std::cout << interY_vert << " < " << interY_horz << std::endl;
+        // if (interY_vert > interY_horz + tanAngle) {
+            interX_vert += 1;
+            interY_vert -= tanAngle;
+        // }
     }
-    // std::cout << "first intersection:\n" << interX << ", " << interY << std::endl;
 }
 
 /**
@@ -75,7 +102,7 @@ void Camera::draw(sf::RenderTarget& window) const {
         shape.setPosition(position);
 
         //Set the color of the rectangle
-        shape.setFillColor(sf::Color::White);
+        shape.setFillColor(sf::Color::Blue);
 
         //Draw the rectangle to the target window
         window.draw(shape);

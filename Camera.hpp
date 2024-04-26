@@ -44,7 +44,7 @@ private:
     int tileX_;
     int tileY_;
 
-    int angle_;
+    double angle_;
 
     std::vector<Vertex> intersections;
 };

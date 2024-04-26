@@ -27,7 +27,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   float PI = 3.14;
 
   // movement speed
-  float movementAmount = 20.0f;
+  float movementAmount = 5.0f;
   // movement speed
   //  float movementAmount=30.0f;
 
@@ -135,16 +135,16 @@ void Player::drawPlayer(sf::RenderWindow &window)
 
   // Set the position of the rectangle
   sf::Vector2f screenPos = {(float)position.x * 20.f + 250, (float)position.y * 20.f};
-  sprite.setPosition(screenPos);
+  shape.setPosition(screenPos);
 
   // Set the color of the rectangle
-  // sprite.setFillColor(sf::Color::Blue);
+  // shape.setFillColor(sf::Color::Blue);
 
   // Rotate
   //  shape.rotate((float) angle_ * (180 / PI));
 
   // Draw the rectangle to the target window
-  window.draw(sprite);
+  window.draw(shape);
   // window.draw(sprite);
 }
 
