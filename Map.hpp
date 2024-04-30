@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+#include <random>
+
 #include <SFML/Graphics.hpp>
 
 class Map {
@@ -47,6 +49,7 @@ public:
      */
     void buildMap(Maze &maze);
 
+
     /**
      * GRAPHICS FUNCTIONS
      */
@@ -54,10 +57,26 @@ public:
      * Draws the map onto the screen
      */
     void draw(sf::RenderTarget& window) const;
+    
+    std::vector<Vertex> getOpenSpaces() const;
+
+    std::vector<sf::Vector2f>findOpenSpaces(const Map& map);
+
+    sf::Vector2f selectSpawnLocation(const std::vector<sf::Vector2f>&OpenSpaces);
+
+    sf::Vector2f convertToScreen(const sf::Vector2f gridCoords) const;
+
+    void setExit(int x, int y);
+
+    sf::Vector2f getExit() const;
+
+    void buildExit();
+
 
 private:
     //2D map
     std::vector<std::vector<bool>> map_;
+    sf::Vector2f exit;
 };
 
 #include "Map.cpp"

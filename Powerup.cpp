@@ -15,6 +15,9 @@ PowerUp::PowerUp(PowerUpType type, const sf::Vector2f& position):type(type){
     case PowerUpType::DoubleScore:
         circle.setFillColor(sf::Color::Blue);
         break;
+    case PowerUpType::HealthBoost:
+        circle.setFillColor(sf::Color::Yellow);
+        break;
     
     default:
         break;

@@ -31,20 +31,7 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
-    // powerups
-    const float scales = 20.0f;
-    const sf::Vector2f offsets = {250.0f, 0.0f};
-    std::vector<std::pair<sf::Vector2f,PowerUpType>> powerUpInfo={
-       {{7.0f,8.0f}, PowerUpType::SpeedBoost},
-       {{10.0f,8.0f}, PowerUpType::RapidFire},
-       {{15.0f,8.0f}, PowerUpType::DoubleScore}
-    };
 
-    for (const auto& [pos,type] : powerUpInfo)
-    {
-        sf::Vector2f adjustedPowerUpPos = {(pos.x * scales) + offsets.x, pos.y * scales};
-        powerUps.push_back(PowerUp(type, adjustedPowerUpPos));
-    };
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
@@ -74,6 +61,33 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     maze.buildMaze();
     map.buildMap(maze);
 
+        // powerups
+
+          const float scales = 20.0f;
+     const sf::Vector2f offsets = {250.0f, 0.0f};
+     std::vector<std::pair<sf::Vector2f,PowerUpType>> powerUpInfo={
+        {{7.0f,8.0f}, PowerUpType::SpeedBoost},
+        {{10.0f,8.0f}, PowerUpType::RapidFire},
+        {{15.0f,8.0f}, PowerUpType::DoubleScore}
+     };
+
+        std::vector<sf::Vector2f> openSpaces;
+        for(auto& vertex: map.getOpenSpaces()){
+            openSpaces.emplace_back(vertex.getX()*scales+offsets.x,vertex.getY()*scales+offsets.y);
+        }
+        for(const auto& [pos,type]:powerUpInfo){
+            sf::Vector2f powerUpLocation=map.selectSpawnLocation(openSpaces);
+            powerUps.push_back(PowerUp(type, powerUpLocation));        
+        }
+
+   
+
+    // for (const auto& [pos,type] : powerUpInfo)
+    // {
+    //     sf::Vector2f adjustedPowerUpPos = {(pos.x * scales) + offsets.x, pos.y * scales};
+    //     powerUps.push_back(PowerUp(type, adjustedPowerUpPos));
+    // };
+
     // ANTON CODE ASSIGNMENT
     // Make a Player position, size
     player.setHealth(3);
@@ -96,6 +110,9 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     // heart pickups
     const float scale = 20.0f;
     const sf::Vector2f offset = {250.0f, 0.0f};
+    std::vector<sf::Vector2f> heartSpaces;
+    
+
     sf::Vector2f heartPos = sf::Vector2f(700.0f, 800.0f);
     sf::Vector2f adjustedHeartPos = {(heartPos.x - offset.x) / scale, heartPos.y / scale};
     HealthPickups.push_back(HealthPickup(adjustedHeartPos, "heart.png"));
@@ -145,6 +162,23 @@ void Driver::loop()
 
         while (window.pollEvent(event))
         {
+            if(event.type==sf::Event::Closed || (event.type==sf::Event::KeyPressed && event.key.code==sf::Keyboard::Escape)){
+                window.close();
+                runProgram=false;
+                continue;
+            }
+            if(GameState==MENU){
+                if(event.type==sf::Event::KeyPressed && event.key.code ==sf::Keyboard::Enter){
+                    GameState=PLAY;
+                }
+            }
+            else if ((GameState==PLAY || GameState==PAUSED) && event.type==sf::Event::KeyPressed){
+                if(event.key.code==sf::Keyboard::P){
+                    GameState=(GameState==PLAY) ? PAUSED : PLAY;
+                }
+            }
+
+
             if (event.type == sf::Event::KeyPressed)
             {
                 if (GameState == MENU)
@@ -185,7 +219,7 @@ void Driver::loop()
             // BROKEN LASER of ENEMY, but tracking works
             for (Enemy &enemy : enemies)
             {
-                enemy.update(deltaTime, playerPosition);
+                enemy.update(deltaTime, playerPosition, map);
                 //     enemy.shoot(playerPosition);
                 //    enemy.updateLasers(deltaTime, window);
             }

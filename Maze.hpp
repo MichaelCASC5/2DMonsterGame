@@ -102,6 +102,7 @@ public:
      */
     void buildMaze();
 
+    
     /**
      * GRAPHICS METHODS
      */

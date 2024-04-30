@@ -17,15 +17,37 @@ Enemy::Enemy(const sf::Vector2f &position, const sf::Vector2f &size)
   life=1;
 }
 
-void Enemy::update(const sf::Time &deltaTime, const sf::Vector2f &playerPosition)
+void Enemy::update(const sf::Time &deltaTime, const sf::Vector2f &playerPosition, const Map& map)
 {
   //calculate vector direction pointing from enemy to player. Player-Enemy position
   sf::Vector2f direction = playerPosition - shape.getPosition();
   //distance length of vector of enemy and player
   float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-  direction /= length;
+  if(length>0){
+    direction /= length;
+  }
+  //shape.move(direction * speed * deltaTime.asSeconds());
+  sf::Vector2f newPos= shape.getPosition()+(direction * speed * deltaTime.asSeconds());
+  sf::Vector2f oldPos = shape.getPosition();
   //move enemy to player direction
-  shape.move(direction * speed * deltaTime.asSeconds());
+  if(!isCollision(newPos, map)){
+    shape.setPosition(newPos);
+  }
+  else{
+    shape.setPosition(oldPos);
+    movementDirection=-movementDirection;
+   
+  }
+  
+}
+
+bool Enemy::isCollision(const sf::Vector2f& newPos, const Map& map){
+  int mapX=static_cast<int>(position.x);
+  int mapY=static_cast<int>(position.y);
+  if(mapX > 0 && mapX < map.getMap().size() && mapY > 0 && mapY < map.getMap()[0].size()){
+    return map.getMap()[mapX][mapY];
+  }
+  return true;
 }
 
 //enemy position
@@ -49,30 +71,3 @@ bool Enemy::isAlive() const {
   return life>0;
 }
 
-// void Enemy::shoot(const sf::Vector2f& targetPos) {
-//   if(lasers.size()<5 &&
-//   laserTimer.getElapsedTime().asSeconds()>=laserCooldown){
-//     sf::Vector2f direction = targetPos-shape.getPosition();
-//     float angle=std::atan2(direction.y, direction.x)*180/3.14159f;
-
-//     lasers.push_back(Laser(shape.getPosition(), angle, 1.0));
-//     laserTimer.restart();
-//   }
-// }
-
-// // update laser path throughout the screen
-// void Enemy::updateLasers(sf::Time deltaTime, sf::RenderWindow& window) {
-//   for (size_t i = 0; i < lasers.size();) {  // go through all lasers
-//     lasers[i].Update();                     // update position of laser
-
-//     // remove laser off screen
-//     if (lasers[i].offScreen(window)) {
-//       lasers.erase(lasers.begin() + i);
-//     } else {
-//       i++;  // move to next laser
-//     }
-//   }
-//   for (auto& laser : lasers) {  // draw each laser on window
-//     laser.draw(window);
-//   }
-// }

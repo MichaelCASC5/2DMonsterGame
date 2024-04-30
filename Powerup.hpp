@@ -6,7 +6,8 @@
 enum class PowerUpType{
     SpeedBoost,
     RapidFire,
-    DoubleScore
+    DoubleScore,
+    HealthBoost
 };
 
 class PowerUp{
