@@ -13,6 +13,7 @@ class Timer{
         //update and draw timer
         void update();
         void draw(sf::RenderWindow& window);
+        void reset(unsigned int newTime);
         
     private:
         sf::Clock clock;

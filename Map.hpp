@@ -72,11 +72,14 @@ public:
 
     void buildExit();
 
+    void setEndGame(bool endGame);
+
 
 private:
     //2D map
     std::vector<std::vector<bool>> map_;
     sf::Vector2f exit;
+    bool endGameColor=false;
 };
 
 #include "Map.cpp"

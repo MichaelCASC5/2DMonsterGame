@@ -9,7 +9,7 @@
  * At the bottom the initial game logic that isn't meant to be looped
  * continuously is placed.
  */
-Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(2.0f, 2.0f)), lives(3, "heart.png"), Timers(30), brightnessAdjust(100, 100, 200, 10)
+Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::Style::Fullscreen), runProgram(true), GameState(MENU), maze(10, 10), player(sf::Vector2f(2.0f, 2.0f)), lives(3, "heart.png"), Timers(90), brightnessAdjust(100, 100, 200, 10), currentLevel(1)
 {
 
     // loading font
@@ -31,8 +31,6 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
-
-
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
     backgroundSprite.setScale(3.3f, 2.0f);
@@ -51,6 +49,15 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     Exit.setFillColor(sf::Color::White);
     Exit.setPosition(200, 250);
 
+    // pause text
+    pausedText.setFont(font);
+    pausedText.setString("PAUSED");
+    pausedText.setCharacterSize(50);
+    pausedText.setFillColor(sf::Color::White);
+    sf::FloatRect textRect = pausedText.getLocalBounds();
+    pausedText.setOrigin(textRect.width / 2, textRect.height / 2);
+    pausedText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+
     /**
      * INITIAL GAME LOGIC
      */
@@ -61,26 +68,25 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     maze.buildMaze();
     map.buildMap(maze);
 
-        // powerups
+    // powerups
 
-          const float scales = 20.0f;
-     const sf::Vector2f offsets = {250.0f, 0.0f};
-     std::vector<std::pair<sf::Vector2f,PowerUpType>> powerUpInfo={
-        {{7.0f,8.0f}, PowerUpType::SpeedBoost},
-        {{10.0f,8.0f}, PowerUpType::RapidFire},
-        {{15.0f,8.0f}, PowerUpType::DoubleScore}
-     };
+    const float scales = 20.0f;
+    const sf::Vector2f offsets = {250.0f, 0.0f};
+    std::vector<std::pair<sf::Vector2f, PowerUpType>> powerUpInfo = {
+        {{7.0f, 8.0f}, PowerUpType::SpeedBoost},
+        {{10.0f, 8.0f}, PowerUpType::RapidFire},
+        {{15.0f, 8.0f}, PowerUpType::DoubleScore}};
 
-        std::vector<sf::Vector2f> openSpaces;
-        for(auto& vertex: map.getOpenSpaces()){
-            openSpaces.emplace_back(vertex.getX()*scales+offsets.x,vertex.getY()*scales+offsets.y);
-        }
-        for(const auto& [pos,type]:powerUpInfo){
-            sf::Vector2f powerUpLocation=map.selectSpawnLocation(openSpaces);
-            powerUps.push_back(PowerUp(type, powerUpLocation));        
-        }
-
-   
+    std::vector<sf::Vector2f> openSpaces;
+    for (auto &vertex : map.getOpenSpaces())
+    {
+        openSpaces.emplace_back(vertex.getX() * scales + offsets.x, vertex.getY() * scales + offsets.y);
+    }
+    for (const auto &[pos, type] : powerUpInfo)
+    {
+        sf::Vector2f powerUpLocation = map.selectSpawnLocation(openSpaces);
+        powerUps.push_back(PowerUp(type, powerUpLocation));
+    }
 
     // for (const auto& [pos,type] : powerUpInfo)
     // {
@@ -96,8 +102,8 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
 
     // position size of lives top right
     heartWidth = lives.getHeartWidth();
-    livesX = 790;
-    livesY = 30;
+    livesX = 1300;
+    livesY = 90;
     lives.setPosition(livesX, livesY);
     lives.setLives(player.getHealth());
 
@@ -105,17 +111,16 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     playerScore.setFont(font);
     playerScore.setCharacterSize(20);
     playerScore.setFillColor(sf::Color::White);
-    playerScore.setPosition(1000, 20);
+    playerScore.setPosition(1500, 90);
 
     // heart pickups
     const float scale = 20.0f;
     const sf::Vector2f offset = {250.0f, 0.0f};
     std::vector<sf::Vector2f> heartSpaces;
-    
 
-    sf::Vector2f heartPos = sf::Vector2f(700.0f, 800.0f);
-    sf::Vector2f adjustedHeartPos = {(heartPos.x - offset.x) / scale, heartPos.y / scale};
-    HealthPickups.push_back(HealthPickup(adjustedHeartPos, "heart.png"));
+    // sf::Vector2f heartPos = sf::Vector2f(700.0f, 800.0f);
+    // sf::Vector2f adjustedHeartPos = {(heartPos.x - offset.x) / scale, heartPos.y / scale};
+    // HealthPickups.push_back(HealthPickup(adjustedHeartPos, "heart.png"));
 }
 
 /**
@@ -162,22 +167,26 @@ void Driver::loop()
 
         while (window.pollEvent(event))
         {
-            if(event.type==sf::Event::Closed || (event.type==sf::Event::KeyPressed && event.key.code==sf::Keyboard::Escape)){
+            if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+            {
                 window.close();
-                runProgram=false;
+                runProgram = false;
                 continue;
             }
-            if(GameState==MENU){
-                if(event.type==sf::Event::KeyPressed && event.key.code ==sf::Keyboard::Enter){
-                    GameState=PLAY;
+            if (GameState == MENU)
+            {
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter)
+                {
+                    GameState = PLAY;
                 }
             }
-            else if ((GameState==PLAY || GameState==PAUSED) && event.type==sf::Event::KeyPressed){
-                if(event.key.code==sf::Keyboard::P){
-                    GameState=(GameState==PLAY) ? PAUSED : PLAY;
+            else if ((GameState == PLAY || GameState == PAUSED) && event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::P)
+                {
+                    GameState = (GameState == PLAY) ? PAUSED : PLAY;
                 }
             }
-
 
             if (event.type == sf::Event::KeyPressed)
             {
@@ -209,6 +218,7 @@ void Driver::loop()
 
         else if (GameState == PLAY)
         {
+            Timers.update();
             /**
              * LOOPED GAME LOGIC GOES HERE
              */
@@ -302,7 +312,7 @@ void Driver::loop()
             bot.move();
 
             // ANTON CODE LOGIC
-            Timers.update();
+
             // Player can move
             player.handleMovement(deltaTime, map);
             player.handleRotation();
@@ -314,6 +324,55 @@ void Driver::loop()
             {
                 runProgram = false;
                 break;
+            }
+
+            if (currentLevel == 2)
+            {
+                //Timers.reset(30);
+                map.setEndGame(true);
+                powerUps.clear();
+            }
+
+            else
+            {
+                map.setEndGame(false);
+            }
+            if (player.reachedExit(map))
+            {
+                currentLevel++;
+                if (currentLevel == 3)
+                {
+                    sf::Font font;
+                    if(font.loadFromFile("Roboto-Bold.ttf")){
+                        sf::Text endText("Congratulations, Game Finished", font,24);
+                        endText.setFillColor(sf::Color::White);
+                        endText.setPosition(100,window.getSize().y/2);
+                        window.draw(endText);
+                        window.display();
+                        sf::sleep(sf::seconds(3));
+                    }
+                    window.close();
+                    runProgram = false;
+                    return;
+                }
+                else
+                {
+                    map.setEndGame(false);
+                    maze.buildMaze();
+                    map.buildMap(maze);
+                    player.setPosition(sf::Vector2f(2.0f, 2.0f));
+                    //  map.setEndGame(false);
+                    if (currentLevel == 2)
+                    {
+                        map.setEndGame(true);
+                        enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
+                        // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
+                        // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
+                        enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
+                        // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
+                    }
+                }
+                // runProgram=false;
             }
 
             //...END LOOPED GAME LOGIC
@@ -382,8 +441,22 @@ void Driver::paintComponent()
             window.draw(Exit);
             brightnessAdjust.draw(window);
         }
+
         else if (GameState == PLAY)
         {
+
+            sf::Text LevelText;
+            sf::Font font;
+            if (!font.loadFromFile("Roboto-Bold.ttf"))
+            {
+                std::cerr << "Failed to load font" << std::endl;
+            }
+            LevelText.setFont(font);
+            LevelText.setString("Level " + std::to_string(currentLevel));
+            LevelText.setCharacterSize(24);
+            LevelText.setFillColor(sf::Color::White);
+            LevelText.setPosition(1500, 50);
+            window.draw(LevelText);
 
             playerScore.setString("Score: " + std::to_string(player.getScore()));
             window.draw(playerScore);
@@ -430,6 +503,10 @@ void Driver::paintComponent()
             lives.draw(window);
 
             //...END DRAW OBJECTS
+        }
+        else if (GameState == PAUSED)
+        {
+            window.draw(pausedText);
         }
         // Display the window
         window.display();

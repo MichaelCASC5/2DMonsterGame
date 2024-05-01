@@ -10,7 +10,7 @@ Timer::Timer(unsigned int timer):timer(timer), finish(false){
     text.setString("Timer");
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::Red);
-    text.setPosition(450,30);
+    text.setPosition(1370,10);
 }
 
 //update timer, starts from example 30seconds until 0 then "Ran out of Time":
@@ -31,4 +31,11 @@ void Timer::update(){
 //draw timer in game
 void Timer::draw(sf::RenderWindow& window){
     window.draw(text);
+}
+
+void Timer::reset(unsigned int newTime){
+    timer=newTime;
+    clock.restart();
+    finish=false;
+    text.setString("Time Left: "+std::to_string(timer)+" seconds");
 }

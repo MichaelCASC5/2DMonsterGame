@@ -26,7 +26,7 @@ void Enemy::update(const sf::Time &deltaTime, const sf::Vector2f &playerPosition
   if(length>0){
     direction /= length;
   }
-  //shape.move(direction * speed * deltaTime.asSeconds());
+  shape.move(direction * speed * deltaTime.asSeconds());
   sf::Vector2f newPos= shape.getPosition()+(direction * speed * deltaTime.asSeconds());
   sf::Vector2f oldPos = shape.getPosition();
   //move enemy to player direction

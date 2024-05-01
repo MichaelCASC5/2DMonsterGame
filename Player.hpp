@@ -38,6 +38,8 @@ class Player{
         bool isCollision(const Map& map);
         
         sf::Vector2f getPosition() const;
+        void setPosition(sf::Vector2f newPosition);
+        
 
         void makeInvinsible();
         bool isInvinsible() const;
@@ -52,6 +54,8 @@ class Player{
         void activateDoubleScore();
 
         void updatePowerUps(sf::Time deltaTime);
+
+        bool reachedExit(const Map& map);
 
 
         

@@ -296,6 +296,11 @@ sf::Vector2f Player::getPosition() const
   return sprite.getPosition();
 }
 
+void Player::setPosition(sf::Vector2f newPosition){
+  position=newPosition;
+  sprite.setPosition(position.x*20+250,position.y*20);
+}
+
 // check if collides with enemy bounding box
 bool Player::collidesWith(const Enemy &enemy) const
 {
@@ -397,4 +402,13 @@ void Player::increaseScore(int points)
     std::cout << "Regular score" << points << "points" << std::endl;
     score += points;
   }
+}
+
+bool Player::reachedExit(const Map& map){
+  sf::Vector2f exitPos=map.getExit();
+  sf::Vector2f playerPos=getPosition();
+  if(fabs(playerPos.x-(exitPos.x*20+250))<20 && fabs(playerPos.y-(exitPos.y*20))<20){
+    return true;
+  }
+  return false;
 }

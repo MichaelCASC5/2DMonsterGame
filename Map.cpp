@@ -129,8 +129,9 @@ void Map::buildMap(Maze &maze)
 
     int exitX = (maze.getMaze().size() * sc) - sc;
     int exitY = (maze.getMaze().back().size() * sc) - sc;
-    if(exitX+3>=map_.size()){
-        exitX=map_.size()-4;
+    if (exitX + 3 >= map_.size())
+    {
+        exitX = map_.size() - 4;
     }
     if (exitX >= 0 && exitX < map_.size() && exitY >= 0 && exitY < map_[exitX].size())
     {
@@ -160,14 +161,21 @@ void Map::draw(sf::RenderTarget &window) const
                 sf::RectangleShape shape(sf::Vector2f(18.f, 18.f));
 
                 shape.setPosition((float)i * 20 + 250, (float)j * 20);
-              
-            
-                if (i == static_cast<int>(exit.x) && i<static_cast<int>(exit.x)+3 && j == static_cast<int>(exit.y))
+
+
+ if (i == static_cast<int>(exit.x) && i < static_cast<int>(exit.x) + 3 && j == static_cast<int>(exit.y))
                 {
                     shape.setFillColor(sf::Color::Yellow);
                 }
-                else{
-  shape.setFillColor(map_[i][j] ? sf::Color::Green : sf::Color::Black);
+
+                else if(endGameColor){
+                    shape.setFillColor(sf::Color::Red);
+                }
+
+               
+                else
+                {
+                    shape.setFillColor(sf::Color::Green);
                 }
                 // Set the position of the rectangle
                 //  sf::Vector2f position = {(float) i * 20 + 250, (float) j * 20};
@@ -179,10 +187,9 @@ void Map::draw(sf::RenderTarget &window) const
                 // if (100000000.0 / rand() < 0.15)
                 // Draw the rectangle to the target window
                 window.draw(shape);
-            
+            }
         }
     }
-}
 }
 
 std::vector<sf::Vector2f> Map::findOpenSpaces(const Map &map)
@@ -234,14 +241,16 @@ sf::Vector2f Map::convertToScreen(const sf::Vector2f gridCoords) const
 
 void Map::setExit(int x, int y)
 {
-    int exitWidth=3;
-    for(int i=0;i<exitWidth;i++){
-        int currentX=x+i;
-        if(currentX<map_.size() && y<map_[currentX].size()){
-            map_[currentX][y]=false;
+    int exitWidth = 3;
+    for (int i = 0; i < exitWidth; i++)
+    {
+        int currentX = x + i;
+        if (currentX < map_.size() && y < map_[currentX].size())
+        {
+            map_[currentX][y] = false;
         }
     }
-    exit=sf::Vector2f(x,y);
+    exit = sf::Vector2f(x, y);
 }
 
 sf::Vector2f Map::getExit() const
@@ -255,4 +264,9 @@ void Map::buildExit()
     {
         map_[static_cast<int>(exit.x)][static_cast<int>(exit.y)] = false;
     }
+}
+
+void Map::setEndGame(bool endGame)
+{
+    endGameColor = endGame;
 }

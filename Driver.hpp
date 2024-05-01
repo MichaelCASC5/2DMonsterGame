@@ -70,6 +70,7 @@ public:
      * Paint to screen
      */
     void paintComponent();
+
     
 private:
     /**
@@ -87,9 +88,13 @@ private:
     sf::Font font;
     sf::Text startGame;
     sf::Text Exit;
+    sf::Text pausedText;
 
     //enemy
     std::vector<Enemy> enemies;
+
+    //level
+    int currentLevel;
 
     //Game Menu variables
     sf::Texture backgroundMenu;
