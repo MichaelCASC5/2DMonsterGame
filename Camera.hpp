@@ -25,7 +25,12 @@ public:
     /**
      * Cast a ray from the camera perspective
      */
-    void raycast();
+    void raycast(Map & map, double angle);
+
+    /**
+     * Cast many rays from the camera POV
+     */
+    void scan(Map & map);
 
     /**
      * Set all relevant data

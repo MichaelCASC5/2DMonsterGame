@@ -31,7 +31,7 @@ Camera::Camera(double posX, double posY, int tileX, int tileY, double angle) {
 /**
  * Cast a ray from the camera pov
  */
-void Camera::raycast() {
+void Camera::raycast(Map & map, double angle) {
     std::cout << "raycast " << angle_ << std::endl;
     //The first point of intersection
     double dx = posX_ - (int)posX_;
@@ -43,10 +43,10 @@ void Camera::raycast() {
     double interX_vert = 0;
     double interY_vert = 0;
 
-    intersections.clear();
+    // intersections.clear();
 
     //Calculate the tan of the angle in radians
-    double tanAngle = tan(angle_ * PI / 180);
+    double tanAngle = tan(angle * PI / 180);
 
     /**
      * Get first intersection points
@@ -59,26 +59,64 @@ void Camera::raycast() {
     interX_vert = posX_ + (1 - dx);
     interY_vert = posY_ + ((-1.0 * (1 - dx)) * tanAngle);
 
+    //Continue the ray cast for a certain amount of iterations
+    bool foundTile = false;
     for (int i = 0; i < 10; i++) {
-        Vertex pointofinterhorz(interX_horz, interY_horz);
-        intersections.push_back(pointofinterhorz);
+        //Only if the intersection points fall in the bounds of the maze
+        //If greater than 0
+        if (interX_horz > 0 && interY_horz > 0) {
+            //If within the length and width of map
+            if (interX_horz < map.getMap().size() && interY_horz < map.getMap()[0].size()) {
+                //Check if the intersection selects a tile for horizontal grid lines
+                if (map.getMap()[interX_horz][interY_horz]) {
+                    //Add that point to the intersections vector
+                    Vertex pointofinterhorz(interX_horz, interY_horz);
+                    intersections.push_back(pointofinterhorz);
 
-        Vertex pointofintervert(interX_vert, interY_vert);
-        intersections.push_back(pointofintervert);
+                    //Leave the loop
+                    // foundTile = true;
+                }
+            }
+        }
 
-        // std::cout << interX_horz << " < " << interX_vert << std::endl;
-        // while (interX_horz < interX_vert) {
+        //Only if the intersection points fall in the bounds of the maze
+        //If greater than 0
+        if (interX_vert > 0 && interY_vert > 0) {
+            //If within the length and width of map
+            if (interX_vert < map.getMap().size() && interY_vert < map.getMap()[0].size()) {
+                //Check if the intersection selects a tile for vertical grid lines
+                if (map.getMap()[interX_vert][interY_vert]) {
+                    //Add that point to the intersections vector
+                    Vertex pointofintervert(interX_vert, interY_vert);
+                    intersections.push_back(pointofintervert);
+
+                    //Leave the loop
+                    // foundTile = true;
+                }
+            }
+        }
+
         // if (interX_horz < interX_vert - 1 / tanAngle) {
             interY_horz -= 1;
             interX_horz += 1 / tanAngle;
         // }
 
         // std::cout << interY_vert << " < " << interY_horz << std::endl;
-        // if (interY_vert > interY_horz + tanAngle) {
+        // if (interY_vert > interY_horz - tanAngle) {
             interX_vert += 1;
             interY_vert -= tanAngle;
         // }
     }
+}
+
+/**
+ * Cast many rays from the camera POV
+ */
+void Camera::scan(Map & map) {
+    intersections.clear();
+    // for (int i = 0; i < 15; i++) {
+        raycast(map, 15);
+    // }
 }
 
 /**

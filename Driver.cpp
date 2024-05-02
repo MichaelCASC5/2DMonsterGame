@@ -293,8 +293,8 @@ void Driver::loop()
             }
 
             //Do camera logic
-            camera.setAll(player.getPosition().x, player.getPosition().y, 20);
-            camera.raycast();
+            camera.setAll(player.getPosition().x, player.getPosition().y, 45);
+            camera.scan(map);
 
             //...END LOOPED GAME LOGIC
 
