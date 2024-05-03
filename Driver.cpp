@@ -62,13 +62,13 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     Exit.setPosition(200, 250);
 
     // pause text
-    pausedText.setFont(font);
-    pausedText.setString("PAUSED");
-    pausedText.setCharacterSize(50);
-    pausedText.setFillColor(sf::Color::White);
-    sf::FloatRect textRect = pausedText.getLocalBounds();
-    pausedText.setOrigin(textRect.width / 2, textRect.height / 2);
-    pausedText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+    pauseText.setFont(font);
+    pauseText.setString("PAUSED");
+    pauseText.setCharacterSize(50);
+    pauseText.setFillColor(sf::Color::White);
+    // sf::FloatRect textRect = pauseText.getLocalBounds();
+    pauseText.setOrigin(textRect.width / 2, textRect.height / 2);
+    pauseText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
     /**
      * INITIAL GAME LOGIC
@@ -531,7 +531,7 @@ void Driver::paintComponent()
 
         else if (GameState == PAUSED)
         {
-            window.draw(pausedText);
+            window.draw(pauseText);
         }
         // Display the window
         window.display();

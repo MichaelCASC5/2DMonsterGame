@@ -145,7 +145,7 @@ void Player::drawPlayer(sf::RenderWindow &window)
 
   // Draw the rectangle to the target window
   window.draw(shape);
-  // window.draw(sprite);
+  window.draw(sprite);
 }
 
 // Set Health of Player
