@@ -26,8 +26,10 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
 
     // creating enemy
     enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
+    enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
     // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
     // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
+    enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
     enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
     // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
 
@@ -41,6 +43,16 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     startGame.setCharacterSize(20);
     startGame.setFillColor(sf::Color::White);
     startGame.setPosition(200, 200);
+
+    pauseText.setFont(font);
+    pauseText.setString("Game Paused");
+    pauseText.setCharacterSize(40);
+    pauseText.setFillColor(sf::Color::White);
+    pauseText.setStyle(sf::Text::Bold);
+
+    sf::FloatRect textRect = pauseText.getLocalBounds();
+    pauseText.setOrigin(textRect.left+textRect.width/2.0f, textRect.top+textRect.height/2.0f);
+    pauseText.setPosition(sf::Vector2f(window.getSize().x/2.0f, window.getSize().y/2.0f));
 
     // exit text
     Exit.setFont(font);
@@ -326,6 +338,10 @@ void Driver::loop()
                 break;
             }
 
+            //Do camera logic
+            camera.setAll(player.getPosition().x, player.getPosition().y, 45);
+            camera.scan(map);
+
             if (currentLevel == 2)
             {
                 //Timers.reset(30);
@@ -502,8 +518,17 @@ void Driver::paintComponent()
             Timers.draw(window);
             lives.draw(window);
 
+            // Camera draw
+            camera.draw(window);
+
             //...END DRAW OBJECTS
         }
+
+        else if(GameState==PAUSED){
+            std::cout<<"drawining pause screen"<<std::endl;
+            window.draw(pauseText);
+        }
+
         else if (GameState == PAUSED)
         {
             window.draw(pausedText);

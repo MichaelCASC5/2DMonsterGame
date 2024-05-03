@@ -21,6 +21,7 @@ private:
     //Specifies the resolution of the maze
     int resolution_[2];
 
+
 public:
     /**
      * BIG 5

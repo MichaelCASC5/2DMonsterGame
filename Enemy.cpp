@@ -8,7 +8,7 @@
 // Constructor of Enemy
 Enemy::Enemy(const sf::Vector2f &position, const sf::Vector2f &size)
 {
-  speed = 50.0f;
+  speed = 10.0f;
   movementDirection = sf::Vector2f(rand() % 3 - 1, rand() % 3 - 1);
   shape.setSize(size);
   shape.setFillColor(sf::Color::Red);
@@ -53,7 +53,18 @@ bool Enemy::isCollision(const sf::Vector2f& newPos, const Map& map){
 //enemy position
 void Enemy::draw(sf::RenderWindow &window) const
 {
-  window.draw(shape);
+  // Set the dimensions of the rectangle
+  sf::RectangleShape drawShape(sf::Vector2f(50.f, 50.f));
+  // std::cout << "over here" << std::endl;
+  std::cout <<"Enemy Position "<< shape.getPosition().x << ", " << shape.getPosition().y << std::endl;
+  // Set the position of the rectangle
+  sf::Vector2f screenPos = {(float)shape.getPosition().x * 20.f + 250, (float)shape.getPosition().y * 20.f};
+  drawShape.setPosition(screenPos);
+  drawShape.setFillColor(sf::Color::Red);
+  window.draw(drawShape);
+
+  //Original Code
+  // window.draw(shape);
 }
 
 //global bounding box of enemy for collision of player

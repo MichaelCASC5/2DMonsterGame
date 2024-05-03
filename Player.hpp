@@ -16,6 +16,7 @@ class Player{
         Player(sf::Vector2f position=sf::Vector2f(0.0f,0.0f));
         void loadSprite(const std::string& sprite);
         void handleMovement(const sf::Time& deltaTime,const Map& map);
+        void update(const sf::Time& deltaTime,const Map& map, const Maze& maze);
         void handleRotation();
         void setSize(float w, float h);
         void drawPlayer(sf::RenderWindow& window);
@@ -23,7 +24,8 @@ class Player{
         void loseLife();
         sf::FloatRect getGlobalBounds() const;
         void increaseHealth(int amount);
-        
+        bool isAtGoal(const std::pair<int,int>& goalPos) const;
+
         //stats 
         void setHealth(int health);
         int getHealth() const;

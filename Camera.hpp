@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include <iostream>
+#include "Vertex.hpp"
 
 class Camera {
 public:
@@ -16,7 +17,7 @@ public:
     /**
      * Parameterized Constructor
      */
-    Camera(int posX, int posY, int tileX, int tileY, double angle);
+    Camera(double posX, double posY, int tileX, int tileY, double angle);
 
     /**
      * CAMERA FUNCTIONS
@@ -24,12 +25,22 @@ public:
     /**
      * Cast a ray from the camera perspective
      */
-    void raycast();
+    void raycast(Map & map, double angle);
+
+    /**
+     * Cast many rays from the camera POV
+     */
+    void scan(Map & map);
 
     /**
      * Set all relevant data
      */
     void setAll(double posX, double posY, double angle);
+
+    /**
+     * Draws camera information
+     */
+    void draw(sf::RenderTarget& window) const;
 
 private:
     double posX_;
@@ -38,7 +49,9 @@ private:
     int tileX_;
     int tileY_;
 
-    int angle_;
+    double angle_;
+
+    std::vector<Vertex> intersections;
 };
 
 #include "Camera.cpp"
