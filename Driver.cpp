@@ -339,7 +339,8 @@ void Driver::loop()
             }
 
             //Do camera logic
-            camera.setAll(player.getPosition().x, player.getPosition().y, 45);
+            std::cout << "ROTATION: " << player.getRotation() << std::endl;
+            camera.setAll(player.getPosition().x, player.getPosition().y, player.getRotation());
             camera.scan(map);
 
             if (currentLevel == 2)

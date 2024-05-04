@@ -156,6 +156,8 @@ int Player::getHealth() const { return health; }
 
 int Player::getMaxLives() { return maxLives; }
 
+double Player::getRotation() { return sprite.getRotation(); }
+
 // shoot lazer
 void Player::shoot()
 {
