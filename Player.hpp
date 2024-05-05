@@ -30,6 +30,7 @@ class Player{
         void setHealth(int health);
         int getHealth() const;
         static int getMaxLives();
+        double getRotation();
 
         //laser
         void shoot();

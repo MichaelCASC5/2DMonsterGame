@@ -323,7 +323,7 @@ void Driver::loop()
                 break;
             }
 
-            // Do camera logic
+            //Do camera logic
             camera.setAll(player.getPosition().x, player.getPosition().y, 45);
             camera.scan(map);
 

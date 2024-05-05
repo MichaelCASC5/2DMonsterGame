@@ -64,26 +64,27 @@ void Camera::raycast(Map & map, double angle) {
     for (int i = 0; i < 10; i++) {
         //Only if the intersection points fall in the bounds of the maze
         //If greater than 0
-        if (interX_horz > 0 && interY_horz > 0) {
+        if (interX_horz > 0 && interY_horz > 0 && interX_horz < map.getMap().size() && interY_horz < map.getMap()[0].size()) {
             //If within the length and width of map
-            if (interX_horz < map.getMap().size() && interY_horz < map.getMap()[0].size()) {
+            if (interX_horz < interX_vert) {
                 //Check if the intersection selects a tile for horizontal grid lines
-                if (map.getMap()[interX_horz][interY_horz]) {
+                if (map.getMap()[interX_horz][interY_horz - 0.25]) {
                     //Add that point to the intersections vector
                     Vertex pointofinterhorz(interX_horz, interY_horz);
                     intersections.push_back(pointofinterhorz);
 
                     //Leave the loop
                     // foundTile = true;
+                    break;
                 }
             }
         }
 
         //Only if the intersection points fall in the bounds of the maze
         //If greater than 0
-        if (interX_vert > 0 && interY_vert > 0) {
+        if (interX_vert > 0 && interY_vert > 0 && interX_vert < map.getMap().size() && interY_vert < map.getMap()[0].size()) {
             //If within the length and width of map
-            if (interX_vert < map.getMap().size() && interY_vert < map.getMap()[0].size()) {
+            if (interY_horz < interY_vert) {
                 //Check if the intersection selects a tile for vertical grid lines
                 if (map.getMap()[interX_vert][interY_vert]) {
                     //Add that point to the intersections vector
@@ -92,6 +93,7 @@ void Camera::raycast(Map & map, double angle) {
 
                     //Leave the loop
                     // foundTile = true;
+                    break;
                 }
             }
         }
@@ -114,9 +116,10 @@ void Camera::raycast(Map & map, double angle) {
  */
 void Camera::scan(Map & map) {
     intersections.clear();
-    // for (int i = 0; i < 15; i++) {
-        raycast(map, 15);
-    // }
+    for (int i = 0; i < angle_; i+=1) {
+        raycast(map, i);
+    }
+    std::cout << angle_ << std::endl;
 }
 
 /**
