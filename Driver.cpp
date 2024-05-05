@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "Driver.hpp"
-#include <SFML/Audio.hpp>
 /**
  * Constructor
  *
@@ -24,14 +23,20 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
         std::cerr << "Failed to load menu image" << std::endl;
     }
 
-    // creating enemy
-    enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
-    enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
-    // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
-    // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
-    enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
-    enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
-    // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
+    // background MUSIC
+    //  if(!backgroundMusic.openFromFile("magic.mp3")){
+    //      std::cerr<<"Failed to load background music"<<std::endl;
+    //  }
+    //  else{
+    //      backgroundMusic.setLoop(true);
+    //      backgroundMusic.play();
+    //  }
+
+    // creating enemy, position and size
+    enemies.push_back(Enemy(sf::Vector2f(1000.0f, 150.0f), sf::Vector2f(60, 60)));
+    enemies.push_back(Enemy(sf::Vector2f(300.0f, 800.0f), sf::Vector2f(20, 20)));
+    enemies.push_back(Enemy(sf::Vector2f(500.0f, 150.0f), sf::Vector2f(60, 60)));
+    enemies.push_back(Enemy(sf::Vector2f(1200.0f, 800.0f), sf::Vector2f(20, 20)));
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
@@ -44,15 +49,17 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     startGame.setFillColor(sf::Color::White);
     startGame.setPosition(200, 200);
 
-    pauseText.setFont(font);
-    pauseText.setString("Game Paused");
-    pauseText.setCharacterSize(40);
-    pauseText.setFillColor(sf::Color::White);
-    pauseText.setStyle(sf::Text::Bold);
+    // pause Text
 
+    pauseText.setFont(font);
+    pauseText.setString("PAUSED");
+    pauseText.setCharacterSize(50);
+    pauseText.setFillColor(sf::Color::White);
+
+    // center Pause Text to Screen
     sf::FloatRect textRect = pauseText.getLocalBounds();
-    pauseText.setOrigin(textRect.left+textRect.width/2.0f, textRect.top+textRect.height/2.0f);
-    pauseText.setPosition(sf::Vector2f(window.getSize().x/2.0f, window.getSize().y/2.0f));
+    pauseText.setOrigin(textRect.width / 2, textRect.height / 2);
+    pauseText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
     // exit text
     Exit.setFont(font);
@@ -60,15 +67,6 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     Exit.setCharacterSize(24);
     Exit.setFillColor(sf::Color::White);
     Exit.setPosition(200, 250);
-
-    // pause text
-    pauseText.setFont(font);
-    pauseText.setString("PAUSED");
-    pauseText.setCharacterSize(50);
-    pauseText.setFillColor(sf::Color::White);
-    // sf::FloatRect textRect = pauseText.getLocalBounds();
-    pauseText.setOrigin(textRect.width / 2, textRect.height / 2);
-    pauseText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
     /**
      * INITIAL GAME LOGIC
@@ -80,39 +78,45 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     maze.buildMaze();
     map.buildMap(maze);
 
-    // powerups
+    /**
+     * Powerups makes a vecotor of powerups,
+     * finds a openspace in the map,
+     * scales the powerups into the map and places it
+     * adds the powerup to the vector
+     */
 
+    // scaling factor to the map
     const float scales = 20.0f;
+    // position shifting by 250 x-axis
     const sf::Vector2f offsets = {250.0f, 0.0f};
+    // powerUpTypes, positions in the game
     std::vector<std::pair<sf::Vector2f, PowerUpType>> powerUpInfo = {
         {{7.0f, 8.0f}, PowerUpType::SpeedBoost},
         {{10.0f, 8.0f}, PowerUpType::RapidFire},
         {{15.0f, 8.0f}, PowerUpType::DoubleScore}};
 
+    // vector of open spaces in the map
     std::vector<sf::Vector2f> openSpaces;
+    // get open spaces from map, adjust coordinates by scale, offset
     for (auto &vertex : map.getOpenSpaces())
     {
         openSpaces.emplace_back(vertex.getX() * scales + offsets.x, vertex.getY() * scales + offsets.y);
     }
+    // loop through each power up type and position and place them in game
     for (const auto &[pos, type] : powerUpInfo)
     {
+        // random open location for placing powerup
         sf::Vector2f powerUpLocation = map.selectSpawnLocation(openSpaces);
+        // create a powerup at selected location and add it to vector
         powerUps.push_back(PowerUp(type, powerUpLocation));
     }
 
-    // for (const auto& [pos,type] : powerUpInfo)
-    // {
-    //     sf::Vector2f adjustedPowerUpPos = {(pos.x * scales) + offsets.x, pos.y * scales};
-    //     powerUps.push_back(PowerUp(type, adjustedPowerUpPos));
-    // };
-
-    // ANTON CODE ASSIGNMENT
     // Make a Player position, size
     player.setHealth(3);
     player.loadSprite("slime1.png");
     player.setSize(30.0f, 30.0f);
 
-    // position size of lives top right
+    // position size of lives
     heartWidth = lives.getHeartWidth();
     livesX = 1300;
     livesY = 90;
@@ -129,10 +133,6 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     const float scale = 20.0f;
     const sf::Vector2f offset = {250.0f, 0.0f};
     std::vector<sf::Vector2f> heartSpaces;
-
-    // sf::Vector2f heartPos = sf::Vector2f(700.0f, 800.0f);
-    // sf::Vector2f adjustedHeartPos = {(heartPos.x - offset.x) / scale, heartPos.y / scale};
-    // HealthPickups.push_back(HealthPickup(adjustedHeartPos, "heart.png"));
 }
 
 /**
@@ -170,23 +170,29 @@ void Driver::start()
  */
 void Driver::loop()
 {
+    // clock to measure time elapsed between frames for consistent updates
     sf::Clock clock;
     sf::Event event;
     // running game, menu screen first comes up
     while (runProgram)
     {
+        // restart clock
         sf::Time deltaTime = clock.restart();
 
+        // handle events that occurs within window
         while (window.pollEvent(event))
         {
+            // check for window close events or ESC key
             if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
             {
                 window.close();
                 runProgram = false;
                 continue;
             }
+            // handle game state transitions
             if (GameState == MENU)
             {
+                // starts the game with ENTER
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter)
                 {
                     GameState = PLAY;
@@ -194,6 +200,7 @@ void Driver::loop()
             }
             else if ((GameState == PLAY || GameState == PAUSED) && event.type == sf::Event::KeyPressed)
             {
+                // pause the game with 'P'
                 if (event.key.code == sf::Keyboard::P)
                 {
                     GameState = (GameState == PLAY) ? PAUSED : PLAY;
@@ -204,10 +211,12 @@ void Driver::loop()
             {
                 if (GameState == MENU)
                 {
+                    // GameState is PLAY starts the game when 'Enter' pressed
                     if (event.key.code == sf::Keyboard::Enter)
                     {
                         GameState = PLAY;
                     }
+                    // runProgram is false when game ends
                     else if (event.key.code == sf::Keyboard::Escape)
                     {
                         runProgram = false;
@@ -222,7 +231,7 @@ void Driver::loop()
                 }
             }
         }
-
+        // Gamestate is MENU menu function works
         if (GameState == MENU)
         {
             handleMenu();
@@ -238,14 +247,12 @@ void Driver::loop()
             // get player position
             sf::Vector2f playerPosition = player.getPosition();
 
-            // BROKEN LASER of ENEMY, but tracking works
+            // Enemy follows Player position
             for (Enemy &enemy : enemies)
             {
                 enemy.update(deltaTime, playerPosition, map);
-                //     enemy.shoot(playerPosition);
-                //    enemy.updateLasers(deltaTime, window);
             }
-
+            // player score increases 100 when enemy dies
             for (auto &enemy : enemies)
             {
                 if (!enemy.isAlive())
@@ -253,7 +260,7 @@ void Driver::loop()
                     player.increaseScore(100);
                 }
             }
-
+            // remove dead enemies from the game
             enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
                                          [](const Enemy &enemy)
                                          { return !enemy.isAlive(); }),
@@ -269,28 +276,10 @@ void Driver::loop()
                 {
                     if (player.collidesWith(enemy))
                     {
-                        // std::cout << "Collision detectedm reducing life" << std::endl;
                         player.loseLife();
                         lives.setLives(player.getHealth());
                         break;
                     }
-                }
-            }
-
-            // collision with health pickups
-            for (size_t i = 0; i < HealthPickups.size();)
-            {
-                if (player.getGlobalBounds().intersects(HealthPickups[i].getGlobalBounds()))
-                {
-                    if (player.getHealth() < Player::getMaxLives())
-                    {
-                        player.increaseHealth(1);
-                    }
-                    HealthPickups.erase(HealthPickups.begin() + i);
-                }
-                else
-                {
-                    ++i;
                 }
             }
 
@@ -323,13 +312,9 @@ void Driver::loop()
             // Move bot
             bot.move();
 
-            // ANTON CODE LOGIC
-
             // Player can move
             player.handleMovement(deltaTime, map);
             player.handleRotation();
-
-            // player.isCollision(map);
 
             // player looses all lives, end game
             if (player.getHealth() <= 0)
@@ -338,31 +323,35 @@ void Driver::loop()
                 break;
             }
 
-            //Do camera logic
+            // Do camera logic
             camera.setAll(player.getPosition().x, player.getPosition().y, 45);
             camera.scan(map);
 
+            // swicth levels
             if (currentLevel == 2)
             {
-                //Timers.reset(30);
                 map.setEndGame(true);
                 powerUps.clear();
             }
 
+            // game ends
             else
             {
                 map.setEndGame(false);
             }
+            // checking if player reached the exit
             if (player.reachedExit(map))
             {
                 currentLevel++;
+                // if last level, finishes game
                 if (currentLevel == 3)
                 {
                     sf::Font font;
-                    if(font.loadFromFile("Roboto-Bold.ttf")){
-                        sf::Text endText("Congratulations, Game Finished", font,24);
+                    if (font.loadFromFile("Roboto-Bold.ttf"))
+                    {
+                        sf::Text endText("Congratulations, Game Finished", font, 24);
                         endText.setFillColor(sf::Color::White);
-                        endText.setPosition(100,window.getSize().y/2);
+                        endText.setPosition(100, window.getSize().y / 2);
                         window.draw(endText);
                         window.display();
                         sf::sleep(sf::seconds(3));
@@ -381,11 +370,10 @@ void Driver::loop()
                     if (currentLevel == 2)
                     {
                         map.setEndGame(true);
-                        enemies.push_back(Enemy(sf::Vector2f(700.0f, 150.0f), sf::Vector2f(60, 60)));
-                        // enemies.push_back(Enemy(sf::Vector2f(300,200), sf::Vector2f(40,40)));
-                        // enemies.push_back(Enemy(sf::Vector2f(400,200), sf::Vector2f(10,10)));
-                        enemies.push_back(Enemy(sf::Vector2f(700.0f, 100.0f), sf::Vector2f(20, 20)));
-                        // enemies.push_back(Enemy(sf::Vector2f(600,700), sf::Vector2f(30,30)));
+                        enemies.push_back(Enemy(sf::Vector2f(1000.0f, 150.0f), sf::Vector2f(60, 60)));
+                        enemies.push_back(Enemy(sf::Vector2f(300.0f, 800.0f), sf::Vector2f(20, 20)));
+                        enemies.push_back(Enemy(sf::Vector2f(500.0f, 150.0f), sf::Vector2f(60, 60)));
+                        enemies.push_back(Enemy(sf::Vector2f(1200.0f, 800.0f), sf::Vector2f(20, 20)));
                     }
                 }
                 // runProgram=false;
@@ -458,9 +446,9 @@ void Driver::paintComponent()
             brightnessAdjust.draw(window);
         }
 
+        // adding Level, Score text
         else if (GameState == PLAY)
         {
-
             sf::Text LevelText;
             sf::Font font;
             if (!font.loadFromFile("Roboto-Bold.ttf"))
@@ -480,9 +468,11 @@ void Driver::paintComponent()
             // updates Laser positions
             player.updateLasers(window, enemies);
 
+            // set Player lives
             lives.setLives(player.getHealth());
             lives.draw(window);
 
+            // draw enemy
             for (Enemy &enemy : enemies)
             {
                 enemy.draw(window);
@@ -513,7 +503,7 @@ void Driver::paintComponent()
             // Draw map
             map.draw(window);
 
-            // ANTON CODE DRAW
+            // draw player,timer,lives
             player.drawPlayer(window);
             Timers.draw(window);
             lives.draw(window);
@@ -524,14 +514,16 @@ void Driver::paintComponent()
             //...END DRAW OBJECTS
         }
 
-        else if(GameState==PAUSED){
-            std::cout<<"drawining pause screen"<<std::endl;
+        else if (GameState == PAUSED)
+        {
+            std::cout << "drawining pause screen" << std::endl;
             window.draw(pauseText);
         }
 
         else if (GameState == PAUSED)
         {
             window.draw(pauseText);
+            // backgroundMusic.pause();
         }
         // Display the window
         window.display();

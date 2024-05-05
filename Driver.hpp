@@ -15,7 +15,7 @@
 
 //External library include
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+//#include <SFML/Audio.hpp>
 
 //Classes include
 #include "Vertex.hpp"
@@ -139,7 +139,6 @@ private:
     float livesX;
     float livesY;
 
-    // sf::Music music;
 
     //handle meny events
     void handleMenu();

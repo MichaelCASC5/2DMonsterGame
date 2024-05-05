@@ -8,7 +8,7 @@
 // Constructor of Enemy
 Enemy::Enemy(const sf::Vector2f &position, const sf::Vector2f &size)
 {
-  speed = 10.0f;
+  speed = 30.0f;
   movementDirection = sf::Vector2f(rand() % 3 - 1, rand() % 3 - 1);
   shape.setSize(size);
   shape.setFillColor(sf::Color::Red);
@@ -64,7 +64,7 @@ void Enemy::draw(sf::RenderWindow &window) const
   window.draw(drawShape);
 
   //Original Code
-  // window.draw(shape);
+   window.draw(shape);
 }
 
 //global bounding box of enemy for collision of player

@@ -151,121 +151,183 @@ void Map::buildMap(Maze &maze)
  */
 void Map::draw(sf::RenderTarget &window) const
 {
+
+    std::cout << "Exit coordinates: " << exit.x << ", " << exit.y << std::endl;
     for (int i = 0; i < map_.size(); i++)
     {
         for (int j = 0; j < map_[i].size(); j++)
         {
-            if (map_[i][j])
+            // Set the dimensions of the rectangle
+            sf::RectangleShape shape(sf::Vector2f(18.f, 18.f));
+
+            shape.setPosition((float)i * 20 + 250, (float)j * 20);
+
+            // Gets the last 3 coordinates of Exit map
+            if (i >= static_cast<int>(exit.x) && i < static_cast<int>(exit.x) + 3 && j == static_cast<int>(exit.y))
             {
-                // Set the dimensions of the rectangle
-                sf::RectangleShape shape(sf::Vector2f(18.f, 18.f));
-
-                shape.setPosition((float)i * 20 + 250, (float)j * 20);
-
-
- if (i == static_cast<int>(exit.x) && i < static_cast<int>(exit.x) + 3 && j == static_cast<int>(exit.y))
+                shape.setFillColor(sf::Color::Yellow);
+                std::cout << "Drawing Exit at:  " << i << ", " << j << std::endl;
+                window.draw(shape);
+            }
+            else if (map_[i][j])
+            {
+                // second level
+                if (endGameColor)
                 {
-                    shape.setFillColor(sf::Color::Yellow);
+                    shape.setFillColor(sf::Color::Blue);
                 }
-
-                else if(endGameColor){
-                    shape.setFillColor(sf::Color::Red);
-                }
-
-               
+                // original level
                 else
                 {
                     shape.setFillColor(sf::Color::Green);
                 }
-                // Set the position of the rectangle
-                //  sf::Vector2f position = {(float) i * 20 + 250, (float) j * 20};
-                // shape.setPosition(position);
-
-                // Set the color of the rectangle
-                //  shape.setFillColor(sf::Color::Green);
-
-                // if (100000000.0 / rand() < 0.15)
-                // Draw the rectangle to the target window
-                window.draw(shape);
             }
+            else
+            {
+                continue;
+            }
+            window.draw(shape);
         }
     }
 }
 
+/**
+ * finds open spaces of coordinate in the map
+ * finds cell that are not occupied. marked as open
+ * returns a list of open spaces as 2D vector coordinates
+ * @param map A constatn reference to map object
+ * @return std::vector<sf::Vector2f> A vector of 2D Vectors representing open spaces
+ */
 std::vector<sf::Vector2f> Map::findOpenSpaces(const Map &map)
 {
+    // vector hold coordinates of all open spaces in map
     std::vector<sf::Vector2f> openSpaces;
+    // iterate trhough each column of map
     for (int x = 0; x < map.getMap().size(); ++x)
     {
+        // iterate through each row within current column
         for (int y = 0; y < map.getMap()[x].size(); ++y)
         {
+            // check if current cell(x,y) not occupied
             if (!getCoordinate(x, y))
             {
+                // if open, add current coordinates to openSpace Vector, convert to float
                 openSpaces.emplace_back(static_cast<float>(x), static_cast<float>(y));
             }
         }
     }
+    // return vector of open spaces coordinates
     return openSpaces;
 }
 
+/**
+ * Selects random spawn location
+ * random number generator from vector of open spaces.
+ * @param OpenSpaces a constant of vector of potential spawn locations
+ * @return sf::Vector2f the coordinate of randmly spawned locations
+ */
 sf::Vector2f Map::selectSpawnLocation(const std::vector<sf::Vector2f> &OpenSpaces)
 {
+    // random device, generator
     static std::random_device rd;
     static std::mt19937 gen(rd());
+    // pick index in range of vector
     std::uniform_int_distribution<> dis(0, OpenSpaces.size() - 1);
+    // return randomly selected location of OpenSpace vector
     return OpenSpaces[dis(gen)];
 }
 
+/**
+ * retrieve open spaces on the map that are not occupied
+ * @return std::vector<Vertex> A vector of 2D Vectors representing open spaces coordinates
+ */
 std::vector<Vertex> Map::getOpenSpaces() const
 {
+    // vector to store coordianates of open spaces
     std::vector<Vertex> openSpaces;
+    // iterate each column of map
     for (int x = 0; x < map_.size(); ++x)
     {
+        // iterate each row of current column
         for (int y = 0; y < map_[x].size(); ++y)
         {
+            // check if cell at position (x,y) not occupied
             if (!map_[x][y])
             {
+                // add coordinates to openSpace vector
                 openSpaces.emplace_back(x, y);
             }
         }
     }
     return openSpaces;
 }
+
+/**
+ * converts grid coordinates to screen coordinates
+ * @param gridCoords grid coordinate to be converted
+ * @return sf::Vector2f Screen coordinate
+ */
 sf::Vector2f Map::convertToScreen(const sf::Vector2f gridCoords) const
 {
+    // size of each tile in pixels
     const float TILE_SIZE = 20.0f;
+    // scaling
     const sf::Vector2f OFFSET(250.0f, 0.0f);
+    // return screen coordinates by scaling grid coordinates, adding offset.
     sf::Vector2f screenCoords(gridCoords.x * TILE_SIZE + OFFSET.x, gridCoords.y * TILE_SIZE);
     return screenCoords;
 }
 
+/**
+ * Sets location of exit of map
+ * defined exit point of map
+ * @param x: the x-coordinate of starting point
+ * @param y the y-coordinate of starting point
+ */
 void Map::setExit(int x, int y)
 {
+    // width of exit area
     int exitWidth = 3;
-    for (int i = 0; i < exitWidth; i++)
+    // prevent out of map bounds
+    int maxX = std::min(x + exitWidth, static_cast<int>(map_.size()));
+    for (int i = x; i < maxX; i++)
     {
-        int currentX = x + i;
-        if (currentX < map_.size() && y < map_[currentX].size())
+
+        if (y < map_[i].size())
         {
-            map_[currentX][y] = false;
+            // clear cell to make part of exit
+            map_[i][y] = false;
         }
     }
+    // store exit location
     exit = sf::Vector2f(x, y);
 }
 
+/**
+ * retrieves exit cooridante of map
+ * @return sf::Vector2f coordinate of exit
+ */
 sf::Vector2f Map::getExit() const
 {
     return exit;
 }
 
+/**
+ * exit marked in map
+ */
 void Map::buildExit()
 {
     if (!map_[static_cast<int>(exit.x)][static_cast<int>(exit.y)])
     {
+        // ensures exit open
         map_[static_cast<int>(exit.x)][static_cast<int>(exit.y)] = false;
     }
 }
 
+/**
+ * sets end game condition
+ * @param endGame boolean flag indicating game condition be activated
+ */
 void Map::setEndGame(bool endGame)
 {
     endGameColor = endGame;

@@ -2,12 +2,10 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(1.0f), speedBoost(50.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(200.0f), speedBoost(50.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
-
-  // std::cout << "Initial Player Health" << health << std::endl;
 }
 
 // load sprite of charector
@@ -27,9 +25,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   float PI = 3.14;
 
   // movement speed
-  float movementAmount = 5.0f;
-  // movement speed
-  //  float movementAmount=30.0f;
+  float movementAmount = 20.0f;
 
   // 2D Vector for movement direction
   sf::Vector2f movement(0.0f, 0.0f);
@@ -38,29 +34,21 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
   {
     movement.y -= movementAmount;
-    // position.y -= movementAmount * cos(rotation * (PI/180));
-    // position.x += movementAmount * sin(rotation * (PI/180));
   }
   // check if A is pressed move shape left, decrease x coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
   {
     movement.x -= 1.0f;
-    // position.y -= movementAmount * sin(rotation * (PI/180));
-    // position.x -= movementAmount * cos(rotation * (PI/180));
   }
   // check if S is pressed move shape down, increase y coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
   {
     movement.y += 1.0f;
-    // position.y += movementAmount * cos(rotation * (PI/180));
-    // position.x -= movementAmount * sin(rotation * (PI/180));
   }
   // check if D is pressed move shape right, increasing x coordinate
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
   {
     movement.x += 1.0f;
-    // position.y += movementAmount * sin(rotation * (PI/180));
-    // position.x += movementAmount * cos(rotation * (PI/180));
   }
   // normalize movement vector. consistent movement 1.0f all directions
   if (movement.x != 0.0f || movement.y != 0.0f)
@@ -71,11 +59,6 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   // update player position on movement vector, movement amount,time delta
   sf::Vector2f newPosition = position + movement * movementAmount * deltaTime.asSeconds();
 
-  // if (isCollision(map, newPosition))
-  // {
-  // position = newPosition;
-  // }
-
   /**
    * HARD CODED TEMPORARILY
    */
@@ -84,6 +67,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   double tempPosY = position.y;
   position = newPosition;
 
+  // collision of map and player
   if (isCollision(map))
   {
     position.x = tempPosX;
@@ -92,14 +76,15 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
 
   // set position of player position
   sprite.setPosition(position);
-
 }
 
-
-bool Player::isAtGoal(const std::pair<int,int>& goalPos) const{
-return true;
+// checking if player reaches the End
+bool Player::isAtGoal(const std::pair<int, int> &goalPos) const
+{
+  return true;
 }
 
+// Player rotation
 void Player::handleRotation()
 {
   // rotate left
@@ -131,21 +116,21 @@ void Player::drawPlayer(sf::RenderWindow &window)
   sf::RectangleShape shape(sf::Vector2f(20.f, 20.f));
 
   // std::cout << "over here" << std::endl;
-  std::cout <<"Player Position "<< position.x << ", " << position.y << std::endl;
+  std::cout << "Player Position " << position.x << ", " << position.y << std::endl;
 
   // Set the position of the rectangle
   sf::Vector2f screenPos = {(float)position.x * 20.f + 250, (float)position.y * 20.f};
-  shape.setPosition(screenPos);
+  sprite.setPosition(screenPos);
 
   // Set the color of the rectangle
-  // shape.setFillColor(sf::Color::Blue);
+  // sprite.setFillColor(sf::Color::Blue);
 
   // Rotate
   //  shape.rotate((float) angle_ * (180 / PI));
 
   // Draw the rectangle to the target window
-  window.draw(shape);
   window.draw(sprite);
+  // window.draw(sprite);
 }
 
 // Set Health of Player
@@ -154,6 +139,7 @@ void Player::setHealth(int h) { health = h; }
 // get Health of Player
 int Player::getHealth() const { return health; }
 
+// Max lives of players
 int Player::getMaxLives() { return maxLives; }
 
 // shoot lazer
@@ -161,8 +147,9 @@ void Player::shoot()
 {
   if (!isCooldown)
   {
+    // shoots lazer at palyer direction
     float playerRotation = sprite.getRotation();
-    sf::Vector2f playerPos = {(float)position.x *20.0f+250, (float)position.y*20.0f};
+    sf::Vector2f playerPos = {(float)position.x * 20.0f + 250, (float)position.y * 20.0f};
 
     std::cout << "Player position: " << playerPos.x << ", " << playerPos.y << std::endl;
     // loads laser starting with the player position with current rotation, moves
@@ -172,12 +159,9 @@ void Player::shoot()
     isCooldown = true;
     cooldownTimer.restart();
   }
- // else if (cooldownTimer.getElapsedTime().asSeconds() > cooldownDuration)
-  //{
-   // isCooldown = false;
- // }
 }
 
+// cooldown for lazers
 void Player::updateCooldown()
 {
   if (isCooldown)
@@ -189,10 +173,6 @@ void Player::updateCooldown()
   }
 }
 
-// void Player::increaseScore(int points){
-//   score+=points;
-// }
-
 int Player::getScore() const
 {
   return score;
@@ -201,19 +181,21 @@ int Player::getScore() const
 // update laser path throughout the screen
 void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemies)
 {
-  sf::Vector2f playerPos = {(float)position.x*20.0f+250, (float)position.y*20.0f};
+  sf::Vector2f playerPos = {(float)position.x * 20.0f + 250, (float)position.y * 20.0f};
   for (size_t i = 0; i < lasers.size();) // go through all lasers
   {
     lasers[i].Update(); // update position of laser
 
     bool laserRemoved = false;
 
+    // if lazers off the screen, erased
     if (lasers[i].offScreen(window))
     {
       lasers.erase(lasers.begin() + i);
       laserRemoved = true;
     }
 
+    // lazer kills the enemy
     else
     {
       for (auto &enemy : enemies)
@@ -234,65 +216,24 @@ void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemies)
     }
   }
 
+  // draw each laser on window
   for (auto &laser : lasers)
-  { // draw each laser on window
+  {
     laser.draw(window);
   }
-
-  //   // remove laser off screen
-  //   if (lasers[i].offScreen(window))
-  //   {
-  //     lasers.erase(lasers.begin() + i);
-  //   }
-  //   else
-  //   {
-  //     i++; // move to next laser
-  //   }
-  // }
 }
 
 bool Player::isCollision(const Map &map)
 {
   bool output = true;
-  //std::cout << position.x << ", " << position.y << std::endl;
+  // std::cout << position.x << ", " << position.y << std::endl;
   if (position.x > 0 && position.x < map.getMap().size() && position.y > 0 && position.y < map.getMap()[0].size())
   {
-  //  std::cout << "if " << std::endl;
+    //  std::cout << "if " << std::endl;
     std::cout << map.getMap()[(int)position.x][(int)position.y] << std::endl;
     output = map.getMap()[(int)position.x][(int)position.y];
   }
   return output;
-  /*
-  // scale to render map
-  const float scalex = 20.0f;
-  const float offsetx = 250.0f;
-  const float scaley = 20.0f;
-
-  // bounding box of player
-  sf::FloatRect playerBounds = sprite.getGlobalBounds();
-
-  // calculate position of four corners of player to detect collision all sides.
-  std::vector<sf::Vector2f> check = {
-      {newPos.x - playerBounds.width / 2, newPos.y - playerBounds.height / 2},
-      {newPos.x + playerBounds.width / 2, newPos.y - playerBounds.height / 2},
-      {newPos.x - playerBounds.width / 2, newPos.y + playerBounds.height / 2},
-      {newPos.x + playerBounds.width / 2, newPos.y + playerBounds.height / 2}};
-
-  // cehck each corner for collision
-  for (const auto &point : check)
-  {
-    // player position to map coordinate scale
-    int x = static_cast<int>((point.x - offsetx) / scalex);
-    int y = static_cast<int>(point.y / scaley);
-
-    // check for collision, if its outszie map boundry or if it a wall(true)
-    if (x < 0 || y < 0 || x >= map.getMap().size() ||
-        y >= map.getMap()[0].size() || map.getMap()[x][y])
-    {
-      return true; // collision detected
-    }
-  }
-  return false; // no collisions detected*/
 }
 
 // player current position
@@ -301,9 +242,11 @@ sf::Vector2f Player::getPosition() const
   return sprite.getPosition();
 }
 
-void Player::setPosition(sf::Vector2f newPosition){
-  position=newPosition;
-  sprite.setPosition(position.x*20+250,position.y*20);
+// set Player position
+void Player::setPosition(sf::Vector2f newPosition)
+{
+  position = newPosition;
+  sprite.setPosition(position.x * 20 + 250, position.y * 20);
 }
 
 // check if collides with enemy bounding box
@@ -319,7 +262,6 @@ void Player::loseLife()
   {
     health--;
     makeInvinsible();
-   // std::cout << "Player lost life. Remaining lives: " << health << std::endl;
   }
 }
 
@@ -359,27 +301,28 @@ void Player::updateInvinsiblity(const sf::Time &deltaTime)
   }
 }
 
+// speedbosst powerup
 void Player::activateSpeedBoost()
 {
   speed = speedBoost;
   isSpeedBoost = true;
   powerUpTimer.restart();
 }
-
+// rapidfire powerup
 void Player::activateRapidFire()
 {
   cooldownDuration = rapidFireRate;
   isFireActive = true;
   powerUpTimer.restart();
 }
-
+// doubleScore powerup
 void Player::activateDoubleScore()
 {
   doubleScoureActive = true;
   std::cout << "Double Score" << std::endl;
   powerUpTimer.restart();
 }
-
+// PowerUps activate
 void Player::updatePowerUps(sf::Time deltaTime)
 {
   if (isSpeedBoost || isFireActive || doubleScoureActive)
@@ -394,7 +337,7 @@ void Player::updatePowerUps(sf::Time deltaTime)
     }
   }
 }
-
+// increase Score
 void Player::increaseScore(int points)
 {
   if (doubleScoureActive)
@@ -408,11 +351,13 @@ void Player::increaseScore(int points)
     score += points;
   }
 }
-
-bool Player::reachedExit(const Map& map){
-  sf::Vector2f exitPos=map.getExit();
-  sf::Vector2f playerPos=getPosition();
-  if(fabs(playerPos.x-(exitPos.x*20+250))<20 && fabs(playerPos.y-(exitPos.y*20))<20){
+// Reached Exit
+bool Player::reachedExit(const Map &map)
+{
+  sf::Vector2f exitPos = map.getExit();
+  sf::Vector2f playerPos = getPosition();
+  if (fabs(playerPos.x - (exitPos.x * 20 + 250)) < 20 && fabs(playerPos.y - (exitPos.y * 20)) < 20)
+  {
     return true;
   }
   return false;
