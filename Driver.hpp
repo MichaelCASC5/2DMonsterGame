@@ -44,7 +44,8 @@ public:
     enum GameState{
         MENU,
         PLAY,
-        PAUSED
+        PAUSED,
+        GAMEOVER
     };
 
     /**
@@ -90,6 +91,7 @@ private:
     sf::Text startGame;
     sf::Text Exit;
     sf::Text pauseText;
+    sf::Text EndGame;
 
     //enemy
     std::vector<Enemy> enemies;

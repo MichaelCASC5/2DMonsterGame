@@ -346,19 +346,26 @@ void Driver::loop()
                 // if last level, finishes game
                 if (currentLevel == 3)
                 {
-                    sf::Font font;
+                    GameState=GAMEOVER;
+                   sf::Font font;
                     if (font.loadFromFile("Roboto-Bold.ttf"))
                     {
-                        sf::Text endText("Congratulations, Game Finished", font, 24);
-                        endText.setFillColor(sf::Color::White);
-                        endText.setPosition(100, window.getSize().y / 2);
-                        window.draw(endText);
-                        window.display();
-                        sf::sleep(sf::seconds(3));
+                        
+                        EndGame.setFont(font);
+                        EndGame.setString("Game Over-Congratulations!");
+                        EndGame.setCharacterSize(24);
+                        EndGame.setColor(sf::Color::White);
+                        sf::FloatRect text=EndGame.getLocalBounds();
+                        EndGame.setOrigin(text.width/2, text.height/2);
+                        EndGame.setPosition(window.getSize().x/2, window.getSize().y/2);
+                      
+                        // window.draw(EndGame);
+                        // window.display();
+                        // sf::sleep(sf::seconds(3));
                     }
-                    window.close();
-                    runProgram = false;
-                    return;
+                    // window.close();
+                    // runProgram = false;
+                    // return;
                 }
                 else
                 {
@@ -408,6 +415,20 @@ void Driver::loop()
                 {
                     player.shoot();
                     player.updateCooldown();
+                }
+            }
+        }
+
+        if(GameState==GAMEOVER){
+            if(event.type==sf::Event::KeyPressed){
+                if(event.key.code==sf::Keyboard::Enter){
+                    GameState=MENU;
+                    currentLevel=1;
+                    runProgram=true;
+                }
+                else if(event.key.code==sf::Keyboard::Escape){
+                    window.close();
+                    runProgram=false;
                 }
             }
         }
@@ -519,12 +540,18 @@ void Driver::paintComponent()
             std::cout << "drawining pause screen" << std::endl;
             window.draw(pauseText);
         }
-
-        else if (GameState == PAUSED)
+        
+          else if (GameState == GAMEOVER)
         {
-            window.draw(pauseText);
-            // backgroundMusic.pause();
+            std::cout << "drawining pause screen" << std::endl;
+            window.draw(EndGame);
         }
+
+        // else if (GameState == PAUSED)
+        // {
+        //     window.draw(pauseText);
+        //     // backgroundMusic.pause();
+        // }
         // Display the window
         window.display();
 

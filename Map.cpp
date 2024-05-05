@@ -163,7 +163,7 @@ void Map::draw(sf::RenderTarget &window) const
             shape.setPosition((float)i * 20 + 250, (float)j * 20);
 
             // Gets the last 3 coordinates of Exit map
-            if (i >= static_cast<int>(exit.x) && i < static_cast<int>(exit.x) + 3 && j == static_cast<int>(exit.y))
+            if (i == static_cast<int>(exit.x) && i < static_cast<int>(exit.x) + 3 && j == static_cast<int>(exit.y))
             {
                 shape.setFillColor(sf::Color::Yellow);
                 std::cout << "Drawing Exit at:  " << i << ", " << j << std::endl;
@@ -171,22 +171,14 @@ void Map::draw(sf::RenderTarget &window) const
             }
             else if (map_[i][j])
             {
-                // second level
-                if (endGameColor)
-                {
-                    shape.setFillColor(sf::Color::Blue);
-                }
-                // original level
-                else
-                {
-                    shape.setFillColor(sf::Color::Green);
-                }
+               shape.setFillColor(endGameColor ? sf::Color::Blue : sf::Color::Green);
+               window.draw(shape);
             }
             else
             {
                 continue;
             }
-            window.draw(shape);
+            
         }
     }
 }
@@ -289,7 +281,7 @@ void Map::setExit(int x, int y)
     // width of exit area
     int exitWidth = 3;
     // prevent out of map bounds
-    int maxX = std::min(x + exitWidth, static_cast<int>(map_.size()));
+    int maxX = std::min(x + 1, static_cast<int>(map_.size()));
     for (int i = x; i < maxX; i++)
     {
 
