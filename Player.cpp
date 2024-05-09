@@ -356,11 +356,17 @@ void Player::increaseScore(int points)
 // Reached Exit
 bool Player::reachedExit(const Map &map)
 {
-  sf::Vector2f exitPos = map.getExit();
-  sf::Vector2f playerPos = getPosition();
-  if (fabs(playerPos.x - (exitPos.x * 20 + 250)) < 20 && fabs(playerPos.y - (exitPos.y * 20)) < 20)
-  {
+  // sf::Vector2f exitPos = map.getExit();
+  // sf::Vector2f playerPos = getPosition();
+  // if (fabs(playerPos.x - (exitPos.x * 20 + 250)) < 20 && fabs(playerPos.y - (exitPos.y * 20)) < 20)
+  // {
+  //   return true;
+  // }
+  // return false;
+
+  if (position.x > 40 && position.y > 40) {
     return true;
+  } else {
+    return false;
   }
-  return false;
 }
