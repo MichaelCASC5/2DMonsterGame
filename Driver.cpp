@@ -1,6 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "Driver.hpp"
+
+//USED SFML DOCS 
+//https://www.sfml-dev.org/learn.php
+
+
 /**
  * Constructor
  *
@@ -24,7 +29,6 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     }
 
     // creating enemy, position and size
-
     enemies.push_back(Enemy(sf::Vector2f(1000.0f, 150.0f), sf::Vector2f(60, 60)));
     enemies.push_back(Enemy(sf::Vector2f(300.0f, 800.0f), sf::Vector2f(20, 20)));
     enemies.push_back(Enemy(sf::Vector2f(500.0f, 150.0f), sf::Vector2f(60, 60)));
@@ -58,6 +62,15 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     Exit.setCharacterSize(24);
     Exit.setFillColor(sf::Color::White);
     Exit.setPosition(200, 250);
+
+    // EndGame Text
+    EndGame.setFont(font);
+    EndGame.setString("Game Over");
+    EndGame.setCharacterSize(24);
+    EndGame.setColor(sf::Color::White);
+    sf::FloatRect text = EndGame.getLocalBounds();
+    EndGame.setOrigin(text.width / 2, text.height / 2);
+    EndGame.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
     // powerup pickup text
     powerupStarted.setFont(font);
@@ -350,20 +363,15 @@ void Driver::loop()
                 {
                     GameState = GAMEOVER;
                     sf::Font font;
-                    if (font.loadFromFile("Roboto-Bold.ttf"))
+                    if (!font.loadFromFile("Roboto-Bold.ttf"))
                     {
-                        EndGame.setFont(font);
-                        EndGame.setString("Game Over");
-                        EndGame.setCharacterSize(24);
-                        EndGame.setColor(sf::Color::White);
-                        sf::FloatRect text = EndGame.getLocalBounds();
-                        EndGame.setOrigin(text.width / 2, text.height / 2);
-                        EndGame.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-
-                        // window.draw(EndGame);
-                        // window.display();
-                        // sf::sleep(sf::seconds(3));
+                        std::cerr << "Failed to load font" << std::endl;
                     }
+
+                    // window.draw(EndGame);
+                    //  window.display();
+                    //  sf::sleep(sf::seconds(3));
+
                     // window.close();
                     // runProgram = false;
                     // return;

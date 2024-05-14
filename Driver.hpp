@@ -31,7 +31,6 @@
 #include "HealthPickup.hpp"
 #include "Powerup.hpp"
 #include "Camera.hpp"
-#include "PowerupManager.hpp"
 
 //C include
 #include <iostream>

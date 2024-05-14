@@ -74,6 +74,8 @@ public:
 
     void setEndGame(bool endGame);
 
+    bool isBlocked(int x, int y) const;
+
 
 private:
     //2D map

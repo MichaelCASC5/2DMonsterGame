@@ -151,8 +151,6 @@ void Map::buildMap(Maze &maze)
  */
 void Map::draw(sf::RenderTarget &window) const
 {
-
-    std::cout << "Exit coordinates: " << exit.x << ", " << exit.y << std::endl;
     for (int i = 0; i < map_.size(); i++)
     {
         for (int j = 0; j < map_[i].size(); j++)
@@ -166,19 +164,17 @@ void Map::draw(sf::RenderTarget &window) const
             if (i == static_cast<int>(exit.x) && i < static_cast<int>(exit.x) + 3 && j == static_cast<int>(exit.y))
             {
                 shape.setFillColor(sf::Color::Yellow);
-                std::cout << "Drawing Exit at:  " << i << ", " << j << std::endl;
                 window.draw(shape);
             }
             else if (map_[i][j])
             {
-               shape.setFillColor(endGameColor ? sf::Color::Blue : sf::Color::Green);
-               window.draw(shape);
+                shape.setFillColor(endGameColor ? sf::Color::Blue : sf::Color::Green);
+                window.draw(shape);
             }
             else
             {
                 continue;
             }
-            
         }
     }
 }
@@ -197,6 +193,7 @@ std::vector<sf::Vector2f> Map::findOpenSpaces(const Map &map)
     // iterate trhough each column of map
     for (int x = 0; x < map.getMap().size(); ++x)
     {
+
         // iterate through each row within current column
         for (int y = 0; y < map.getMap()[x].size(); ++y)
         {
@@ -208,10 +205,8 @@ std::vector<sf::Vector2f> Map::findOpenSpaces(const Map &map)
             }
         }
     }
-    // return vector of open spaces coordinates
     return openSpaces;
 }
-
 /**
  * Selects random spawn location
  * random number generator from vector of open spaces.
@@ -236,7 +231,7 @@ sf::Vector2f Map::selectSpawnLocation(const std::vector<sf::Vector2f> &OpenSpace
 std::vector<Vertex> Map::getOpenSpaces() const
 {
     // vector to store coordianates of open spaces
-    std::vector<Vertex> openSpaces;
+    std::vector<Vertex> OpenSpaces;
     // iterate each column of map
     for (int x = 0; x < map_.size(); ++x)
     {
@@ -247,11 +242,11 @@ std::vector<Vertex> Map::getOpenSpaces() const
             if (!map_[x][y])
             {
                 // add coordinates to openSpace vector
-                openSpaces.emplace_back(x, y);
+                OpenSpaces.emplace_back(x, y);
             }
         }
     }
-    return openSpaces;
+    return OpenSpaces;
 }
 
 /**
@@ -281,8 +276,8 @@ void Map::setExit(int x, int y)
     // width of exit area
     int exitWidth = 3;
     // prevent out of map bounds
-    int maxX = std::min(x + 1, static_cast<int>(map_.size()));
-    for (int i = x; i < maxX; i++)
+    int mapX = std::min(x + 1, static_cast<int>(map_.size()));
+    for (int i = x; i < mapX; i++)
     {
 
         if (y < map_[i].size())
@@ -291,7 +286,6 @@ void Map::setExit(int x, int y)
             map_[i][y] = false;
         }
     }
-    // store exit location
     exit = sf::Vector2f(x, y);
 }
 
@@ -323,4 +317,13 @@ void Map::buildExit()
 void Map::setEndGame(bool endGame)
 {
     endGameColor = endGame;
+}
+
+bool Map::isBlocked(int x, int y) const
+{
+    if (x >= 0 && x < map_.size() && y >= 0 && y < map_[x].size())
+    {
+        return map_[x][y];
+    }
+    return true;
 }

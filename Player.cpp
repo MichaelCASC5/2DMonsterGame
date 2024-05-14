@@ -2,7 +2,10 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(10.0f), speedBoost(10.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed), movementAmount(10.0f)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3),
+                                        isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(10.0f),
+                                        speedBoost(10.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false),
+                                        speed(originalSpeed), movementAmount(10.0f)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -25,7 +28,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   float PI = 3.14;
 
   // movement speed
-  //float movementAmount = 10.0f;
+  // float movementAmount = 10.0f;
 
   // 2D Vector for movement direction
   sf::Vector2f movement(0.0f, 0.0f);
@@ -83,7 +86,6 @@ bool Player::isAtGoal(const std::pair<int, int> &goalPos) const
 {
   return true;
 }
-
 // Player rotation
 void Player::handleRotation()
 {
@@ -116,7 +118,7 @@ void Player::drawPlayer(sf::RenderWindow &window)
   sf::RectangleShape shape(sf::Vector2f(20.f, 20.f));
 
   // std::cout << "over here" << std::endl;
-  std::cout << "Player Position " << position.x << ", " << position.y << std::endl;
+  // std::cout << "Player Position " << position.x << ", " << position.y << std::endl;
 
   // Set the position of the rectangle
   sf::Vector2f screenPos = {(float)position.x * 20.f + 250, (float)position.y * 20.f};
@@ -151,13 +153,11 @@ void Player::shoot()
   {
     // shoots lazer at palyer direction
     float playerRotation = sprite.getRotation();
-    sf::Vector2f playerPos = {(float)position.x * 20.0f + 250, (float)position.y * 20.0f};
-
-    std::cout << "Player position: " << playerPos.x << ", " << playerPos.y << std::endl;
+    sf::Vector2f playerPos = {(float)position.x * 20.f + 250, (float)position.y * 20.0f};
+    // std::cout << "Player position: " << playerPos.x << ", " << playerPos.y << std::endl;
     // loads laser starting with the player position with current rotation, moves
     // in direction of player
     lasers.push_back(Laser(playerPos, playerRotation, 10.0f));
-
     isCooldown = true;
     cooldownTimer.restart();
   }
@@ -181,9 +181,9 @@ int Player::getScore() const
 }
 
 // update laser path throughout the screen
-void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemies)
+void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemy)
 {
-  sf::Vector2f playerPos = {(float)position.x * 20.0f + 250, (float)position.y * 20.0f};
+  sf::Vector2f playerPos = {position.x * 20.0f + 250,position.y * 20.0f};
   for (size_t i = 0; i < lasers.size();) // go through all lasers
   {
     lasers[i].Update(); // update position of laser
@@ -200,7 +200,7 @@ void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemies)
     // lazer kills the enemy
     else
     {
-      for (auto &enemy : enemies)
+      for (auto &enemy : enemy)
       {
         if (lasers[i].getBounds().intersects(enemy.getGlobalBounds()) && enemy.isAlive())
         {
@@ -306,8 +306,8 @@ void Player::updateInvinsiblity(const sf::Time &deltaTime)
 // speedbosst powerup
 void Player::activateSpeedBoost()
 {
-  speed = originalSpeed+speedBoost;
-  movementAmount+=speedBoost;
+  speed = originalSpeed + speedBoost;
+  movementAmount += speedBoost;
   isSpeedBoost = true;
   powerUpTimer.restart();
 }
@@ -357,17 +357,13 @@ void Player::increaseScore(int points)
 // Reached Exit
 bool Player::reachedExit(const Map &map)
 {
-  // sf::Vector2f exitPos = map.getExit();
-  // sf::Vector2f playerPos = getPosition();
-  // if (fabs(playerPos.x - (exitPos.x * 20 + 250)) < 20 && fabs(playerPos.y - (exitPos.y * 20)) < 20)
-  // {
-  //   return true;
-  // }
-  // return false;
 
-  if (position.x > 45 && position.y > 40) {
+  if (position.x > 45 && position.y > 40)
+  {
     return true;
-  } else {
+  }
+  else
+  {
     return false;
   }
 }
