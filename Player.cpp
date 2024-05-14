@@ -2,7 +2,7 @@
 // Player class
 
 // constructor of Player class
-Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(200.0f), speedBoost(50.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed)
+Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3), isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(10.0f), speedBoost(10.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed), movementAmount(10.0f)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -25,7 +25,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   float PI = 3.14;
 
   // movement speed
-  float movementAmount = 20.0f;
+  //float movementAmount = 10.0f;
 
   // 2D Vector for movement direction
   sf::Vector2f movement(0.0f, 0.0f);
@@ -306,7 +306,8 @@ void Player::updateInvinsiblity(const sf::Time &deltaTime)
 // speedbosst powerup
 void Player::activateSpeedBoost()
 {
-  speed = speedBoost;
+  speed = originalSpeed+speedBoost;
+  movementAmount+=speedBoost;
   isSpeedBoost = true;
   powerUpTimer.restart();
 }
@@ -364,7 +365,7 @@ bool Player::reachedExit(const Map &map)
   // }
   // return false;
 
-  if (position.x > 40 && position.y > 40) {
+  if (position.x > 45 && position.y > 40) {
     return true;
   } else {
     return false;

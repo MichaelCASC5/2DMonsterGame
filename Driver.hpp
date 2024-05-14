@@ -2,7 +2,7 @@
  * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
  *
  * 2D MONSTER GAME
- * CREATED BY ANTON, ANGELA, MICHAEL
+ * CREATED BY ANTON, MICHAEL
  * 01/30/24 Spring Semester
  * 
  * THIS IS THE DRIVER FOR THE GAME.
@@ -31,6 +31,7 @@
 #include "HealthPickup.hpp"
 #include "Powerup.hpp"
 #include "Camera.hpp"
+#include "PowerupManager.hpp"
 
 //C include
 #include <iostream>
@@ -73,6 +74,8 @@ public:
      */
     void paintComponent();
 
+   
+
     
 private:
     /**
@@ -92,6 +95,8 @@ private:
     sf::Text Exit;
     sf::Text pauseText;
     sf::Text EndGame;
+    sf::Text powerupStarted;
+    sf::Font gameFont;
 
     //enemy
     std::vector<Enemy> enemies;
@@ -110,6 +115,7 @@ private:
     sf::Clock waitTimer;
     bool wait;
 
+    //player score text to show on screen
     sf::Text playerScore;
     
 
@@ -140,6 +146,7 @@ private:
     float heartWidth;
     float livesX;
     float livesY;
+
 
 
     //handle meny events

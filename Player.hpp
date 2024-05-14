@@ -72,6 +72,7 @@ class Player{
         // sf::SoundBuffer laser;
         //sf::Sound laserSound;
         float speed=200.0f;
+        float movementAmount;
         
         static const int maxLives=3;
         int health;

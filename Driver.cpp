@@ -18,21 +18,13 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     }
 
     // loading menu background
-    if (!backgroundMenu.loadFromFile("maze.jpg"))
+    if (!backgroundMenu.loadFromFile("black.jpg"))
     {
         std::cerr << "Failed to load menu image" << std::endl;
     }
 
-    // background MUSIC
-    //  if(!backgroundMusic.openFromFile("magic.mp3")){
-    //      std::cerr<<"Failed to load background music"<<std::endl;
-    //  }
-    //  else{
-    //      backgroundMusic.setLoop(true);
-    //      backgroundMusic.play();
-    //  }
-
     // creating enemy, position and size
+
     enemies.push_back(Enemy(sf::Vector2f(1000.0f, 150.0f), sf::Vector2f(60, 60)));
     enemies.push_back(Enemy(sf::Vector2f(300.0f, 800.0f), sf::Vector2f(20, 20)));
     enemies.push_back(Enemy(sf::Vector2f(500.0f, 150.0f), sf::Vector2f(60, 60)));
@@ -40,7 +32,7 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
 
     // setting up Menu background and size
     backgroundSprite.setTexture(backgroundMenu);
-    backgroundSprite.setScale(3.3f, 2.0f);
+    backgroundSprite.setScale(5.0f, 5.0f);
 
     // start game text
     startGame.setFont(font);
@@ -50,7 +42,6 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     startGame.setPosition(200, 200);
 
     // pause Text
-
     pauseText.setFont(font);
     pauseText.setString("PAUSED");
     pauseText.setCharacterSize(50);
@@ -67,6 +58,12 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     Exit.setCharacterSize(24);
     Exit.setFillColor(sf::Color::White);
     Exit.setPosition(200, 250);
+
+    // powerup pickup text
+    powerupStarted.setFont(font);
+    powerupStarted.setCharacterSize(24);
+    powerupStarted.setFillColor(sf::Color::White);
+    powerupStarted.setPosition(1450, 300);
 
     /**
      * INITIAL GAME LOGIC
@@ -189,6 +186,7 @@ void Driver::loop()
                 runProgram = false;
                 continue;
             }
+
             // handle game state transitions
             if (GameState == MENU)
             {
@@ -200,7 +198,6 @@ void Driver::loop()
             }
             else if ((GameState == PLAY || GameState == PAUSED) && event.type == sf::Event::KeyPressed)
             {
-                // pause the game with 'P'
                 if (event.key.code == sf::Keyboard::P)
                 {
                     GameState = (GameState == PLAY) ? PAUSED : PLAY;
@@ -219,6 +216,7 @@ void Driver::loop()
                     // runProgram is false when game ends
                     else if (event.key.code == sf::Keyboard::Escape)
                     {
+
                         runProgram = false;
                     }
                     else if (GameState == PLAY || GameState == PAUSED)
@@ -261,8 +259,7 @@ void Driver::loop()
                 }
             }
             // remove dead enemies from the game
-            enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
-                                         [](const Enemy &enemy)
+            enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const Enemy &enemy)
                                          { return !enemy.isAlive(); }),
                           enemies.end());
 
@@ -292,12 +289,16 @@ void Driver::loop()
                     {
                     case PowerUpType::SpeedBoost:
                         player.activateSpeedBoost();
+                        powerupStarted.setString("Speed Boost activated");
                         break;
                     case PowerUpType::RapidFire:
                         player.activateRapidFire();
+                        powerupStarted.setString("Single Fire activated");
                         break;
+
                     case PowerUpType::DoubleScore:
                         player.activateDoubleScore();
+                        powerupStarted.setString("Double Score activated");
                         break;
                     }
                     powerUps.erase(powerUps.begin() + i);
@@ -323,11 +324,12 @@ void Driver::loop()
                 break;
             }
 
-            //Do camera logic
+            // Do camera logic
             camera.setAll(player.getPosition().x, player.getPosition().y, 45);
             camera.scan(map);
 
             // swicth levels
+
             if (currentLevel == 2)
             {
                 map.setEndGame(true);
@@ -346,19 +348,18 @@ void Driver::loop()
                 // if last level, finishes game
                 if (currentLevel == 3)
                 {
-                    GameState=GAMEOVER;
-                   sf::Font font;
+                    GameState = GAMEOVER;
+                    sf::Font font;
                     if (font.loadFromFile("Roboto-Bold.ttf"))
                     {
-                        
                         EndGame.setFont(font);
-                        EndGame.setString("Game Over-Congratulations!");
+                        EndGame.setString("Game Over");
                         EndGame.setCharacterSize(24);
                         EndGame.setColor(sf::Color::White);
-                        sf::FloatRect text=EndGame.getLocalBounds();
-                        EndGame.setOrigin(text.width/2, text.height/2);
-                        EndGame.setPosition(window.getSize().x/2, window.getSize().y/2);
-                      
+                        sf::FloatRect text = EndGame.getLocalBounds();
+                        EndGame.setOrigin(text.width / 2, text.height / 2);
+                        EndGame.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+
                         // window.draw(EndGame);
                         // window.display();
                         // sf::sleep(sf::seconds(3));
@@ -372,18 +373,19 @@ void Driver::loop()
                     map.setEndGame(false);
                     maze.buildMaze();
                     map.buildMap(maze);
+
                     player.setPosition(sf::Vector2f(2.0f, 2.0f));
                     //  map.setEndGame(false);
                     if (currentLevel == 2)
                     {
                         map.setEndGame(true);
+
                         enemies.push_back(Enemy(sf::Vector2f(1000.0f, 150.0f), sf::Vector2f(60, 60)));
                         enemies.push_back(Enemy(sf::Vector2f(300.0f, 800.0f), sf::Vector2f(20, 20)));
                         enemies.push_back(Enemy(sf::Vector2f(500.0f, 150.0f), sf::Vector2f(60, 60)));
                         enemies.push_back(Enemy(sf::Vector2f(1200.0f, 800.0f), sf::Vector2f(20, 20)));
                     }
                 }
-                // runProgram=false;
             }
 
             //...END LOOPED GAME LOGIC
@@ -419,16 +421,20 @@ void Driver::loop()
             }
         }
 
-        if(GameState==GAMEOVER){
-            if(event.type==sf::Event::KeyPressed){
-                if(event.key.code==sf::Keyboard::Enter){
-                    GameState=MENU;
-                    currentLevel=1;
-                    runProgram=true;
+        if (GameState == GAMEOVER)
+        {
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Enter)
+                {
+                    GameState = MENU;
+                    currentLevel = 1;
+                    runProgram = true;
                 }
-                else if(event.key.code==sf::Keyboard::Escape){
+                else if (event.key.code == sf::Keyboard::Escape)
+                {
                     window.close();
-                    runProgram=false;
+                    runProgram = false;
                 }
             }
         }
@@ -456,6 +462,7 @@ void Driver::paintComponent()
 
         // Clear the screen to black
         window.clear(sf::Color::Black);
+        window.draw(backgroundSprite);
 
         // if in Menu Screen draw backgorund imagae, startGame and Exit buttons
         if (GameState == MENU)
@@ -470,6 +477,7 @@ void Driver::paintComponent()
         // adding Level, Score text
         else if (GameState == PLAY)
         {
+            window.draw(powerupStarted);
             sf::Text LevelText;
             sf::Font font;
             if (!font.loadFromFile("Roboto-Bold.ttf"))
@@ -540,8 +548,8 @@ void Driver::paintComponent()
             std::cout << "drawining pause screen" << std::endl;
             window.draw(pauseText);
         }
-        
-          else if (GameState == GAMEOVER)
+
+        else if (GameState == GAMEOVER)
         {
             std::cout << "drawining pause screen" << std::endl;
             window.draw(EndGame);
