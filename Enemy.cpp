@@ -33,8 +33,12 @@ void Enemy::update(const sf::Time &deltaTime, const sf::Vector2f &playerPosition
   // int mapX=static_cast<int>(newPos.x/20);
   // int mapY=static_cast<int>(newPos.y/20);
   // if(!map.isBlocked(mapX,mapY)){
-  shape.setPosition(newPos);
-  // }
+  double newX = (newPos.x - 250.0) / 20.0;
+  double newY = newPos.y / 20.0;
+  if (newX > 0 && newY > 0 && newX < map.getMap().size() && newY < map.getMap()[0].size() && !map.getMap()[newX][newY]) {
+    // std::cout << "newPos: " << (newPos.x - 250.0) / 20.0 << ", " << newPos.y / 20.0 << std::endl;
+    shape.setPosition(newPos);
+  }
   // else{
   // shape.setPosition(newPos);
   // movementDirection=-movementDirection;

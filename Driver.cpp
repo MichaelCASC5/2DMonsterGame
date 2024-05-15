@@ -67,7 +67,7 @@ Driver::Driver() : window(sf::VideoMode::getDesktopMode(), "2D Graphics", sf::St
     EndGame.setFont(font);
     EndGame.setString("Game Over");
     EndGame.setCharacterSize(24);
-    EndGame.setColor(sf::Color::White);
+    EndGame.setFillColor(sf::Color::White);
     sf::FloatRect text = EndGame.getLocalBounds();
     EndGame.setOrigin(text.width / 2, text.height / 2);
     EndGame.setPosition(window.getSize().x / 2, window.getSize().y / 2);
