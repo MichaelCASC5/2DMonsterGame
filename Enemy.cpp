@@ -25,34 +25,30 @@ void Enemy::update(const sf::Time &deltaTime, const sf::Vector2f &playerPosition
   {
     direction /= length;
   }
-  // shape.move(direction * speed * deltaTime.asSeconds());
+  // gets new position based on current direction, position
   sf::Vector2f newPos = shape.getPosition() + (direction * speed * deltaTime.asSeconds());
-  // sf::Vector2f oldPos = shape.getPosition();
-  // move enemy to player direction
 
-  // int mapX=static_cast<int>(newPos.x/20);
-  // int mapY=static_cast<int>(newPos.y/20);
-  // if(!map.isBlocked(mapX,mapY)){
+  // convert positon to map coordinates using this scale measurement
   double newX = (newPos.x - 250.0) / 20.0;
   double newY = newPos.y / 20.0;
-  if (newX > 0 && newY > 0 && newX < map.getMap().size() && newY < map.getMap()[0].size() && !map.getMap()[newX][newY]) {
-    // std::cout << "newPos: " << (newPos.x - 250.0) / 20.0 << ", " << newPos.y / 20.0 << std::endl;
+
+  // check if position of enemy is inside the map and not colliding with obstacle
+  if (newX > 0 && newY > 0 && newX < map.getMap().size() && newY < map.getMap()[0].size() && !map.getMap()[newX][newY])
+  {
+    // update enemy position to the new position
     shape.setPosition(newPos);
   }
-  // else{
-  // shape.setPosition(newPos);
-  // movementDirection=-movementDirection;
-  // shape.move(-direction*speed*deltaTime.asSeconds());
-
-  //}
 }
 
 bool Enemy::isCollision(const sf::Vector2f &newPos, const Map &map)
 {
+  // convert position to map coordinates scale
   int mapX = static_cast<int>(position.x / 20);
   int mapY = static_cast<int>(position.y / 20);
+  // check if position is in the map
   if (mapX > 0 && mapX < map.getMap().size() && mapY > 0 && mapY < map.getMap()[0].size())
   {
+    // return true if there is a collision
     return map.getMap()[mapX][mapY];
   }
   return true;
@@ -63,7 +59,6 @@ void Enemy::draw(sf::RenderWindow &window) const
 {
   // Set the dimensions of the rectangle
   sf::RectangleShape drawShape(sf::Vector2f(50.0f, 50.0f));
-  // std::cout << "over here" << std::endl;
   // Set the position of the rectangle
   sf::Vector2f screenPos = {(float)shape.getPosition().x * 20.f + 250, (float)shape.getPosition().y * 20.f};
   drawShape.setPosition(screenPos);
@@ -80,6 +75,7 @@ sf::FloatRect Enemy::getGlobalBounds() const
   return shape.getGlobalBounds();
 }
 
+// if player collides with enemy looses a heart
 void Enemy::hit()
 {
   if (life > 0)
@@ -88,6 +84,7 @@ void Enemy::hit()
   }
 }
 
+// checks if enemy is alive or not
 bool Enemy::isAlive() const
 {
   return life > 0;

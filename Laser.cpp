@@ -33,9 +33,6 @@ void Laser::Update()
 {
     float angle = shape.getRotation() * 3.14159f / 180.f; // change rotation angle to radians
     shape.move(speed * cos(angle), speed * sin(angle));   // move the laser in direction its pointing
-   // sf::Vector2f newPos = shape.getPosition();
-   // shape.setPosition(playerPos);
-    //std::cout << "laser moved to: " << playerPos.x << ", " << playerPos.y << std::endl;
 }
 
 // draw laser in sfmls

@@ -1,9 +1,11 @@
 #include "Powerup.hpp"
 
-PowerUp::PowerUp(PowerUpType type, const sf::Vector2f& position):type(type){
+PowerUp::PowerUp(PowerUpType type, const sf::Vector2f &position) : type(type)
+{
     circle.setRadius(5.0f);
     circle.setPosition(position);
 
+    // set fill color based on type of powerup
     switch (type)
     {
     case PowerUpType::SpeedBoost:
@@ -18,23 +20,30 @@ PowerUp::PowerUp(PowerUpType type, const sf::Vector2f& position):type(type){
     case PowerUpType::HealthBoost:
         circle.setFillColor(sf::Color::Yellow);
         break;
-    
+
     default:
         break;
     }
 
+    // set outline, thickness of powerups
     circle.setOutlineColor(sf::Color::White);
     circle.setOutlineThickness(2.0f);
 }
 
-void PowerUp::draw(sf::RenderWindow& window) const{
+// draw powerup
+void PowerUp::draw(sf::RenderWindow &window) const
+{
     window.draw(circle);
 }
 
-sf::FloatRect PowerUp::getGlobalBounds() const{
+// get global bounds for collision
+sf::FloatRect PowerUp::getGlobalBounds() const
+{
     return circle.getGlobalBounds();
 }
 
-PowerUpType PowerUp::getType() const {
+// get type of powerup
+PowerUpType PowerUp::getType() const
+{
     return type;
 }

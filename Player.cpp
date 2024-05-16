@@ -3,9 +3,7 @@
 
 // constructor of Player class
 Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3),
-                                        isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(10.0f),
-                                        speedBoost(10.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false),
-                                        speed(originalSpeed), movementAmount(10.0f)
+                                        isCooldown(false), cooldownDuration(0.03f), score(0), originalSpeed(10.0f), speedBoost(10.0f), OriginalFireRate(1.0f), rapidFireRate(1.0f), doubleScoureActive(false), speed(originalSpeed), movementAmount(10.0f)
 {
   sprite.setPosition(position);
   sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -26,9 +24,6 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
 {
   // Pi used for rotation
   float PI = 3.14;
-
-  // movement speed
-  // float movementAmount = 10.0f;
 
   // 2D Vector for movement direction
   sf::Vector2f movement(0.0f, 0.0f);
@@ -62,10 +57,7 @@ void Player::handleMovement(const sf::Time &deltaTime, const Map &map)
   // update player position on movement vector, movement amount,time delta
   sf::Vector2f newPosition = position + movement * movementAmount * deltaTime.asSeconds();
 
-  /**
-   * HARD CODED TEMPORARILY
-   */
-  // sf::Vector2f savePosition = position;
+  // X and Y position of player
   double tempPosX = position.x;
   double tempPosY = position.y;
   position = newPosition;
@@ -117,34 +109,37 @@ void Player::drawPlayer(sf::RenderWindow &window)
   // Set the dimensions of the rectangle
   sf::RectangleShape shape(sf::Vector2f(20.f, 20.f));
 
-  // std::cout << "over here" << std::endl;
-  // std::cout << "Player Position " << position.x << ", " << position.y << std::endl;
-
   // Set the position of the rectangle
   sf::Vector2f screenPos = {(float)position.x * 20.f + 250, (float)position.y * 20.f};
   sprite.setPosition(screenPos);
 
-  // Set the color of the rectangle
-  // sprite.setFillColor(sf::Color::Blue);
-
-  // Rotate
-  //  shape.rotate((float) angle_ * (180 / PI));
-
   // Draw the rectangle to the target window
   window.draw(sprite);
-  // window.draw(sprite);
 }
 
 // Set Health of Player
-void Player::setHealth(int h) { health = h; }
+void Player::setHealth(int h)
+{
+  health = h;
+}
 
 // get Health of Player
-int Player::getHealth() const { return health; }
+int Player::getHealth() const
+{
+  return health;
+}
 
 // Max lives of players
-int Player::getMaxLives() { return maxLives; }
+int Player::getMaxLives()
+{
+  return maxLives;
+}
 
-double Player::getRotation() { return sprite.getRotation(); }
+// rotation of player sprite
+double Player::getRotation()
+{
+  return sprite.getRotation();
+}
 
 // shoot lazer
 void Player::shoot()
@@ -153,10 +148,9 @@ void Player::shoot()
   {
     // shoots lazer at palyer direction
     float playerRotation = sprite.getRotation();
+    // player position is scaled based on map
     sf::Vector2f playerPos = {(float)position.x * 20.f + 250, (float)position.y * 20.0f};
-    // std::cout << "Player position: " << playerPos.x << ", " << playerPos.y << std::endl;
-    // loads laser starting with the player position with current rotation, moves
-    // in direction of player
+    // add delay to laser
     lasers.push_back(Laser(playerPos, playerRotation, 10.0f));
     isCooldown = true;
     cooldownTimer.restart();
@@ -175,6 +169,7 @@ void Player::updateCooldown()
   }
 }
 
+// return player score
 int Player::getScore() const
 {
   return score;
@@ -183,25 +178,29 @@ int Player::getScore() const
 // update laser path throughout the screen
 void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemy)
 {
-  sf::Vector2f playerPos = {position.x * 20.0f + 250,position.y * 20.0f};
-  for (size_t i = 0; i < lasers.size();) // go through all lasers
+  // player position to map scale
+  sf::Vector2f playerPos = {position.x * 20.0f + 250, position.y * 20.0f};
+  // loop through all lasers
+  for (size_t i = 0; i < lasers.size();)
   {
-    lasers[i].Update(); // update position of laser
+    // update position of laser
+    lasers[i].Update();
 
     bool laserRemoved = false;
 
-    // if lazers off the screen, erased
+    // if lazers off the screen, erase it
     if (lasers[i].offScreen(window))
     {
       lasers.erase(lasers.begin() + i);
       laserRemoved = true;
     }
 
-    // lazer kills the enemy
+    // laser hits a enemy
     else
     {
       for (auto &enemy : enemy)
       {
+        // if laser hits a enemy, enemy gets removed as well as the laser
         if (lasers[i].getBounds().intersects(enemy.getGlobalBounds()) && enemy.isAlive())
         {
           enemy.hit();
@@ -212,6 +211,7 @@ void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemy)
       }
     }
 
+    // if laser wasen't removed, move to next laser
     if (!laserRemoved)
     {
       ++i;
@@ -228,11 +228,12 @@ void Player::updateLasers(sf::RenderWindow &window, std::vector<Enemy> &enemy)
 bool Player::isCollision(const Map &map)
 {
   bool output = true;
-  // std::cout << position.x << ", " << position.y << std::endl;
+  // check if player position is in map bounds
   if (position.x > 0 && position.x < map.getMap().size() && position.y > 0 && position.y < map.getMap()[0].size())
   {
-    //  std::cout << "if " << std::endl;
+    // print player position in map, debug
     std::cout << map.getMap()[(int)position.x][(int)position.y] << std::endl;
+    // output to value of player position in map
     output = map.getMap()[(int)position.x][(int)position.y];
   }
   return output;
@@ -257,7 +258,7 @@ bool Player::collidesWith(const Enemy &enemy) const
   return sprite.getGlobalBounds().intersects(enemy.getGlobalBounds());
 }
 
-// Player looses life if touches enemy
+// Player looses life if touches enemy, delay for invulniribility
 void Player::loseLife()
 {
   if (health > 0)
@@ -267,11 +268,13 @@ void Player::loseLife()
   }
 }
 
+// player bounding box
 sf::FloatRect Player::getGlobalBounds() const
 {
   return sprite.getGlobalBounds();
 }
 
+// player increase health
 void Player::increaseHealth(int amount)
 {
   health += amount;
@@ -306,6 +309,7 @@ void Player::updateInvinsiblity(const sf::Time &deltaTime)
 // speedbosst powerup
 void Player::activateSpeedBoost()
 {
+  // speed boost
   speed = originalSpeed + speedBoost;
   movementAmount += speedBoost;
   isSpeedBoost = true;
@@ -328,8 +332,10 @@ void Player::activateDoubleScore()
 // PowerUps activate
 void Player::updatePowerUps(sf::Time deltaTime)
 {
+  // check if a pwoerup is being used
   if (isSpeedBoost || isFireActive || doubleScoureActive)
   {
+    // if powerup exceeded 5 seceonds, reset the powerups
     if (powerUpTimer.getElapsedTime().asSeconds() > 5.0f)
     {
       speed = originalSpeed;
@@ -343,21 +349,23 @@ void Player::updatePowerUps(sf::Time deltaTime)
 // increase Score
 void Player::increaseScore(int points)
 {
+  // if double score powerup active, double points
   if (doubleScoureActive)
   {
     std::cout << "double Score! Adding" << 2 * points << "points" << std::endl;
     score += 2 * points;
   }
+  // else add regular points
   else
   {
     std::cout << "Regular score" << points << "points" << std::endl;
     score += points;
   }
 }
-// Reached Exit
+// Player Reached Exit
 bool Player::reachedExit(const Map &map)
 {
-
+  // if player reaches this coords,
   if (position.x > 45 && position.y > 40)
   {
     return true;
