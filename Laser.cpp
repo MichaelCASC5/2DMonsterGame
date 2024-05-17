@@ -1,6 +1,14 @@
-#include "Laser.hpp"
+/**
+ * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
+ *
+ * 2D MONSTER GAME
+ * CREATED BY ANTON, MICHAEL
+ * 01/30/24 Spring Semester
+ *
+ * // utuilized resources from SFML docs https://www.sfml-dev.org/learn.php
+ */
 
-// utuilized resources from SFML docs https://www.sfml-dev.org/learn.php
+#include "Laser.hpp"
 
 #include <cmath>
 #include <random>
@@ -24,8 +32,6 @@ Laser::Laser(const sf::Vector2f &position, float rotation, float speed) : speed(
     shape.setPosition(position);
     shape.setRotation(rotation);
     shape.setFillColor(randomColor);
-
-    std::cout << "Laser Rotation" << position.x << ", " << position.y << std::endl;
 }
 
 // update laser with speed, direction
@@ -50,6 +56,7 @@ bool Laser::offScreen(const sf::RenderWindow &window) const
            position.y < 0 || position.y > window.getSize().y;
 }
 
+// get bounding box of laser
 sf::FloatRect Laser::getBounds() const
 {
     return shape.getGlobalBounds();

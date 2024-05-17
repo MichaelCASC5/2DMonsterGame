@@ -183,7 +183,7 @@ void Map::draw(sf::RenderTarget &window) const
  * finds open spaces of coordinate in the map
  * finds cell that are not occupied. marked as open
  * returns a list of open spaces as 2D vector coordinates
- * @param map A constatn reference to map object
+ * @param map A constant reference to map object
  * @return std::vector<sf::Vector2f> A vector of 2D Vectors representing open spaces
  */
 std::vector<sf::Vector2f> Map::findOpenSpaces(const Map &map)
@@ -215,7 +215,8 @@ std::vector<sf::Vector2f> Map::findOpenSpaces(const Map &map)
  */
 sf::Vector2f Map::selectSpawnLocation(const std::vector<sf::Vector2f> &OpenSpaces)
 {
-    // random device, generator
+    // used resource https://stackoverflow.com/questions/19665818/generate-random-numbers-using-c11-random-library
+    //  random device, generator
     static std::random_device rd;
     static std::mt19937 gen(rd());
     // pick index in range of vector
@@ -319,6 +320,7 @@ void Map::setEndGame(bool endGame)
     endGameColor = endGame;
 }
 
+// check if map is blocked.
 bool Map::isBlocked(int x, int y) const
 {
     if (x >= 0 && x < map_.size() && y >= 0 && y < map_[x].size())

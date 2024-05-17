@@ -1,3 +1,13 @@
+/**
+ * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
+ *
+ * 2D MONSTER GAME
+ * CREATED BY ANTON, MICHAEL
+ * 01/30/24 Spring Semester
+ *
+ */
+
+
 #include <iostream>
 #include <cstdlib>
 #include <math.h>

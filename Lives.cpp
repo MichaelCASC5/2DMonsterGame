@@ -1,3 +1,12 @@
+/**
+ * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
+ *
+ * 2D MONSTER GAME
+ * CREATED BY ANTON, MICHAEL
+ * 01/30/24 Spring Semester
+ *
+ */
+
 #include "Lives.hpp"
 // constructor count total amount of lives, get the sprite
 Lives::Lives(int count, const std::string &heartImage) : lives(count)
@@ -17,7 +26,7 @@ Lives::Lives(int count, const std::string &heartImage) : lives(count)
         hearts.push_back(heart);
     }
 }
-// se position of hearts
+// set position of hearts
 void Lives::setPosition(float x, float y)
 {
     float spacing = 10.0f;
@@ -44,6 +53,6 @@ float Lives::getHeartWidth() const
 // set number of lives
 void Lives::setLives(int count)
 {
-   
+
     lives = count;
 }

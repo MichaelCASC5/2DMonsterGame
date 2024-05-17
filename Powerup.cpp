@@ -1,3 +1,5 @@
+
+
 #include "Powerup.hpp"
 
 PowerUp::PowerUp(PowerUpType type, const sf::Vector2f &position) : type(type)

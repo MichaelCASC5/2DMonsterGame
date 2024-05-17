@@ -1,5 +1,13 @@
+/**
+ * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
+ *
+ * 2D MONSTER GAME
+ * CREATED BY ANTON, MICHAEL
+ * 01/30/24 Spring Semester
+ *
+ */
+
 #include "Enemy.hpp"
-// Player class
 
 // constructor of Player class
 Player::Player(sf::Vector2f position) : position(position), rotation(2.0f), health(3),

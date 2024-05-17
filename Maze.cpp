@@ -361,17 +361,6 @@ void Maze::buildMaze()
     // Algorithmically generates the maze
     depthFirstSearch();
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, resolution_[1] - 2);
-
-    int exitRow = dis(gen);
-    maze_[resolution_[0] - 2][exitRow].setWallValues(
-        maze_[resolution_[0] - 2][exitRow].getWalls()[0],
-        false,
-        maze_[resolution_[0] - 2][exitRow].getWalls()[2],
-        maze_[resolution_[0] - 2][exitRow].getWalls()[3],
-        true);
 }
 
 /**

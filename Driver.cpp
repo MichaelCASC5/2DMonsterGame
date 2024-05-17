@@ -1,3 +1,12 @@
+/**
+ * COMPUTER SCIENCE 49900 MAJOR CAPSTONE HUNTER 2024
+ *
+ * 2D MONSTER GAME
+ * CREATED BY ANTON, MICHAEL
+ * 01/30/24 Spring Semester
+ *
+ */
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "Driver.hpp"
@@ -368,13 +377,6 @@ void Driver::loop()
                         std::cerr << "Failed to load font" << std::endl;
                     }
 
-                    // window.draw(EndGame);
-                    //  window.display();
-                    //  sf::sleep(sf::seconds(3));
-
-                    // window.close();
-                    // runProgram = false;
-                    // return;
                 }
                 else
                 {

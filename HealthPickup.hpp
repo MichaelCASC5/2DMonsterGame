@@ -3,15 +3,19 @@
 
 #include <SFML/Graphics.hpp>
 
-class HealthPickup{
-    public:
-        HealthPickup(const sf::Vector2f& position, const std::string &texturePath);
-        void draw(sf::RenderWindow& window) const;
-        sf::FloatRect getGlobalBounds() const;
+class HealthPickup
+{
+public:
+    // Constructor, position of initial position of health pickup
+    HealthPickup(const sf::Vector2f &position, const std::string &texturePath);
+    // draw health pickup on screen
+    void draw(sf::RenderWindow &window) const;
+    // get bounding box
+    sf::FloatRect getGlobalBounds() const;
 
-    private:
-        sf::Sprite sprite;
-        sf::Texture texture;
+private:
+    sf::Sprite sprite;
+    sf::Texture texture;
 };
 
 #include "HealthPickup.cpp"

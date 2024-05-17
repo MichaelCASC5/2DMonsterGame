@@ -8,7 +8,8 @@
 
 #include <SFML/Graphics.hpp>
 
-class Map {
+class Map
+{
 public:
     /**
      * BIG 5
@@ -25,11 +26,11 @@ public:
      * Gets the value at a certain 2D index
      */
     bool getCoordinate(int x, int y);
-    
+
     /**
      * Returns a pointer to the 2D vector
      */
-    const std::vector<std::vector<bool>> & getMap() const;
+    const std::vector<std::vector<bool>> &getMap() const;
 
     /**
      * MAP FUNCTIONS
@@ -49,39 +50,40 @@ public:
      */
     void buildMap(Maze &maze);
 
-
     /**
      * GRAPHICS FUNCTIONS
      */
     /**
      * Draws the map onto the screen
      */
-    void draw(sf::RenderTarget& window) const;
-    
+    void draw(sf::RenderTarget &window) const;
+
+    // gets open spaces in map
     std::vector<Vertex> getOpenSpaces() const;
 
-    std::vector<sf::Vector2f>findOpenSpaces(const Map& map);
+    // finds open spaces in map
+    std::vector<sf::Vector2f> findOpenSpaces(const Map &map);
 
-    sf::Vector2f selectSpawnLocation(const std::vector<sf::Vector2f>&OpenSpaces);
-
+    // selects a spawnlcoation used for powerups
+    sf::Vector2f selectSpawnLocation(const std::vector<sf::Vector2f> &OpenSpaces);
+    // convert to map scale
     sf::Vector2f convertToScreen(const sf::Vector2f gridCoords) const;
-
+    // set exit position
     void setExit(int x, int y);
-
+    // gets exit position
     sf::Vector2f getExit() const;
-
+    // build exit position
     void buildExit();
-
+    // sets end game
     void setEndGame(bool endGame);
-
+    // check if postion blocked
     bool isBlocked(int x, int y) const;
 
-
 private:
-    //2D map
+    // 2D map
     std::vector<std::vector<bool>> map_;
     sf::Vector2f exit;
-    bool endGameColor=false;
+    bool endGameColor = false;
 };
 
 #include "Map.cpp"

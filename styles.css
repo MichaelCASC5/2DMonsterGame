@@ -1,0 +1,76 @@
+body{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: aquamarine;
+    color: black;
+}
+
+header{
+    background-color: antiquewhite;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.hero{
+    background-color: chocolate;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.hero{
+    background-color: darkgreen;
+    color: White;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.hero .btn {
+    background-color: antiquewhite;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.hero .btn:hover{
+    background-color: blueviolet;
+}
+
+.features, .faq, .contacts{
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.features h2, .faq h2, .contacts h2{
+    color: aqua;
+    border-bottom: 2px solid #FF8C;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.features ul, .faq ul, .contacts ul{
+    list-style: none;
+    padding: 0;
+}
+
+.features li, .faq li, .contacts li{
+    margin-bottom: 20px;
+}
+
+.features h3, .faq h3{
+    margin:0;
+    color:bisque;
+}
+
+footer{
+    background-color: crimson;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}

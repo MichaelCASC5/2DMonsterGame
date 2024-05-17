@@ -4,7 +4,7 @@
  * 2D MONSTER GAME
  * CREATED BY ANTON, MICHAEL
  * 01/30/24 Spring Semester
- * 
+ *
  * THIS IS THE DRIVER FOR THE GAME.
  * Some code is taken from the SFML tutorial page
  * https://www.sfml-dev.org/tutorials/2.6/start-linux.php
@@ -13,11 +13,10 @@
 #ifndef DRIVER_HPP
 #define DRIVER_HPP
 
-//External library include
+// External library include
 #include <SFML/Graphics.hpp>
-//#include <SFML/Audio.hpp>
 
-//Classes include
+// Classes include
 #include "Vertex.hpp"
 #include "Maze.hpp"
 #include "Player.hpp"
@@ -32,16 +31,21 @@
 #include "Powerup.hpp"
 #include "Camera.hpp"
 
-//C include
+// C include
 #include <iostream>
 #include <thread>
 #include <mutex>
 #include <chrono>
 
-class Driver {
+class Driver
+{
 public:
+    /**
+     * Game State Enumerations
+     */
 
-    enum GameState{
+    enum GameState
+    {
         MENU,
         PLAY,
         PAUSED,
@@ -73,9 +77,6 @@ public:
      */
     void paintComponent();
 
-   
-
-    
 private:
     /**
      * Threading and window variables
@@ -84,10 +85,10 @@ private:
     std::thread loopThread;
     std::mutex mutex;
 
-    //Program running boolean
+    // Program running boolean
     bool runProgram;
 
-    //Game management
+    // Game management
     GameState GameState;
     sf::Font font;
     sf::Text startGame;
@@ -97,58 +98,52 @@ private:
     sf::Text powerupStarted;
     sf::Font gameFont;
 
-    //enemy
+    // enemy
     std::vector<Enemy> enemies;
 
-    //level
+    // level
     int currentLevel;
 
-    //Game Menu variables
+    // Game Menu variables
     sf::Texture backgroundMenu;
     sf::Sprite backgroundSprite;
 
-    //brightness
+    // brightness
     Slider brightnessAdjust;
 
-    //invulnebility timer
+    // invulnebility timer
     sf::Clock waitTimer;
     bool wait;
 
-    //player score text to show on screen
+    // player score text to show on screen
     sf::Text playerScore;
-    
 
     /**
      * GAME PRIVATE MEMBERS
      */
-    //Create a maze and map
+    // Create a maze and map
     Maze maze;
     Map map;
 
-    //Create a bot
     Bot bot;
 
-    //Create camera
     Camera camera;
 
-    //ANTON CODE INITIALIZATION
-    //Make a Player position, size
+    // Make a Player position, size
     Player player;
     Lives lives;
-    std::vector<HealthPickup> HealthPickups;    
+    std::vector<HealthPickup> HealthPickups;
     std::vector<PowerUp> powerUps;
 
-    //Initiaziaze timer
+    // Initiaziaze timer
     Timer Timers;
 
-    //position size of lives top right
+    // position size of lives top right
     float heartWidth;
     float livesX;
     float livesY;
 
-
-
-    //handle meny events
+    // handle meny events
     void handleMenu();
 };
 
