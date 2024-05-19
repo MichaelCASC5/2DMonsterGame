@@ -239,8 +239,6 @@ bool Player::isCollision(const Map &map)
   // check if player position is in map bounds
   if (position.x > 0 && position.x < map.getMap().size() && position.y > 0 && position.y < map.getMap()[0].size())
   {
-    // print player position in map, debug
-    std::cout << map.getMap()[(int)position.x][(int)position.y] << std::endl;
     // output to value of player position in map
     output = map.getMap()[(int)position.x][(int)position.y];
   }
@@ -334,7 +332,6 @@ void Player::activateRapidFire()
 void Player::activateDoubleScore()
 {
   doubleScoureActive = true;
-  std::cout << "Double Score" << std::endl;
   powerUpTimer.restart();
 }
 // PowerUps activate
@@ -360,13 +357,11 @@ void Player::increaseScore(int points)
   // if double score powerup active, double points
   if (doubleScoureActive)
   {
-    std::cout << "double Score! Adding" << 2 * points << "points" << std::endl;
     score += 2 * points;
   }
   // else add regular points
   else
   {
-    std::cout << "Regular score" << points << "points" << std::endl;
     score += points;
   }
 }

@@ -32,7 +32,6 @@ Camera::Camera(double posX, double posY, int tileX, int tileY, double angle) {
  * Cast a ray from the camera pov
  */
 void Camera::raycast(Map & map, double angle) {
-    std::cout << "raycast " << angle_ << std::endl;
     //The first point of intersection
     double dx = posX_ - (int)posX_;
     double dy = posY_ - (int)posY_;
@@ -42,8 +41,6 @@ void Camera::raycast(Map & map, double angle) {
 
     double interX_vert = 0;
     double interY_vert = 0;
-
-    // intersections.clear();
 
     //Calculate the tan of the angle in radians
     double tanAngle = tan(angle * PI / 180);
@@ -74,7 +71,6 @@ void Camera::raycast(Map & map, double angle) {
                     intersections.push_back(pointofinterhorz);
 
                     //Leave the loop
-                    // foundTile = true;
                     break;
                 }
             }
@@ -92,22 +88,16 @@ void Camera::raycast(Map & map, double angle) {
                     intersections.push_back(pointofintervert);
 
                     //Leave the loop
-                    // foundTile = true;
                     break;
                 }
             }
         }
 
-        // if (interX_horz < interX_vert - 1 / tanAngle) {
-            interY_horz -= 1;
-            interX_horz += 1 / tanAngle;
-        // }
+        interY_horz -= 1;
+        interX_horz += 1 / tanAngle;
 
-        // std::cout << interY_vert << " < " << interY_horz << std::endl;
-        // if (interY_vert > interY_horz - tanAngle) {
-            interX_vert += 1;
-            interY_vert -= tanAngle;
-        // }
+        interX_vert += 1;
+        interY_vert -= tanAngle;
     }
 }
 

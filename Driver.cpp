@@ -555,13 +555,11 @@ void Driver::paintComponent()
 
         else if (GameState == PAUSED)
         {
-            std::cout << "drawining pause screen" << std::endl;
             window.draw(pauseText);
         }
 
         else if (GameState == GAMEOVER)
         {
-            std::cout << "drawining pause screen" << std::endl;
             window.draw(EndGame);
         }
 

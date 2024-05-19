@@ -272,7 +272,6 @@ void Maze::depthFirstSearch()
     std::vector<Vertex> path;
 
     // Add the first cell to the path
-    //  Vertex firstCell(1, 1);
     path.push_back(spawn);
 
     // So long as the amount of cells hasn't filled in the maze, keep generating

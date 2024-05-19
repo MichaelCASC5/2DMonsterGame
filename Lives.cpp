@@ -38,7 +38,6 @@ void Lives::setPosition(float x, float y)
 // draw hearts
 void Lives::draw(sf::RenderWindow &window)
 {
-    // std::cout<<"Drawing Lives: "<<lives<<std::endl;
     for (int i = 0; i < lives; i++)
     {
         window.draw(hearts[i]);
