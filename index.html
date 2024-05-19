@@ -14,28 +14,79 @@
 
     <section class="hero">
         <h2>Welcome to 2D Monster Maze Game</h2>
-        <p>Navigate through a monster-infested maze and sruvive!</p>
+        <img src="maze.png" alt="2D Monster Maze image" class="image-used">
+        <p>CS Capstone Spring 2024 group project. Navigate a monster-infested maze.</p>
+        <p>This project is a 2D game built in C++ using the SFML 2D graphics library. Our group decided to select this
+            language since we have experience with it from our coursework.</p>
+    </section>
+
+    <section class="contribution">
+        <h2>Contributions</h2>
+        <p>Maintainence and Contribution: Anton and Michael have contributed to this project, and it may be maintained
+            and updated going forward.</p>
+        <p>1. Clone the github project and switch branches to combine, using in the terminal "git checkout combine"</p>
+        <p>2. To launch the program, simply enter "make" into the WSL terminal. Ensure you have the SFML 2D graphics
+            library installed for WSL.
+            What the make file does: All .cpp files are compiled with C++17 into an executable called "prog".</p>
+        <p>3. You will need the development library called: <b>libsfml-dev</b> Then, install the library:
+            <b>sudo apt-get install libsfml-dev</b>
+
+            If it prompts you, enter <b>yes</b> to install.
+
+            Here is the official SFML tutorial for Linux with some sample code for testing:
+            <b> https://www.sfml-dev.org/tutorials/2.6/start-linux.php</b>
+
+            Then you can run <b>"make"</b>
+        </p>
+
+
     </section>
 
     <section class="features">
-        <h2>Game features</h2>
+        <h2>**** THE GAME ****</h2>
         <ul>
             <li>
-                <h3>Randomly Generated Maze</h3>
-                <p>Every Game starts with a new maze layout</p>
-            </li>
-            <li>
                 <h3>Player Controls</h3>
-                <p>Move using WASD keys, shoot lasers with the F key. rotate using C and V keys. Pause the game with P
-                    key</p>
+                <img src="slime1.png" alt="2D Monster Maze image" class="image-used">
+                <p>Use the WASD keys to move around, and the C and V keys to rotate the player.</p>
+                <p>Use the F keys to fire the weapon.
+
+                    The player has 3 lives. Once they are all exhausted, the game is lost.</p>
             </li>
             <li>
-                <h3>Enemies and Power-ups</h3>
-                <p>Navigate thorugh the maze, kill enemies, collect powerups and SURVIVE</p>
+                <h3>Powerups</h3>
+                <div class="image-row">
+                    <img src="powerups.png" alt="2D Monster Maze image" class="image-power">
+                    <img src="powerups2.png" alt="2D Monster Maze image" class="image-power">
+                    <img src="powerups3.png" alt="2D Monster Maze image" class="image-power">
+                </div>
+
+                <p>Power ups spawn in scattered across the map. Collide with them to collect them.</p>
+                <p>These power ups can alter statistics like the weapon's rate of fire and the player's rate of speed.
+                </p>
+                <p>Red Speed Boost powerup -> increases the speed of the player</p>
+                <p>Green Single Fire Rate powerup -> Changes the Mode of the firemode of lasers</p>
+                <p>Blue Double Score powerup -> doubles the score of killing an enemy</p>
             </li>
             <li>
-                <h3>Levels</h3>
-                <p>Developed using the SFML 2D graphics library in C++</p>
+                <h3>The Map</h3>
+                <img src="map.png" alt="2D Monster Maze image" class="image-used">
+                <p>The map consits of a maze of blocks. The blocks cannot be passed through.</p>
+                <p>There is an exit at the bottom right of the maze, that will proceed to the next level or end the
+                    game.</p>
+            </li>
+            <li>
+                <h3>The Enemies:</h3>
+                <img src="enemy.png" alt="2D Monster Maze image" class="image-used">
+                <p>The moving red squares represent the enemies. They follow the player and will remove your lives when
+                    made contact with.</p>
+                <p>Take aim and shoot them to destroy them.</p>
+            </li>
+            <li>
+                <h3>Additional Controls</h3>
+                <p>Press ESC to leave the program</p>
+                <p>Press P to pasue the Game</p>
+                <p>Press SPACEBAR to regenerate the maze</p>
             </li>
         </ul>
     </section>
